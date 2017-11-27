@@ -23,12 +23,11 @@ class FavoriteRoutesTableViewController: UITableViewController {
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
-        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
-
         UserDefaults.standard.removeObject(forKey: "ListDefaults")
-
+        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
         UserDefaults.standard.synchronize()
         
+
         if(UserDefaults.standard.object(forKey: "ListDefaults") != nil){
             
             let userDefault  = UserDefaults.standard.object(forKey: "ListDefaults") as! Data
@@ -40,7 +39,7 @@ class FavoriteRoutesTableViewController: UITableViewController {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         count = 0
         

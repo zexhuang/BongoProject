@@ -16,6 +16,8 @@ class RouteInfoTableViewController: UITableViewController {
     var stops = [Stops]()
     
     var isFavoriteButtonPressed = false
+    
+    let FavoriteButtonStatus = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,18 @@ class RouteInfoTableViewController: UITableViewController {
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
+        
+        
+        
+        isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
+        
+        if (isFavoriteButtonPressed == true){
+            
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+        }
+        else{
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        }
         
         
         
@@ -80,6 +94,27 @@ class RouteInfoTableViewController: UITableViewController {
    
 
     }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+            
+            isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
+        
+        if (isFavoriteButtonPressed == true){
+            
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+        }
+        else{
+                  self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        }
+            
+        print("isFavoriteButtonPressed" + "\(isFavoriteButtonPressed)")
+            
+        tableView.reloadData()
+        
+    }
+    
     @objc func pushToFavourite() {
         
         
@@ -87,13 +122,7 @@ class RouteInfoTableViewController: UITableViewController {
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
             print("is favorite!")
-            
-//            FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.append(routeglobalData)
-//
-//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
-//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
-//
-//            let mylist = FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes
+
 
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: routeglobalData)
 
@@ -103,13 +132,27 @@ class RouteInfoTableViewController: UITableViewController {
 
             FavoriteRoutesDefault.synchronize()
             
+            
+            
             isFavoriteButtonPressed = true
+        
+            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
+            
+            FavoriteButtonStatus.synchronize()
+            
+ 
         }
         else{
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+            
             print("is not favorite!")
+            
             isFavoriteButtonPressed = false
+            
+            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
+            
+            FavoriteButtonStatus.synchronize()
         }
     }
 
