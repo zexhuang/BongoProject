@@ -22,6 +22,9 @@ class RouteInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        UserDefaults.standard.removeObject(forKey: "ButtonStatus")
+//        UserDefaults.standard.synchronize()
+        
         
         // favourite button
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))

@@ -23,9 +23,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
-        UserDefaults.standard.removeObject(forKey: "ListDefaults")
-        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
-        UserDefaults.standard.synchronize()
+//        UserDefaults.standard.removeObject(forKey: "ListDefaults")
+//        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
+//        UserDefaults.standard.synchronize()
         
 
         if(UserDefaults.standard.object(forKey: "ListDefaults") != nil){
