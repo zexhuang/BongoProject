@@ -20,6 +20,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 80.0
+        
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
