@@ -27,7 +27,12 @@ class FavoriteRoutesTableViewController: UITableViewController {
 //        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
 //        UserDefaults.standard.synchronize()
         
-
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        count = 0
+        
         if(UserDefaults.standard.object(forKey: "ListDefaults") != nil){
             
             let userDefault  = UserDefaults.standard.object(forKey: "ListDefaults") as! Data
@@ -35,13 +40,6 @@ class FavoriteRoutesTableViewController: UITableViewController {
             myFavoriteRoutesList = NSKeyedUnarchiver.unarchiveObject(with: userDefault) as! [Routes]
             
         }
-        
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        count = 0
         
         if(UserDefaults.standard.object(forKey: "RouteDefaults") != nil){
 
@@ -73,28 +71,28 @@ class FavoriteRoutesTableViewController: UITableViewController {
                     }
                 }
                 
-                
-                if ( count == 0){
+            if ( count == 0){
                     
-                    myFavoriteRoutesList.append(myFavoriteRoutes)
+             myFavoriteRoutesList.append(myFavoriteRoutes)
                     
-                    let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
+             let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
                     
-                    let FavoriteRoutesListDefault = UserDefaults.standard
+             let FavoriteRoutesListDefault = UserDefaults.standard
                     
-                    FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
+             FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
                     
-                    FavoriteRoutesListDefault.synchronize()
+             FavoriteRoutesListDefault.synchronize()
                     
-                }
-                
-                self.tableView.reloadData()
             }
             
         }
-        
- 
+            
     }
+        
+        FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes = myFavoriteRoutesList
+        
+        self.tableView.reloadData()
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

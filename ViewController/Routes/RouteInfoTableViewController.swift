@@ -30,28 +30,12 @@ class RouteInfoTableViewController: UITableViewController {
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
-        
-        
-        
-        isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
-        
-        if (isFavoriteButtonPressed == true){
-            
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-        }
-        else{
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-        }
-        
-        
-        
+
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
         
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
-        
-    
         
         navigationItem.title = routeglobalData.name
         
@@ -102,18 +86,46 @@ class RouteInfoTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         
             
-            isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
+//        isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
+//
+//        if (isFavoriteButtonPressed == true){
+//
+//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+//        }
+//        else{
+//
+//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+//        }
+//
+//        print("isFavoriteButtonPressed" + "\(isFavoriteButtonPressed)")
         
-        if (isFavoriteButtonPressed == true){
+        if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty){
             
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count)
+            
+            for i in (0...FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count - 1){
+                
+                if(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[i].id == routeglobalData.id){
+                    
+                    isFavoriteButtonPressed = true
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+                }
+                else{
+                    
+                    
+                    isFavoriteButtonPressed = false
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+
+                }
+                
+                
+            }
+            
+            
         }
-        else{
-                  self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-        }
-            
-        print("isFavoriteButtonPressed" + "\(isFavoriteButtonPressed)")
-            
+        
         tableView.reloadData()
         
     }
@@ -136,12 +148,12 @@ class RouteInfoTableViewController: UITableViewController {
             FavoriteRoutesDefault.synchronize()
             
             
-            
-            isFavoriteButtonPressed = true
-        
-            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
-            
-            FavoriteButtonStatus.synchronize()
+//
+//            isFavoriteButtonPressed = true
+//
+//            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
+//
+//            FavoriteButtonStatus.synchronize()
             
  
         }
@@ -151,14 +163,15 @@ class RouteInfoTableViewController: UITableViewController {
             
             print("is not favorite!")
             
-            isFavoriteButtonPressed = false
-            
-            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
-            
-            FavoriteButtonStatus.synchronize()
+//            isFavoriteButtonPressed = false
+//            
+//            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
+//            
+//            FavoriteButtonStatus.synchronize()
         }
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
