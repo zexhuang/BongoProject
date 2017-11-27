@@ -99,35 +99,45 @@ class RouteInfoTableViewController: UITableViewController {
 //
 //        print("isFavoriteButtonPressed" + "\(isFavoriteButtonPressed)")
         
+        var count:Int = 0
+        
         if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty){
             
-//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
-//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
-//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count)
+            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
+            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
+            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count)
             
             for i in (0...FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count - 1){
                 
-                if(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[i].id == routeglobalData.id){
+                if(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[i].name == routeglobalData.name){
                     
+                    count = count + 1
                     isFavoriteButtonPressed = true
+                 
+                }
+                    
+                if(count > 0 ){
+                    
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+                    
+                    //print(isFavoriteButtonPressed)
                 }
                 else{
                     
                     
                     isFavoriteButtonPressed = false
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-
+                    
+                    //print(isFavoriteButtonPressed)
                 }
                 
                 
             }
             
+
             
         }
-        
-        tableView.reloadData()
-        
+
     }
     
     @objc func pushToFavourite() {
