@@ -112,12 +112,13 @@ class RouteInfoTableViewController: UITableViewController {
                 if(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[i].name == routeglobalData.name){
                     
                     count = count + 1
-                    isFavoriteButtonPressed = true
+                    
                  
                 }
                     
                 if(count > 0 ){
                     
+                    isFavoriteButtonPressed = true
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
                     
                     //print(isFavoriteButtonPressed)
