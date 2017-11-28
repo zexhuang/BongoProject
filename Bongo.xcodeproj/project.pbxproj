@@ -616,7 +616,7 @@
 				DEVELOPMENT_TEAM = PSA882ZPWY;
 				INFOPLIST_FILE = Bongo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "C---Doc.Bongo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schweer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -635,7 +635,7 @@
 				DEVELOPMENT_TEAM = PSA882ZPWY;
 				INFOPLIST_FILE = Bongo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "C---Doc.Bongo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schweer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

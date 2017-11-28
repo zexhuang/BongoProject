@@ -624,7 +624,6 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="375" id="8Fp-Vz-9nC"/>
                                     <constraint firstAttribute="height" constant="554.5" id="EYZ-I8-K51"/>
-                                    <constraint firstAttribute="width" secondItem="RUi-3e-QOw" secondAttribute="height" multiplier="375:554" id="US9-rn-fjA"/>
                                 </constraints>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LYP-Gh-Ome">
