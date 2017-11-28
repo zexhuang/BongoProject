@@ -173,25 +173,7 @@ class RouteInfoTableViewController: UITableViewController {
                 
                 var favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
                 
-//                for i in favoriteRouteList{
-//
-//                    if (i.id == routeglobalData.id){
-//
-//                        RouteisEqual = true
-//
-//                    }
-//                    else{
-//
-//                        RouteisEqual = false
-//
-//                    }
-//
-//                    if (!RouteisEqual){
-//
-//                        favoriteRouteList.append(routeglobalData)
-//                    }
-//
-//                }
+
                 
                 favoriteRouteList.append(routeglobalData)
                 

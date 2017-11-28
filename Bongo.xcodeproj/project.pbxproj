@@ -17,6 +17,7 @@
 		D422411C1F9AE89D00DF423C /* StopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D422411B1F9AE89D00DF423C /* StopsTableViewController.swift */; };
 		D42241231F9B01CD00DF423C /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42241221F9B01CD00DF423C /* Routes.swift */; };
 		D42241271F9B10DB00DF423C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42241261F9B10DB00DF423C /* NetworkService.swift */; };
+		D42907FE1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */; };
 		D42CD5331F9B3C9700C1407D /* routelist.json in Resources */ = {isa = PBXBuildFile; fileRef = D42CD5321F9B3C9700C1407D /* routelist.json */; };
 		D42E13891F9B1A3800802FE4 /* RoutesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42E13881F9B1A3800802FE4 /* RoutesTableViewCell.swift */; };
 		D45F66F01FC504F000B4CF7C /* FavouriteStopsGlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F66EF1FC504F000B4CF7C /* FavouriteStopsGlobalData.swift */; };
@@ -62,6 +63,7 @@
 		D422411B1F9AE89D00DF423C /* StopsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsTableViewController.swift; sourceTree = "<group>"; };
 		D42241221F9B01CD00DF423C /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		D42241261F9B10DB00DF423C /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStopsTableViewController.swift; sourceTree = "<group>"; };
 		D42CD5321F9B3C9700C1407D /* routelist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = routelist.json; sourceTree = "<group>"; };
 		D42E13881F9B1A3800802FE4 /* RoutesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewCell.swift; sourceTree = "<group>"; };
 		D45F66EF1FC504F000B4CF7C /* FavouriteStopsGlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteStopsGlobalData.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				D490CC0B1FC64495003CDD18 /* FavoriteRoutesTableViewController.swift */,
+				D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */,
 			);
 			path = Favourite;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				D49A90011FC37FDD00552FBE /* MapTableViewCell.swift in Sources */,
 				D49ED74A1F9C68C500E6E4BA /* Stops.swift in Sources */,
 				28784CBF1FC8D5AA00E4BBE9 /* LocationSearchTable.swift in Sources */,
+				D42907FE1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift in Sources */,
 				D4B4594B1FA8514800F5395A /* StopsInfo.swift in Sources */,
 				D49A8FF31FC370F700552FBE /* MapGlobalData.swift in Sources */,
 			);

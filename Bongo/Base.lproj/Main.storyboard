@@ -215,11 +215,73 @@
                             <outlet property="delegate" destination="hIy-MZ-T3J" id="GiQ-a9-BvZ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="7Hl-kS-E4v"/>
+                    <navigationItem key="navigationItem" id="whc-p1-WyJ">
+                        <barButtonItem key="rightBarButtonItem" image="right-arrow" id="3J5-pv-J97">
+                            <connections>
+                                <segue destination="XeH-VC-0jS" kind="show" id="gj4-oh-zeV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aKU-NZ-tWL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1098.4000000000001" y="-261.31934032983509"/>
+        </scene>
+        <!--Favorite Stops Table View Controller-->
+        <scene sceneID="lbn-qy-NCZ">
+            <objects>
+                <tableViewController id="XeH-VC-0jS" customClass="FavoriteStopsTableViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="e8T-cT-PZ8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="FavoriteStopsCell" rowHeight="80" id="Acx-pj-1Ds" customClass="FavoriteStopsTableViewCell" customModule="Bongo" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Acx-pj-1Ds" id="Vtc-nK-SRj">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="79.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YxB-6V-1d5">
+                                            <rect key="frame" x="8" y="15" width="333" height="23"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="niU-iX-EX5" userLabel="StopNumber">
+                                            <rect key="frame" x="8" y="42" width="333" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="niU-iX-EX5" secondAttribute="trailing" id="6mN-0z-CzU"/>
+                                        <constraint firstItem="niU-iX-EX5" firstAttribute="top" secondItem="YxB-6V-1d5" secondAttribute="bottom" constant="4" id="9mg-Lf-0Wl"/>
+                                        <constraint firstItem="YxB-6V-1d5" firstAttribute="top" secondItem="Vtc-nK-SRj" secondAttribute="top" constant="15" id="BZC-9l-bov"/>
+                                        <constraint firstAttribute="trailing" secondItem="YxB-6V-1d5" secondAttribute="trailing" id="CI4-pu-oer"/>
+                                        <constraint firstItem="YxB-6V-1d5" firstAttribute="leading" secondItem="Vtc-nK-SRj" secondAttribute="leading" constant="8" id="Eqh-5K-x3u"/>
+                                        <constraint firstItem="niU-iX-EX5" firstAttribute="leading" secondItem="Vtc-nK-SRj" secondAttribute="leading" constant="8" id="Tze-qQ-obm"/>
+                                        <constraint firstAttribute="bottom" secondItem="niU-iX-EX5" secondAttribute="bottom" constant="15.5" id="VLm-Go-DZD"/>
+                                        <constraint firstItem="niU-iX-EX5" firstAttribute="top" secondItem="YxB-6V-1d5" secondAttribute="bottom" constant="4" id="w9C-wT-lQ2"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="StopNumber" destination="niU-iX-EX5" id="dZT-GA-CUn"/>
+                                    <outlet property="StopTitle" destination="YxB-6V-1d5" id="tSF-Ep-uUN"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="XeH-VC-0jS" id="RRL-0e-VpI"/>
+                            <outlet property="delegate" destination="XeH-VC-0jS" id="n3Y-sO-4WU"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fKi-zc-Bem" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2277.5999999999999" y="-260.41979010494754"/>
         </scene>
         <!--My Tab Bar View Controller-->
         <scene sceneID="8g2-BZ-GZf">
@@ -329,7 +391,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cpZ-vu-m8d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1232.8" y="1188.7556221889056"/>
+            <point key="canvasLocation" x="1196" y="1189"/>
         </scene>
         <!--Stop Prediction Table View Controller-->
         <scene sceneID="Dj5-vB-sn5">
@@ -771,6 +833,7 @@
         <image name="pin" width="128" height="128"/>
         <image name="placeholder" width="21" height="21"/>
         <image name="placeholder-1" width="128" height="128"/>
+        <image name="right-arrow" width="21" height="21"/>
         <image name="route" width="21" height="21"/>
     </resources>
 </document>
