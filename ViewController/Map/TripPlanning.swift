@@ -97,13 +97,13 @@ class TripPlanning
     
     private static func determineIfBusGoesToBothStops(start: Stops, destination: Stops)->Bool
     {
-        let predictionsForStart: [StopsInfo]! = getPredictionForStop(stop: start)
+        let predictionsForStart: [StopsInfo]! = getPredictions(stop: start)
         if predictionsForStart == nil || predictionsForStart.isEmpty
         {
             return false
         }
         
-        let predictionsForDestination: [StopsInfo]! = getPredictionForStop(stop: destination)
+        let predictionsForDestination: [StopsInfo]! = getPredictions(stop: destination)
         if predictionsForDestination == nil || predictionsForDestination.isEmpty
         {
             return false
