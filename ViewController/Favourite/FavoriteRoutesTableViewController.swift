@@ -20,113 +20,32 @@ class FavoriteRoutesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
+//        UserDefaults.standard.synchronize()
+        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
         
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
-//        UserDefaults.standard.removeObject(forKey: "ListDefaults")
-//        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
-//        UserDefaults.standard.synchronize()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        count = 0
-        
-        if(UserDefaults.standard.object(forKey: "ListDefaults") != nil){
-            
-            let userDefault  = UserDefaults.standard.object(forKey: "ListDefaults") as! Data
-            
-            myFavoriteRoutesList = NSKeyedUnarchiver.unarchiveObject(with: userDefault) as! [Routes]
-        }
-        
-        //Add to my myFavoriteRoutesList
         if(UserDefaults.standard.object(forKey: "RouteDefaults") != nil){
-
-            let FavoriteRoutesDefault  = UserDefaults.standard.object(forKey: "RouteDefaults") as! Data
-
-            myFavoriteRoutes = NSKeyedUnarchiver.unarchiveObject(with: FavoriteRoutesDefault) as! Routes
             
-            if (myFavoriteRoutesList.count == 0)
-                {
-                
-                myFavoriteRoutesList.append(myFavoriteRoutes)
-                
-                let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
-                
-                let FavoriteRoutesListDefault = UserDefaults.standard
-                
-                FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
-                
-                FavoriteRoutesListDefault.synchronize()
-                
-            }
-            else
-            {
-                for i in(0...myFavoriteRoutesList.count - 1){
-                    
-                    if (myFavoriteRoutes.name == myFavoriteRoutesList[i].name){
-
-                        count = count + 1
-                    }
-                }
-                
-              if ( count == 0){
-                    
-               myFavoriteRoutesList.append(myFavoriteRoutes)
-                    
-               let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
-                    
-               let FavoriteRoutesListDefault = UserDefaults.standard
-                    
-               FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
-                    
-               FavoriteRoutesListDefault.synchronize()
-                    
-            }
+            let RouteData =  UserDefaults.standard.object(forKey: "RouteDefaults") as! Data
             
-        }
+            myFavoriteRoutesList = NSKeyedUnarchiver.unarchiveObject(with: RouteData) as! [Routes]
             
-    }
-        
-        // Remove from myFavoriteRoutesList
-        if (UserDefaults.standard.object(forKey: "DeletedRoutesDefaults") != nil){
-            
-            
-            let DeletedData = UserDefaults.standard.object(forKey: "DeletedRoutesDefaults") as! Data
-            
-            let  DeletedRoute = NSKeyedUnarchiver.unarchiveObject(with: DeletedData) as! Routes
-            
-            //print(DeletedRoute.name!)
-            
-            var myFavoriteRoutesSubList:[Routes] = [Routes]()
-            
-            for i in myFavoriteRoutesList {
-
-                if (i.name != DeletedRoute.name){
-                    
-                    myFavoriteRoutesSubList.append(i)
-                    
-                }
-            }
-            
-            myFavoriteRoutesList = myFavoriteRoutesSubList
-            
-            let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
-            
-            let FavoriteRoutesListDefault = UserDefaults.standard
-            
-            FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
-            
-            FavoriteRoutesListDefault.synchronize()
         }
         
         FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes = myFavoriteRoutesList
         
-        self.tableView.reloadData()
+        tableView.reloadData()
+        
   }
 
     override func didReceiveMemoryWarning() {
@@ -171,12 +90,8 @@ class FavoriteRoutesTableViewController: UITableViewController {
         else {
             
             return cell
-            
         }
         
-      
     }
-
-
 
 }
