@@ -7,15 +7,15 @@
 //
 
 import UIKit
+import MapKit
 
-class RouteInfoTableViewController: UITableViewController {
+class RouteInfoTableViewController: UITableViewController
+{
+    @IBOutlet weak var theMap: MKMapView!
     
     let routeglobalData = RouteGlobalData.sharedInstance.routeData
-    
     let routePredictionGlobalData:Stops = RoutePredictionGlobalData.sharedInstance.routePrediction
-    
     var routeData = Routes()
-    
     var stops = [Stops]()
     
     var isFavoriteButtonPressed = false
@@ -23,14 +23,12 @@ class RouteInfoTableViewController: UITableViewController {
     var RouteisEqual = false
     
     let FavoriteRoutesDefault = UserDefaults.standard
-    
     var RouteSubList = [Routes]()
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        
-
-        
+    
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
@@ -79,19 +77,16 @@ class RouteInfoTableViewController: UITableViewController {
             DispatchQueue.main.async() {
                 self.tableView.reloadData()
             }
-            
-         
-            }.resume()
-   
+        }.resume()
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty){
-            
-            for i in FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes{
-                
+    override func viewWillAppear(_ animated: Bool)
+    {
+        if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty)
+        {
+            for i in FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes
+            {
                 if (i.id == routeglobalData.id){
                     
                     RouteisExisted = true
