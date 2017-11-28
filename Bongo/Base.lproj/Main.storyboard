@@ -78,7 +78,7 @@
         <!--Route Info Table View Controller-->
         <scene sceneID="yVp-uc-NgT">
             <objects>
-                <tableViewController id="GqL-Oj-Zrp" customClass="RouteInfoTableViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RouteInfoTableViewController" id="GqL-Oj-Zrp" customClass="RouteInfoTableViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hfd-Ly-VQ3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -539,7 +539,7 @@
         <!--Stop Prediction Table View Controller-->
         <scene sceneID="Dj5-vB-sn5">
             <objects>
-                <tableViewController id="gvi-in-sLP" customClass="StopPredictionTableViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="StopPredictionTableViewController" id="gvi-in-sLP" customClass="StopPredictionTableViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="PAR-MF-2WO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

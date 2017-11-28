@@ -31,6 +31,14 @@ class RoutesTableViewController: UITableViewController
         self.tableView.tableFooterView = UIView()
         
         
+        if traitCollection.forceTouchCapability == .available{
+            
+           registerForPreviewing(with: self, sourceView: tableView)
+            
+            
+        }
+        
+        
 
     }
     
@@ -88,4 +96,37 @@ class RoutesTableViewController: UITableViewController
     }
     
 
+}
+
+
+
+extension RoutesTableViewController : UIViewControllerPreviewingDelegate{
+    
+    // peak
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = tableView.indexPathForRow(at: location),
+            let cell = tableView.cellForRow(at: indexPath) as? RoutesTableViewCell
+            else{return nil}
+        
+        let identifier = "RouteInfoTableViewController"
+        
+        guard let RoutesVC = storyboard?.instantiateViewController(withIdentifier: identifier) as? RouteInfoTableViewController else {return nil}
+        
+        RoutesVC.routeData = cell.route
+        
+        previewingContext.sourceRect = cell.frame
+        
+        
+        return RoutesVC 
+    }
+    
+    //pop
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        
+        self.showDetailViewController(viewControllerToCommit, sender: self)
+    }
+    
+    
+    
 }
