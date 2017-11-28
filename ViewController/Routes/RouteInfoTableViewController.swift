@@ -22,11 +22,6 @@ class RouteInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        UserDefaults.standard.removeObject(forKey: "ButtonStatus")
-//        UserDefaults.standard.synchronize()
-        
-        
-        // favourite button
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
@@ -79,63 +74,38 @@ class RouteInfoTableViewController: UITableViewController {
          
             }.resume()
    
-
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         
-            
-//        isFavoriteButtonPressed = UserDefaults.standard.bool(forKey: "ButtonStatus")
-//
-//        if (isFavoriteButtonPressed == true){
-//
-//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-//        }
-//        else{
-//
-//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-//        }
-//
-//        print("isFavoriteButtonPressed" + "\(isFavoriteButtonPressed)")
-        
         var count:Int = 0
         
         if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty){
             
-            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
-            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
-            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[0].name!)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.last!.name!)
+//            print(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count)
             
             for i in (0...FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.count - 1){
                 
                 if(FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes[i].name == routeglobalData.name){
                     
                     count = count + 1
-                    
-                 
                 }
                     
                 if(count > 0 ){
-                    
                     isFavoriteButtonPressed = true
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-                    
-                    //print(isFavoriteButtonPressed)
                 }
                 else{
                     
-                    
                     isFavoriteButtonPressed = false
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-                    
-                    //print(isFavoriteButtonPressed)
                 }
                 
                 
             }
-            
-
             
         }
 
@@ -147,8 +117,8 @@ class RouteInfoTableViewController: UITableViewController {
         if (isFavoriteButtonPressed == false){
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+            
             print("is favorite!")
-
 
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: routeglobalData)
 
@@ -157,15 +127,7 @@ class RouteInfoTableViewController: UITableViewController {
             FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
 
             FavoriteRoutesDefault.synchronize()
-            
-            
-//
-//            isFavoriteButtonPressed = true
-//
-//            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
-//
-//            FavoriteButtonStatus.synchronize()
-            
+            isFavoriteButtonPressed = true
  
         }
         else{
@@ -174,14 +136,18 @@ class RouteInfoTableViewController: UITableViewController {
             
             print("is not favorite!")
             
-//            isFavoriteButtonPressed = false
-//            
-//            FavoriteButtonStatus.set(isFavoriteButtonPressed, forKey: "ButtonStatus")
-//            
-//            FavoriteButtonStatus.synchronize()
+            let encodedDeletedData = NSKeyedArchiver.archivedData(withRootObject: routeglobalData)
+            
+            let DeletedRoutesDefault = UserDefaults.standard
+            
+            DeletedRoutesDefault.set(encodedDeletedData, forKey: "DeletedRoutesDefaults")
+            
+            DeletedRoutesDefault.synchronize()
+            
+            isFavoriteButtonPressed = false
+
         }
     }
-
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -209,6 +175,7 @@ class RouteInfoTableViewController: UITableViewController {
         routePredictionGlobalData.stopnumber = stop.stopnumber!
         routePredictionGlobalData.stoplat = stop.stoplat!
         routePredictionGlobalData.stoplng = stop.stoplng!
+        
         return indexPath
     }
 

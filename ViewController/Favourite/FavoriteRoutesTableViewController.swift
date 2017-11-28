@@ -41,9 +41,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
             let userDefault  = UserDefaults.standard.object(forKey: "ListDefaults") as! Data
             
             myFavoriteRoutesList = NSKeyedUnarchiver.unarchiveObject(with: userDefault) as! [Routes]
-            
         }
         
+        //Add to my myFavoriteRoutesList
         if(UserDefaults.standard.object(forKey: "RouteDefaults") != nil){
 
             let FavoriteRoutesDefault  = UserDefaults.standard.object(forKey: "RouteDefaults") as! Data
@@ -74,23 +74,55 @@ class FavoriteRoutesTableViewController: UITableViewController {
                     }
                 }
                 
-            if ( count == 0){
+              if ( count == 0){
                     
-             myFavoriteRoutesList.append(myFavoriteRoutes)
+               myFavoriteRoutesList.append(myFavoriteRoutes)
                     
-             let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
+               let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
                     
-             let FavoriteRoutesListDefault = UserDefaults.standard
+               let FavoriteRoutesListDefault = UserDefaults.standard
                     
-             FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
+               FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
                     
-             FavoriteRoutesListDefault.synchronize()
+               FavoriteRoutesListDefault.synchronize()
                     
             }
             
         }
             
     }
+        
+        // Remove from myFavoriteRoutesList
+        if (UserDefaults.standard.object(forKey: "DeletedRoutesDefaults") != nil){
+            
+            
+            let DeletedData = UserDefaults.standard.object(forKey: "DeletedRoutesDefaults") as! Data
+            
+            let  DeletedRoute = NSKeyedUnarchiver.unarchiveObject(with: DeletedData) as! Routes
+            
+            //print(DeletedRoute.name!)
+            
+            var myFavoriteRoutesSubList:[Routes] = [Routes]()
+            
+            for i in myFavoriteRoutesList {
+
+                if (i.name != DeletedRoute.name){
+                    
+                    myFavoriteRoutesSubList.append(i)
+                    
+                }
+            }
+            
+            myFavoriteRoutesList = myFavoriteRoutesSubList
+            
+            let encodedList = NSKeyedArchiver.archivedData(withRootObject: myFavoriteRoutesList)
+            
+            let FavoriteRoutesListDefault = UserDefaults.standard
+            
+            FavoriteRoutesListDefault.set(encodedList, forKey: "ListDefaults")
+            
+            FavoriteRoutesListDefault.synchronize()
+        }
         
         FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes = myFavoriteRoutesList
         
