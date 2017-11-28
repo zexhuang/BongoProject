@@ -11,7 +11,7 @@ import MapKit
 
 class TripPlanning
 {
-    
+    /*
     public static func findBestBusBetweenStartAndDestination(startingStops: [Stops], destinationStops: [Stops])->[Stops : String]
     {
         let optimalRoute: [Stops : String] = [Stops : String]()
@@ -66,7 +66,7 @@ class TripPlanning
         }
         return predictionsForAllStops
     }
-    
+    */
 
     
     
