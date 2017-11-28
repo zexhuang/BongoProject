@@ -46,6 +46,12 @@ class StopsTableViewController: UITableViewController
         {
             registerForPreviewing(with: self, sourceView: tableView)
         }
+        
+        if traitCollection.forceTouchCapability == .available{
+            
+            registerForPreviewing(with: self, sourceView: tableView)
+            
+        }
     }
     
     
@@ -66,21 +72,6 @@ class StopsTableViewController: UITableViewController
         return searchController.isActive && !searchBarIsEmpty()
     }
     
-//    @available(iOS 9.0, *)
-//    override var previewActionItems: [UIPreviewActionItem] {
-//        
-//        let item1 = UIPreviewAction(title: "Item1", style: .default) {
-//            (action, vc) in
-//            // run item 1 action
-//        }
-//        
-//        let item2 = UIPreviewAction(title: "Item2", style: .destructive) {
-//            (action, vc) in
-//            // run item 2 action
-//        }
-//        
-//        return [item1, item2]
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -170,7 +161,21 @@ extension StopsTableViewController : UIViewControllerPreviewingDelegate{
     
     // peak
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        return nil
+        
+        guard let indexPath = tableView.indexPathForRow(at: location),
+            let cell = tableView.cellForRow(at: indexPath) as? StopsTableViewCell
+            else{return nil}
+        
+        let identifier = "StopPredictionTableViewController"
+        
+        guard let StopsVC = storyboard?.instantiateViewController(withIdentifier: identifier) as? StopPredictionTableViewController else {return nil}
+        
+        StopsVC.StopData = cell.stop
+        
+        previewingContext.sourceRect = cell.frame
+        
+        
+        return StopsVC
     }
     
     //pop

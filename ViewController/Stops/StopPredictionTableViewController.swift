@@ -17,7 +17,7 @@ class StopPredictionTableViewController: UITableViewController
     var stopsInfoList = [StopsInfo]()
     var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
     var isFavoriteButtonPressed = false
-    
+    var StopData = StopsGlobalData.sharedInstance.selectedStops
     var StopisExisted = false
     var StopisEqual = false
     let FavoriteStopsDefault = UserDefaults.standard
@@ -127,6 +127,47 @@ class StopPredictionTableViewController: UITableViewController
         headerLabelSubtitle.text = currentStopDataToDisplay.stopnumber
         
         tableView.reloadData()
+        
+        
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
+        
+        guard let url = URL(string: todoEndpoint) else { return }
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // make the request
+        session.dataTask(with: url){
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /todos/1")
+                print(error!)
+                return
+            }
+            // make sure we got data
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse the result as JSON, since that's what the API provides
+            do {
+                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+                
+                DispatchQueue.main.async {
+                    self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
+                }
+            }
+            catch
+            {
+                print("error trying to convert data to JSON")
+                return
+            }
+            
+            DispatchQueue.main.async() {
+                self.tableView.reloadData()
+            }
+            
+            }.resume()
         
         
         
@@ -298,7 +339,7 @@ class StopPredictionTableViewController: UITableViewController
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
 
         //let titleLabel = UILabel()
-        headerLabel.text =  currentStopDataToDisplay.stoptitle
+        headerLabel.text =  StopData.stoptitle
         headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
 
@@ -306,7 +347,7 @@ class StopPredictionTableViewController: UITableViewController
 
         ///let NumberLabel = UILabel()
 
-        headerLabelSubtitle.text =  "Stop " + currentStopDataToDisplay.stopnumber!
+        headerLabelSubtitle.text =  "Stop " + StopData.stopnumber!
         headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)
         headerLabelSubtitle.font = UIFont.boldSystemFont(ofSize: 18)
         
