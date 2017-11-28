@@ -18,13 +18,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bus" translatesAutoresizingMaskIntoConstraints="NO" id="FL1-AE-l3s">
-                                <rect key="frame" x="60" y="216" width="256" height="256"/>
+                                <rect key="frame" x="123" y="269" width="128" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="37K-JJ-YXa"/>
+                                    <constraint firstAttribute="width" constant="128" id="grg-KM-QTt"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.34373653616062733" green="0.49848668561822107" blue="0.74374502897262573" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="FL1-AE-l3s" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="HCS-Mu-fDW"/>
-                            <constraint firstItem="FL1-AE-l3s" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="YvF-vM-bat"/>
+                            <constraint firstItem="FL1-AE-l3s" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="3Dj-q2-6kc"/>
+                            <constraint firstItem="FL1-AE-l3s" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="7gu-Ez-88Y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -35,6 +39,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bus" width="256" height="256"/>
+        <image name="bus" width="128" height="128"/>
     </resources>
 </document>
