@@ -8,9 +8,26 @@
 
 import Foundation
 
-class Stops: Hashable
+class Stops: NSObject, NSCoding
 {
-    var hashValue: Int
+    func encode(with aCoder: NSCoder) {
+        
+        aCoder.encode(stoptitle, forKey: "stoptitle")
+        aCoder.encode(stopnumber, forKey: "stopnumber")
+        aCoder.encode(stoplat, forKey: "stoplat")
+        aCoder.encode(stoplng, forKey: "stoplng")
+
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        stoptitle = aDecoder.decodeObject(forKey: "stoptitle") as? String
+        stopnumber = aDecoder.decodeObject(forKey: "stopnumber") as? String
+        stoplat = aDecoder.decodeObject(forKey: "stoplat") as? Double ?? aDecoder.decodeDouble(forKey: "stoplat")
+        stoplng = aDecoder.decodeObject(forKey: "stoplng") as? Double ?? aDecoder.decodeDouble(forKey: "stoplng")
+        //id = aDecoder.decodeObject(forKey: "id") as? Int ?? aDecoder.decodeInteger(forKey: "id")
+    }
+    
+    override var hashValue: Int
     {
         return stoplat!.hashValue ^ stoplng!.hashValue &* 16777619
     }
@@ -27,7 +44,9 @@ class Stops: Hashable
     var stoplat: Double?
     var stoplng: Double?
     
-    init()
+    
+    
+    override init()
     {
         self.stoptitle = ""
         self.stopnumber = ""

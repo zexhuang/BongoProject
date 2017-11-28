@@ -12,11 +12,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
     
     var myFavoriteRoutesList:[Routes] = [Routes]()
     
-    var myFavoriteRoutes:Routes = Routes()
+    let headerview = UIView()
+    var headerLabel = UILabel()
     
-    var count:Int = 0
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,6 +45,26 @@ class FavoriteRoutesTableViewController: UITableViewController {
         tableView.reloadData()
         
   }
+    
+    override func tableView(_ tableView: UITableView,viewForHeaderInSection section: Int) -> UIView?
+    {
+        headerview.backgroundColor = UIColor.clear
+        
+        headerview.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
+        
+        headerview.layer.masksToBounds = false
+        headerview.layer.cornerRadius = 5.0
+        headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
+        
+        //let titleLabel = UILabel()
+        headerLabel.text =  "Routes"
+        headerLabel.frame = CGRect(x:10,y:0, width: view.frame.width, height: 30)
+        headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        headerview.addSubview(headerLabel)
+        
+        return headerview
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -63,8 +81,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
       
-        
-        return myFavoriteRoutesList.count
+  
+            return myFavoriteRoutesList.count
+      
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath?

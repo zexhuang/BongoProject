@@ -17,6 +17,11 @@ class StopPredictionTableViewController: UITableViewController
     var stopsInfoList = [StopsInfo]()
     var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
     var isFavoriteButtonPressed = false
+    
+    var StopisExisted = false
+    var StopisEqual = false
+    let FavoriteStopsDefault = UserDefaults.standard
+    var StopSubList = [Stops]()
 
     override func viewDidLoad()
     {
@@ -91,6 +96,42 @@ class StopPredictionTableViewController: UITableViewController
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if(!FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops.isEmpty){
+            
+            for i in FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops{
+                
+                if (i.stopnumber == currentStopDataToDisplay.stopnumber){
+                    
+                    StopisExisted = true
+                }
+                
+                if (StopisExisted){
+                    
+                    isFavoriteButtonPressed = true
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+                }
+                    
+                else{
+                    
+                    isFavoriteButtonPressed = false
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+                    
+                }
+            }
+            
+        }
+        
+        headerLabel.text = currentStopDataToDisplay.stoptitle
+        headerLabelSubtitle.text = currentStopDataToDisplay.stopnumber
+        
+        tableView.reloadData()
+        
+        
+        
+    }
+    
     
     @objc func pushToFavourite() {
         
@@ -101,8 +142,46 @@ class StopPredictionTableViewController: UITableViewController
             print("is favorite!")
             
             // TODO
-        FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops.append(currentStopDataToDisplay)
-            
+       
+            if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil ){
+                
+                
+                let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
+                
+                var favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+                
+                favoriteStopList.append(currentStopDataToDisplay)
+                
+                print(favoriteStopList[0].stoptitle!)
+                print(favoriteStopList.last!.stoptitle!)
+                print(favoriteStopList.count)
+                
+                
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+                
+                FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+                
+                FavoriteStopsDefault.synchronize()
+                
+            }
+                
+            else{
+                
+                var favoriteStopList = [Stops]()
+                
+                favoriteStopList.append(currentStopDataToDisplay)
+                
+                print("Chicken" + favoriteStopList[0].stoptitle!)
+                print("Chicken" + favoriteStopList.last!.stoptitle!)
+                print(favoriteStopList.count)
+                
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+                
+                FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+                
+                FavoriteStopsDefault.synchronize()
+                
+            }
             
             isFavoriteButtonPressed = true
         }
@@ -112,23 +191,33 @@ class StopPredictionTableViewController: UITableViewController
             print("is not favorite!")
             
             
-         //TODO
+            let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
             
+            var favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+            
+            for i in favoriteStopList {
+                
+                if (i.stopnumber != currentStopDataToDisplay.stopnumber){
+                    
+                    
+                    StopSubList.append(i)
+                    
+                }
+            }
+            
+            favoriteStopList = StopSubList
+            
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+            
+            FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+            
+            FavoriteStopsDefault.synchronize()
             
             isFavoriteButtonPressed = false
+            
         }
     }
  
-    
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear(animated)
-        
-        headerLabel.text = currentStopDataToDisplay.stoptitle
-        headerLabelSubtitle.text = currentStopDataToDisplay.stopnumber
-        
-        tableView.reloadData()
-    }
     
 
     // MARK: - Table view data source

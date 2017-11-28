@@ -13,13 +13,12 @@ import UIKit
 class FavoriteStopsTableViewCell: UITableViewCell{
     
     @IBOutlet weak var StopTitle: UILabel!
-    
-    
     @IBOutlet weak var StopNumber: UILabel!
+
+//    @IBOutlet weak var background: UIView!
     
-    @IBOutlet weak var MyBackgroundCardView: UIView!
-    
-    
+//
+//    @IBOutlet weak var MyBackgroundCardView: UIView!
     
     var stop:Stops! {
         didSet {
@@ -30,11 +29,10 @@ class FavoriteStopsTableViewCell: UITableViewCell{
     
     func updateUI(){
         
-        MyBackgroundCardView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
-        MyBackgroundCardView.layer.masksToBounds = false
-        MyBackgroundCardView.layer.cornerRadius = 5.0
-        MyBackgroundCardView.layer.shadowOffset = CGSize(width: 0, height: 0)
-
+//        background.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
+//        background.layer.masksToBounds = false
+//        background.layer.cornerRadius = 5.0
+//        background.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         
         StopTitle.text = stop.stoptitle
