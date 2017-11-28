@@ -27,8 +27,7 @@ class RouteInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
-//        UserDefaults.standard.synchronize()
+
         
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
@@ -174,25 +173,31 @@ class RouteInfoTableViewController: UITableViewController {
                 
                 var favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
                 
-                for i in favoriteRouteList{
-
-                    if (i.id == routeglobalData.id){
+//                for i in favoriteRouteList{
+//
+//                    if (i.id == routeglobalData.id){
+//
+//                        RouteisEqual = true
+//
+//                    }
+//                    else{
+//
+//                        RouteisEqual = false
+//
+//                    }
+//
+//                    if (!RouteisEqual){
+//
+//                        favoriteRouteList.append(routeglobalData)
+//                    }
+//
+//                }
                 
-                        RouteisEqual = true
-
-                    }
-                    else{
-                        
-                        RouteisEqual = false
-                        
-                    }
-                    
-                    if (!RouteisEqual){
-                        
-                        favoriteRouteList.append(routeglobalData)
-                    }
-
-                }
+                favoriteRouteList.append(routeglobalData)
+                
+                print(favoriteRouteList[0].name!)
+                print(favoriteRouteList.last!.name!)
+                print(favoriteRouteList.count)
                 
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
@@ -209,6 +214,10 @@ class RouteInfoTableViewController: UITableViewController {
                 var favoriteRouteList = [Routes]()
                 
                 favoriteRouteList.append(routeglobalData)
+                
+                print("Chicken" + favoriteRouteList[0].name!)
+                print("Chicken" + favoriteRouteList.last!.name!)
+                print(favoriteRouteList.count)
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
                 

@@ -20,6 +20,9 @@ class FavoriteRoutesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
+//        UserDefaults.standard.synchronize()
+        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
         
