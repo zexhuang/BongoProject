@@ -10,6 +10,7 @@
 		283D1AD61FA7CAAB0007D893 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 283D1AD51FA7CAAB0007D893 /* MapKit.framework */; };
 		28784CBF1FC8D5AA00E4BBE9 /* LocationSearchTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */; };
 		28784CC11FC9E58A00E4BBE9 /* TripPlanning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */; };
+		28DE18C61FCDBAF500808FB2 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */; };
 		D404D38E1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404D38D1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift */; };
 		D404D3901FC362E300ED0EA6 /* RoutesPredictionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404D38F1FC362E300ED0EA6 /* RoutesPredictionTableViewCell.swift */; };
 		D42241101F9AC3E500DF423C /* MyTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D422410F1F9AC3E500DF423C /* MyTabBarViewController.swift */; };
@@ -54,6 +55,7 @@
 		283D1AD51FA7CAAB0007D893 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchTable.swift; sourceTree = "<group>"; };
 		28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlanning.swift; sourceTree = "<group>"; };
+		28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
 		5206F37ABBE51006ECC211E1 /* Pods-Bongo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bongo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bongo/Pods-Bongo.debug.xcconfig"; sourceTree = "<group>"; };
 		528F474CEA7B8BFF8ECB38B9 /* libPods-Bongo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bongo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D404D38D1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesPredictionTableViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				D490CC0B1FC64495003CDD18 /* FavoriteRoutesTableViewController.swift */,
 				D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */,
+				28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */,
 			);
 			path = Favourite;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				D42907FE1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift in Sources */,
 				D4B4594B1FA8514800F5395A /* StopsInfo.swift in Sources */,
 				D49A8FF31FC370F700552FBE /* MapGlobalData.swift in Sources */,
+				28DE18C61FCDBAF500808FB2 /* InformationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
