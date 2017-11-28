@@ -11,6 +11,72 @@ import MapKit
 
 class TripPlanning
 {
+    /**
+    public static func findBestBusBetweenStartAndDestination(startingStops: [Stops], destinationStops: [Stops])->[Stops : String]
+    {
+        let optimalRoute: [Stops : String] = [Stops : String]()
+        
+        let allPredictionsForStartingStops: [StopsInfo] = getPredictions(stops: startingStops)
+        let allPredictionsForDestinationStops: [StopsInfo] = getPredictions(stops: destinationStops)
+        
+        if allPredictionsForStartingStops.isEmpty || allPredictionsForDestinationStops.isEmpty
+        {
+            return optimalRoute // Return an empty dictionary
+        }
+        
+        
+    
+        
+        
+        
+        let routesFromStartLocation = NSMutableSet()
+        for prediction in allPredictionsForStartingStops
+        {
+            routesFromStartLocation.add(prediction.RouteName!)
+        }
+        
+        let commonRoutes = NSMutableSet()
+        for prediction in allPredictionsForDestinationStops
+        {
+            if routesFromStartLocation.contains(prediction.RouteName!)
+            {
+                commonRoutes.add(prediction.RouteName!)
+            }
+        }
+        
+        print("Common routes:")
+        for route in commonRoutes
+        {
+            print(route)
+        }
+        
+        
+        return optimalRoute
+    }
+    
+    
+    
+    
+    // Aggregate all predictions for an array of stops
+    private static func getPredictions(stops: [Stops])->[StopsInfo]
+    {
+        var predictionsForAllStops: [StopsInfo]
+        for stop in stops
+        {
+            predictionsForAllStops.append(contentsOf: getPredictions(stop: stop))
+        }
+    }
+    
+
+    */
+    
+    
+    
+    
+    
+    
+    
+    
     // This is currently n^2 just to get it to work. Speed improvements to come soon
     public static func determineIfBusGoesToBothStops(startingStops: [Stops], destinationStops: [Stops])->[Stops : Stops]
     {
@@ -31,13 +97,13 @@ class TripPlanning
     
     private static func determineIfBusGoesToBothStops(start: Stops, destination: Stops)->Bool
     {
-        let predictionsForStart: [StopsInfo]! = getPredictionForStop(stop: start)
+        let predictionsForStart: [StopsInfo]! = getPredictions(stop: start)
         if predictionsForStart == nil || predictionsForStart.isEmpty
         {
             return false
         }
         
-        let predictionsForDestination: [StopsInfo]! = getPredictionForStop(stop: destination)
+        let predictionsForDestination: [StopsInfo]! = getPredictions(stop: destination)
         if predictionsForDestination == nil || predictionsForDestination.isEmpty
         {
             return false
@@ -67,7 +133,7 @@ class TripPlanning
         return commonRoutes.count > 0 
     }
     
-    private static func getPredictionForStop(stop: Stops)->[StopsInfo]!
+    private static func getPredictions(stop: Stops)->[StopsInfo]!
     {
         // Set up the URL request
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  stop.stopnumber!  + "&api_key=XXXX"
