@@ -11,7 +11,7 @@ import MapKit
 
 class TripPlanning
 {
-    /**
+    
     public static func findBestBusBetweenStartAndDestination(startingStops: [Stops], destinationStops: [Stops])->[Stops : String]
     {
         let optimalRoute: [Stops : String] = [Stops : String]()
@@ -27,8 +27,7 @@ class TripPlanning
         
     
         
-        
-        
+
         let routesFromStartLocation = NSMutableSet()
         for prediction in allPredictionsForStartingStops
         {
@@ -60,16 +59,15 @@ class TripPlanning
     // Aggregate all predictions for an array of stops
     private static func getPredictions(stops: [Stops])->[StopsInfo]
     {
-        var predictionsForAllStops: [StopsInfo]
+        var predictionsForAllStops: [StopsInfo] = [StopsInfo]()
         for stop in stops
         {
             predictionsForAllStops.append(contentsOf: getPredictions(stop: stop))
         }
+        return predictionsForAllStops
     }
     
 
-    */
-    
     
     
     
