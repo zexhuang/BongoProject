@@ -124,7 +124,8 @@ extension RoutesTableViewController : UIViewControllerPreviewingDelegate{
     //pop
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         
-        self.showDetailViewController(viewControllerToCommit, sender: self)
+        self.navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        
     }
     
     
