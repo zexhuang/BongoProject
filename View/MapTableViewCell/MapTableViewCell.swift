@@ -43,24 +43,22 @@ class MapTableViewCell: UITableViewCell {
         }
         
         
-        if (stopsInfo.Agency == "iowa-city")
-        {
-            AgencyImage.image = UIImage(named: "bus-stop (2)")
-        }
-        else if (stopsInfo.Agency == "uiowa")
+        if stopsInfo.Agency == "uiowa"
         {
             AgencyImage.image = UIImage(named: "bus-stop (1)")
         }
-            
+        else if stopsInfo.Agency == "coralville"
+        {
+            AgencyImage.image = UIImage(named: "bus-stop-1")
+        }
         else if (stopsInfo.Agency == "No Agency Running")
         {
             AgencyImage.image = nil
         }
-        else
+        else // Default to Iowa City
         {
-            AgencyImage.image = UIImage(named: "bus-stop-1")
+            AgencyImage.image = UIImage(named: "bus-stop (2)")
         }
-        
         
         RouteName.text = stopsInfo.RouteName
         RouteName.font =  UIFont.boldSystemFont(ofSize: 18)

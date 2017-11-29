@@ -26,9 +26,8 @@ class FavoriteStopsTableViewCell: UITableViewCell{
         }
     }
     
-    
-    func updateUI(){
-        
+    func updateUI()
+    {
 //        background.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
 //        background.layer.masksToBounds = false
 //        background.layer.cornerRadius = 5.0
@@ -40,11 +39,5 @@ class FavoriteStopsTableViewCell: UITableViewCell{
         StopTitle.adjustsFontSizeToFitWidth = true
         StopTitle.minimumScaleFactor = 0.1
         StopNumber.text  =  "Stop " + stop.stopnumber!
-        
-        
     }
-
-    
-    
-    
 }

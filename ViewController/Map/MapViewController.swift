@@ -158,7 +158,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func showNearbyStops()
     {
-        let closestStops = getAllStopsWithinFifthMile(location: locationManager.location!)
+        let closestStops = getClosestStops(location: locationManager.location!)
 
         // Get rid of all old annotations
         self.centerMapOnCurrentLocation()
@@ -177,7 +177,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    private func getAllStopsWithinFifthMile(location: CLLocation)->[Stops]
+    private func getClosestStops(location: CLLocation)->[Stops]
     {
         // Array of every stop
         let allStops: [Stops] = Stops.downloadBongoStops()
@@ -228,7 +228,27 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 }
             }
         }
-        return Array(closestStops.keys)
+        
+        // Create an array of stops sorted by distance away from the location of interest
+        var closestStopsArray: [Stops] = [Stops]()
+        var previousMin = 0.0
+        for pair in closestStops
+        {
+            var min: Double = Double.infinity
+            var stopToAdd: Stops = pair.key
+            for p in closestStops
+            {
+                if p.value < min && p.value > previousMin
+                {
+                    min = p.value
+                    stopToAdd = p.key
+                }
+            }
+            previousMin = min
+            closestStopsArray.append(stopToAdd)
+        }
+
+        return closestStopsArray
     }
     
     // Gets the current location and focuses the view on it
@@ -410,8 +430,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     private func giveBusDirections(start: CLLocation, destination: CLLocation)
     {
-        let stopsNearStart = getAllStopsWithinFifthMile(location: start)
-        let stopsNearDestination = getAllStopsWithinFifthMile(location: destination)
+        let stopsNearStart = getClosestStops(location: start)
+        let stopsNearDestination = getClosestStops(location: destination)
         
         if !stopsNearStart.isEmpty && !stopsNearDestination.isEmpty
         {
@@ -424,14 +444,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             alert.view.addSubview(loadingIndicator)
             
             self.present(alert, animated: true, completion: {
-                let startDestDict = TripPlanning.determineIfBusGoesToBothStops(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
+                //let startDestDict = TripPlanning.determineIfBusGoesToBothStops(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
+                
+                let optimalRouteDictionary: [Stops : String] = TripPlanning.findBestBusBetweenStartAndDestination(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
+                
                 
                 // Remove the loading indicator
                 alert.dismiss(animated: true, completion: {
-                    if !startDestDict.isEmpty
+                    if optimalRouteDictionary.count == 2
                     {
-                        let startingStop: Stops = (startDestDict.first?.key)!
-                        let destinationStop: Stops = (startDestDict.first?.value)!
+                        var startingStop: Stops = stopsNearStart[0]
+                        var destinationStop: Stops = stopsNearDestination[0]
+                        var description: String = "An unknown error occurred."
+                        for pair in optimalRouteDictionary
+                        {
+                            if pair.value.isEmpty
+                            {
+                                destinationStop = pair.key
+                            }
+                            else
+                            {
+                                startingStop = pair.key
+                                description = pair.value
+                            }
+                        }
+                        
+                        //let startingStop: Stops = (startDestDict.first?.key)!
+                        //let destinationStop: Stops = (startDestDict.first?.value)!
                         
                         let startStopLocation: CLLocation = CLLocation(latitude: (startingStop.stoplat)!, longitude: (startingStop.stoplng)!)
                         
@@ -439,7 +478,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         
                         self.giveBusDirectionsOnMap(start: startStopLocation, destination: destinationStopLocation)
                         let title = "Trip Information"
-                        let message = "A bus is available for your request. More info and speed improvements to come in a future version"
+                        let message = description
                         self.displayAlertMessage(title: title, message: message)
                     }
                     else

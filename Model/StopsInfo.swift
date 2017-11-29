@@ -13,6 +13,7 @@ class StopsInfo
     var Prediction: Int?
     var RouteName: String?
     var Agency: String?
+    var optionalInfo: Int? = 0
     
     init()
     {
@@ -36,7 +37,8 @@ class StopsInfo
         self.RouteName = prediction["title"] as? String
     }
     
-    public static func downloadBongoStopsInfo(jsonDictionary:[String:AnyObject]) -> [StopsInfo]
+    
+    public static func downloadBongoStopsInfo(jsonDictionary:[String:AnyObject], optionalInfo: Int) -> [StopsInfo]
     {
         var stopsInfo = [StopsInfo]()
         let jsonDictionaries = jsonDictionary["predictions"] as![[String:AnyObject]]
@@ -45,8 +47,15 @@ class StopsInfo
         {
             let prediction = predictionDictionary
             let newPrediction = StopsInfo(prediction:prediction as [String:AnyObject])
+            newPrediction.optionalInfo = optionalInfo
             stopsInfo.append(newPrediction)
         }
         return stopsInfo
+    }
+
+    
+    public static func downloadBongoStopsInfo(jsonDictionary:[String:AnyObject]) -> [StopsInfo]
+    {
+        return downloadBongoStopsInfo(jsonDictionary: jsonDictionary, optionalInfo: 0)
     }
 }

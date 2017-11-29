@@ -8,24 +8,15 @@
 
 import UIKit
 
-class RoutesTableViewCell: UITableViewCell{
-    
-
-    
-    
+class RoutesTableViewCell: UITableViewCell
+{    
     var route: Routes! {
         didSet {
             self.updateUI()
         }
     }
-    
-    //@IBOutlet weak var BackgroundCardView: UIView!
-    
-    //@IBOutlet weak var titleLabel: UILabel!
-    
-    //@IBOutlet weak var ImageView: UIImageView!
+
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var ImageView: UIImageView!
     
     func updateUI()
@@ -35,25 +26,17 @@ class RoutesTableViewCell: UITableViewCell{
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.1
    
-        if (route.agencyName == "Iowa City Transit"){
-            
-            
-            ImageView.image = UIImage(named: "bus-stop (2)")
-        }
-        else if (route.agencyName == "Cambus"){
-            
+        if (route.agencyName == "Cambus")
+        {
             ImageView.image = UIImage(named: "bus-stop (1)")
         }
-        else{
+        else if route.agencyName == "Coralville Transit"
+        {
             ImageView.image = UIImage(named: "bus-stop-1")
-
         }
-        
-        
-        
+        else
+        {
+            ImageView.image = UIImage(named: "bus-stop (2)")
+        }
     }
-    
-    
-    
-    
 }
