@@ -16,11 +16,17 @@ class RoutesTableViewCell: UITableViewCell
         }
     }
 
+    @IBOutlet weak var CardView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var ImageView: UIImageView!
     
     func updateUI()
     {
+        CardView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
+        CardView.layer.masksToBounds = false
+        CardView.layer.cornerRadius = 5.0
+        CardView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        
         titleLabel.text = route.name
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.adjustsFontSizeToFitWidth = true

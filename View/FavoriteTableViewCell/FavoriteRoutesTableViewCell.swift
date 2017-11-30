@@ -17,7 +17,7 @@ class FavoriteRoutesTableViewCell: UITableViewCell{
     
     @IBOutlet weak var RouteImage: UIImageView!
     
-    @IBOutlet weak var MyBackgroundCardView: UIView!
+//    @IBOutlet weak var MyBackgroundCardView: UIView!
     
     var route: Routes! {
         didSet {
@@ -27,10 +27,10 @@ class FavoriteRoutesTableViewCell: UITableViewCell{
     
     func updateUI()
     {
-        MyBackgroundCardView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
-        MyBackgroundCardView.layer.masksToBounds = false
-        MyBackgroundCardView.layer.cornerRadius = 5.0
-        MyBackgroundCardView.layer.shadowOffset = CGSize(width: 0, height: 0)
+//        MyBackgroundCardView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
+//        MyBackgroundCardView.layer.masksToBounds = false
+//        MyBackgroundCardView.layer.cornerRadius = 5.0
+//        MyBackgroundCardView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         
         RouteName.text = route.name

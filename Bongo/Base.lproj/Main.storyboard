@@ -27,6 +27,14 @@
                                     <rect key="frame" x="0.0" y="0.0" width="341" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lE-SZ-MdK">
+                                            <rect key="frame" x="3" y="12" width="375" height="61"/>
+                                            <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="61" id="ies-8M-dSd"/>
+                                                <constraint firstAttribute="width" constant="375" id="yhd-Rp-buL"/>
+                                            </constraints>
+                                        </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wL1-zB-1Fr">
                                             <rect key="frame" x="16" y="25.5" width="35" height="35"/>
                                             <constraints>
@@ -48,16 +56,21 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="FxQ-an-gLV" secondAttribute="trailing" constant="1" id="8xb-33-Xbm"/>
+                                        <constraint firstItem="1lE-SZ-MdK" firstAttribute="leading" secondItem="2kC-a0-acI" secondAttribute="leading" constant="3" id="Lhq-90-sWF"/>
                                         <constraint firstItem="wL1-zB-1Fr" firstAttribute="top" secondItem="2kC-a0-acI" secondAttribute="topMargin" constant="14" id="RYY-iw-5PH"/>
                                         <constraint firstItem="wL1-zB-1Fr" firstAttribute="leading" secondItem="2kC-a0-acI" secondAttribute="leadingMargin" id="XKR-Hr-gFG"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="FxQ-an-gLV" secondAttribute="bottom" constant="1.5" id="YSI-Wv-i68"/>
                                         <constraint firstItem="FxQ-an-gLV" firstAttribute="top" secondItem="2kC-a0-acI" secondAttribute="topMargin" constant="2" id="Zqd-l2-h8Q"/>
+                                        <constraint firstAttribute="bottom" secondItem="1lE-SZ-MdK" secondAttribute="bottom" constant="12.5" id="fE2-eI-0m2"/>
+                                        <constraint firstAttribute="trailing" secondItem="1lE-SZ-MdK" secondAttribute="trailing" constant="-37" id="nF9-31-yUb"/>
                                         <constraint firstItem="FxQ-an-gLV" firstAttribute="leading" secondItem="wL1-zB-1Fr" secondAttribute="trailing" constant="8" id="rhb-Gv-Pdf"/>
+                                        <constraint firstItem="1lE-SZ-MdK" firstAttribute="top" secondItem="2kC-a0-acI" secondAttribute="top" constant="12" id="tmP-xC-ozw"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="wL1-zB-1Fr" secondAttribute="bottom" constant="14.5" id="yfM-5i-FsP"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 <connections>
+                                    <outlet property="CardView" destination="1lE-SZ-MdK" id="24J-jI-zgV"/>
                                     <outlet property="ImageView" destination="wL1-zB-1Fr" id="D80-l1-Jv8"/>
                                     <outlet property="titleLabel" destination="FxQ-an-gLV" id="bpR-FD-cPY"/>
                                     <segue destination="GqL-Oj-Zrp" kind="show" id="4Fu-FL-xpS"/>
@@ -73,7 +86,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vYS-kB-HYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1232.5" y="483.5"/>
+            <point key="canvasLocation" x="1231.2" y="482.60869565217394"/>
         </scene>
         <!--Route Info Table View Controller-->
         <scene sceneID="yVp-uc-NgT">
@@ -298,14 +311,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="341" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dSE-UC-aGR">
-                                            <rect key="frame" x="3" y="13" width="375" height="60"/>
-                                            <color key="backgroundColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="375" id="3RN-cn-hc2"/>
-                                                <constraint firstAttribute="height" constant="60" id="IiG-sE-3Pe"/>
-                                            </constraints>
-                                        </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="viI-mL-N39">
                                             <rect key="frame" x="16" y="25.5" width="35" height="35"/>
                                             <constraints>
@@ -328,18 +333,13 @@
                                         <constraint firstItem="wh7-Ms-ijL" firstAttribute="top" secondItem="MAL-Xh-3Ag" secondAttribute="top" constant="13.5" id="4V3-xC-yDW"/>
                                         <constraint firstItem="viI-mL-N39" firstAttribute="leading" secondItem="MAL-Xh-3Ag" secondAttribute="leadingMargin" id="9Wd-g1-O4d"/>
                                         <constraint firstItem="wh7-Ms-ijL" firstAttribute="leading" secondItem="viI-mL-N39" secondAttribute="trailing" constant="8" id="CHL-sh-a4o"/>
-                                        <constraint firstAttribute="trailing" secondItem="dSE-UC-aGR" secondAttribute="trailing" constant="-37" id="Flr-aD-Tug"/>
-                                        <constraint firstAttribute="bottom" secondItem="dSE-UC-aGR" secondAttribute="bottom" constant="6.5" id="LDa-GJ-8nW"/>
-                                        <constraint firstItem="dSE-UC-aGR" firstAttribute="leading" secondItem="MAL-Xh-3Ag" secondAttribute="leading" constant="3" id="M4w-dY-QdC"/>
                                         <constraint firstItem="viI-mL-N39" firstAttribute="top" secondItem="MAL-Xh-3Ag" secondAttribute="topMargin" constant="14.5" id="UNd-Wq-NBh"/>
                                         <constraint firstAttribute="trailing" secondItem="wh7-Ms-ijL" secondAttribute="trailing" constant="1" id="bfb-ke-dPb"/>
                                         <constraint firstAttribute="bottom" secondItem="wh7-Ms-ijL" secondAttribute="bottom" constant="6" id="hZN-JH-Z6b"/>
-                                        <constraint firstItem="dSE-UC-aGR" firstAttribute="top" secondItem="MAL-Xh-3Ag" secondAttribute="top" constant="13" id="iFi-Po-JGz"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="viI-mL-N39" secondAttribute="bottom" constant="8.5" id="r0C-Xb-HYc"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="MyBackgroundCardView" destination="dSE-UC-aGR" id="1Vb-Uv-M7t"/>
                                     <outlet property="RouteImage" destination="viI-mL-N39" id="e5B-eH-E6H"/>
                                     <outlet property="RouteName" destination="wh7-Ms-ijL" id="iNb-sg-akH"/>
                                 </connections>

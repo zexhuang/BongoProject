@@ -74,18 +74,18 @@ class RoutesTableViewController: UITableViewController
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Routecell", for: indexPath)as! RoutesTableViewCell
         
-        let whiteRoundedView : UIView = UIView(frame: CGRect(x: 4, y: 12, width: self.view.frame.size.width - 6, height: 55))
-        
-        whiteRoundedView.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
-        
-        whiteRoundedView.layer.masksToBounds = false
-        whiteRoundedView.layer.cornerRadius = 5.0
-        
-        whiteRoundedView.layer.shadowOffset = CGSize(width: 0, height: 0)
-
-        
-        cell.contentView.addSubview(whiteRoundedView)
-        cell.contentView.sendSubview(toBack: whiteRoundedView)
+//        let whiteRoundedView : UIView = UIView(frame: CGRect(x: 4, y: 12, width: self.view.frame.size.width - 6, height: 55))
+//        
+//        whiteRoundedView.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
+//        
+//        whiteRoundedView.layer.masksToBounds = false
+//        whiteRoundedView.layer.cornerRadius = 5.0
+//        
+//        whiteRoundedView.layer.shadowOffset = CGSize(width: 0, height: 0)
+//
+//        
+//        cell.contentView.addSubview(whiteRoundedView)
+//        cell.contentView.sendSubview(toBack: whiteRoundedView)
         
         
         let route = routes[indexPath.row]
