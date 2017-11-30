@@ -30,13 +30,13 @@ class RoutesTableViewCell: UITableViewCell
         {
             ImageView.image = UIImage(named: "bus-stop (1)")
         }
-        else if route.agencyName == "Coralville Transit"
-        {
-            ImageView.image = UIImage(named: "bus-stop-1")
-        }
-        else
+        else if route.agencyName == "Iowa City Transit"
         {
             ImageView.image = UIImage(named: "bus-stop (2)")
+        }
+        else if route.agencyName == "Coraville Transit"
+        {
+            ImageView.image = UIImage(named: "bus-stop-1")
         }
     }
 }
