@@ -10,18 +10,19 @@ import UIKit
 
 class StopPredictionTableViewController: UITableViewController
 {
+
     var refresher:UIRefreshControl!
-    let headerview = UIView()
     var headerLabel = UILabel()
     var headerLabelSubtitle = UILabel()
     var stopsInfoList = [StopsInfo]()
-    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
-    var isFavoriteButtonPressed = false
-    var StopData = StopsGlobalData.sharedInstance.selectedStops
-    var StopisExisted = false
-    var StopisEqual = false
-    let FavoriteStopsDefault = UserDefaults.standard
     var StopSubList = [Stops]()
+    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
+    var StopData = StopsGlobalData.sharedInstance.selectedStops
+    var isFavoriteButtonPressed = false
+    var StopisExisted = false
+    
+    let FavoriteStopsDefault = UserDefaults.standard
+    let headerview = UIView()
 
     override func viewDidLoad()
     {
@@ -203,6 +204,7 @@ class StopPredictionTableViewController: UITableViewController
                 FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
                 
                 FavoriteStopsDefault.synchronize()
+                
                 
             }
                 
