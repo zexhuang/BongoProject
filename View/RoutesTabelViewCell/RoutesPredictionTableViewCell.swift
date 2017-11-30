@@ -23,39 +23,36 @@ class RoutesPredictionTableViewCell: UITableViewCell {
     
     func updateUI()
     {
-        if (String(describing: stopsInfo.Prediction!) == "0"){
-            
+        if (String(describing: stopsInfo.Prediction!) == "0")
+        {
             StopPrediction.text = "Arriving"
             StopPrediction.font =  UIFont.boldSystemFont(ofSize: 18)
         }
-        else if (String(describing: stopsInfo.Prediction!)=="999"){
-            
+        else if (String(describing: stopsInfo.Prediction!)=="999")
+        {
             StopPrediction.text = " "
         }
-            
         else
         {
             StopPrediction.text = String (describing: stopsInfo.Prediction!) + " min"
             StopPrediction.font =  UIFont.boldSystemFont(ofSize: 18)
         }
         
-        
-        if (stopsInfo.Agency == "iowa-city")
-        {
-            AgencyImage.image = UIImage(named: "bus-stop (2)")
-        }
-        else if (stopsInfo.Agency == "uiowa")
+        if stopsInfo.Agency == "uiowa"
         {
             AgencyImage.image = UIImage(named: "bus-stop (1)")
         }
-            
+        else if stopsInfo.Agency == "coralville"
+        {
+            AgencyImage.image = UIImage(named: "bus-stop-1")
+        }
         else if (stopsInfo.Agency == "No Agency Running")
         {
             AgencyImage.image = nil
         }
-        else
+        else // Default to Iowa City
         {
-            AgencyImage.image = UIImage(named: "bus-stop-1")
+            AgencyImage.image = UIImage(named: "bus-stop (2)")
         }
         
         RouteName.text = stopsInfo.RouteName

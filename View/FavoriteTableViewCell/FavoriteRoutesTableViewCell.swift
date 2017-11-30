@@ -25,8 +25,6 @@ class FavoriteRoutesTableViewCell: UITableViewCell{
         }
     }
     
-
-    
     func updateUI()
     {
         MyBackgroundCardView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
@@ -40,25 +38,17 @@ class FavoriteRoutesTableViewCell: UITableViewCell{
         RouteName.adjustsFontSizeToFitWidth = true
         RouteName.minimumScaleFactor = 0.1
         
-        if (route.agencyName == "Iowa City Transit"){
-            
-            
-            RouteImage.image = UIImage(named: "bus-stop (2)")
-        }
-        else if (route.agencyName == "Cambus"){
-            
+        if (route.agencyName == "Cambus")
+        {
             RouteImage.image = UIImage(named: "bus-stop (1)")
         }
-        else{
+        else if route.agencyName == "Coralville Transit"
+        {
             RouteImage.image = UIImage(named: "bus-stop-1")
-            
         }
-        
-        
-        
+        else
+        {
+            RouteImage.image = UIImage(named: "bus-stop (2)")
+        }
     }
-    
-    
-    
-    
 }
