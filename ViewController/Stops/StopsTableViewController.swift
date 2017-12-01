@@ -21,7 +21,6 @@ class StopsTableViewController: UITableViewController
     {
         super.viewDidLoad()
         
-
         
         // Setup the Search Controller
         searchController.searchResultsUpdater = self

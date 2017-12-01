@@ -10,14 +10,17 @@ import UIKit
 
 class StopPredictionTableViewController: UITableViewController
 {
-
     var refresher:UIRefreshControl!
     var headerLabel = UILabel()
     var headerLabelSubtitle = UILabel()
+    
     var stopsInfoList = [StopsInfo]()
     var StopSubList = [Stops]()
-    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
-    var StopData = StopsGlobalData.sharedInstance.selectedStops
+    var favoriteStopList = [Stops]()
+    
+//    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
+    var StopData: Stops = StopsGlobalData.sharedInstance.selectedStops
+    
     var isFavoriteButtonPressed = false
     var StopisExisted = false
     
@@ -46,7 +49,7 @@ class StopPredictionTableViewController: UITableViewController
         Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(StopPredictionTableViewController.update), userInfo: nil, repeats: true)
         
         tableView.addSubview(refresher)
-        tableView.reloadData()
+        //tableView.reloadData()
         
         
         // favourite button
@@ -55,55 +58,60 @@ class StopPredictionTableViewController: UITableViewController
         
     self.navigationItem.rightBarButtonItem = favouriteButtonItem
         
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + currentStopDataToDisplay.stopnumber! + "&api_key=XXXX"
-        
-        guard let url = URL(string: todoEndpoint) else { return }
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        
-        // make the request
-        session.dataTask(with: url){
-            (data, response, error) in
-            // check for any errors
-            guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
-                return
-            }
-            // make sure we got data
-            guard let responseData = data else {
-                print("Error: did not receive data")
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            do {
-                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
-                
-                DispatchQueue.main.async {
-                    self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                }
-            }
-            catch
-            {
-                print("error trying to convert data to JSON")
-                return
-            }
-            
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
-            
-            }.resume()
+//        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + currentStopDataToDisplay.stopnumber! + "&api_key=XXXX"
+//
+//        guard let url = URL(string: todoEndpoint) else { return }
+//        let config = URLSessionConfiguration.default
+//        let session = URLSession(configuration: config)
+//
+//        // make the request
+//        session.dataTask(with: url){
+//            (data, response, error) in
+//            // check for any errors
+//            guard error == nil else {
+//                print("error calling GET on /todos/1")
+//                print(error!)
+//                return
+//            }
+//            // make sure we got data
+//            guard let responseData = data else {
+//                print("Error: did not receive data")
+//                return
+//            }
+//            // parse the result as JSON, since that's what the API provides
+//            do {
+//                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+//
+//                DispatchQueue.main.async {
+//                    self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
+//                }
+//            }
+//            catch
+//            {
+//                print("error trying to convert data to JSON")
+//                return
+//            }
+//
+//            DispatchQueue.main.async() {
+//                self.tableView.reloadData()
+//            }
+//
+//            }.resume()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if(!FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops.isEmpty){
+        if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil){
             
-            for i in FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops{
+            let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
+            
+            favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+            
+            
+            for i in favoriteStopList{
                 
-                if (i.stopnumber == currentStopDataToDisplay.stopnumber){
+                if (i.stopnumber == StopData.stopnumber){
                     
                     StopisExisted = true
                 }
@@ -124,11 +132,11 @@ class StopPredictionTableViewController: UITableViewController
             
         }
         
-        headerLabel.text = currentStopDataToDisplay.stoptitle
-        headerLabelSubtitle.text = currentStopDataToDisplay.stopnumber
+        headerLabel.text = StopData.stoptitle
+        headerLabelSubtitle.text = StopData.stopnumber
         
         tableView.reloadData()
-        
+
         
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
         
@@ -171,13 +179,11 @@ class StopPredictionTableViewController: UITableViewController
             }.resume()
         
         
-        
     }
     
     
     @objc func pushToFavourite() {
         
-      
         if (isFavoriteButtonPressed == false){
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
@@ -190,15 +196,10 @@ class StopPredictionTableViewController: UITableViewController
                 
                 let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
                 
-                var favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+                favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
                 
-                favoriteStopList.append(currentStopDataToDisplay)
-                
-                print(favoriteStopList[0].stoptitle!)
-                print(favoriteStopList.last!.stoptitle!)
-                print(favoriteStopList.count)
-                
-                
+                favoriteStopList.append(StopData)
+
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
                 
                 FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
@@ -210,13 +211,9 @@ class StopPredictionTableViewController: UITableViewController
                 
             else{
                 
-                var favoriteStopList = [Stops]()
+                favoriteStopList = [Stops]()
                 
-                favoriteStopList.append(currentStopDataToDisplay)
-                
-                print("Chicken" + favoriteStopList[0].stoptitle!)
-                print("Chicken" + favoriteStopList.last!.stoptitle!)
-                print(favoriteStopList.count)
+                favoriteStopList.append(StopData)
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
                 
@@ -224,11 +221,12 @@ class StopPredictionTableViewController: UITableViewController
                 
                 FavoriteStopsDefault.synchronize()
                 
-            }
+               }
             
             isFavoriteButtonPressed = true
         }
-        else{
+        else
+        {
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
             print("is not favorite!")
@@ -236,15 +234,13 @@ class StopPredictionTableViewController: UITableViewController
             
             let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
             
-            var favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+            favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
             
             for i in favoriteStopList {
                 
-                if (i.stopnumber != currentStopDataToDisplay.stopnumber){
-                    
+                if (i.stopnumber != StopData.stopnumber){
                     
                     StopSubList.append(i)
-                    
                 }
             }
             
@@ -316,11 +312,11 @@ class StopPredictionTableViewController: UITableViewController
             let whiteRoundedView : UIView = UIView(frame: CGRect(x: 4, y: 12, width: self.view.frame.size.width - 6, height: 55))
             
             whiteRoundedView.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
-            
+
             whiteRoundedView.layer.masksToBounds = false
             whiteRoundedView.layer.cornerRadius = 5.0
             whiteRoundedView.layer.shadowOffset = CGSize(width: 0, height: 0)
-            
+
             cell.contentView.addSubview(whiteRoundedView)
             cell.contentView.sendSubview(toBack: whiteRoundedView)
             
@@ -362,7 +358,7 @@ class StopPredictionTableViewController: UITableViewController
     
     @objc func populate()
     {
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + currentStopDataToDisplay.stopnumber! + "&api_key=XXXX"
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -404,7 +400,7 @@ class StopPredictionTableViewController: UITableViewController
     
     @objc func update() {
         // Set up the URL request
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + currentStopDataToDisplay.stopnumber! + "&api_key=XXXX"
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
 
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default

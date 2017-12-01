@@ -38,11 +38,18 @@ class RoutesPredictionTableViewController: UITableViewController {
         // self-update 15 second intervals
         Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(StopPredictionTableViewController.update), userInfo: nil, repeats: true)
         
-        
         tableView.addSubview(refresher)
-        tableView.reloadData()
+        //tableView.reloadData()
+
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
         
-        
+        headerLabel.text = routePredictionGlobalData.stoptitle
+        headerLabelSubtitle.text = routePredictionGlobalData.stopnumber
         
         // Set up the URL request
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  routePredictionGlobalData.stopnumber! + "&api_key=XXXX"
@@ -84,17 +91,6 @@ class RoutesPredictionTableViewController: UITableViewController {
             }
             
             }.resume()
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear(animated)
-        
-        headerLabel.text = routePredictionGlobalData.stoptitle
-        headerLabelSubtitle.text = routePredictionGlobalData.stopnumber
-        
-        
         
         tableView.reloadData()
     }
@@ -178,14 +174,11 @@ class RoutesPredictionTableViewController: UITableViewController {
         headerview.layer.cornerRadius = 5.0
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
         
-        //let titleLabel = UILabel()
         headerLabel.text =  routePredictionGlobalData.stoptitle
         headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
-        
-        ///let NumberLabel = UILabel()
         
         headerLabelSubtitle.text =  "Stop " + routePredictionGlobalData.stopnumber!
         headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)

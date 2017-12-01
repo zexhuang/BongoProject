@@ -44,7 +44,7 @@ class FavoriteStopsTableViewController: UITableViewController {
             
         }
         
-        FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops = myFavoriteStopsList
+//        FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops = myFavoriteStopsList
         
         tableView.reloadData()
         

@@ -42,6 +42,17 @@ class MapPredictionTableViewController: UITableViewController {
         tableView.addSubview(refresher)
         tableView.reloadData()
         
+
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+        headerLabel.text = MapGlobalData.sharedInstance.mapPrediction.stoptitle
+        headerLabelSubtitle.text = MapGlobalData.sharedInstance.mapPrediction.stopnumber
+        
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  MapGlobalData.sharedInstance.mapPrediction.stopnumber!  + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
@@ -82,17 +93,6 @@ class MapPredictionTableViewController: UITableViewController {
             }
             
             }.resume()
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear(animated)
-        
-        headerLabel.text = MapGlobalData.sharedInstance.mapPrediction.stoptitle
-        headerLabelSubtitle.text = MapGlobalData.sharedInstance.mapPrediction.stopnumber
-        
-        
         
         tableView.reloadData()
     }

@@ -4,7 +4,6 @@
 //
 //  Created by Huangzexian on 11/7/17.
 //  Copyright © 2017 Huangzexian. All rights reserved.
-//
 
 import UIKit
 import MapKit
@@ -13,17 +12,18 @@ class RouteInfoTableViewController: UITableViewController
 {
     @IBOutlet weak var theMap: MKMapView!
     
-    let routeglobalData = RouteGlobalData.sharedInstance.routeData
+//    let routeglobalData = RouteGlobalData.sharedInstance.routeData
     let routePredictionGlobalData:Stops = RoutePredictionGlobalData.sharedInstance.routePrediction
-    var routeData = Routes()
+    var routeData = RouteGlobalData.sharedInstance.routeData
     var stops = [Stops]()
+    var RouteSubList = [Routes]()
+    var favoriteRouteList = [Routes]()
     
     var isFavoriteButtonPressed = false
     var RouteisExisted = false
-    var RouteisEqual = false
     
     let FavoriteRoutesDefault = UserDefaults.standard
-    var RouteSubList = [Routes]()
+
 
     override func viewDidLoad()
     {
@@ -39,55 +39,59 @@ class RouteInfoTableViewController: UITableViewController
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
         
-        navigationItem.title = routeglobalData.name
+        navigationItem.title = routeData.name
         
         
-        let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeglobalData.agency!)&route=\(routeglobalData.id!)&api_key=XXXX"
-        guard let url = URL(string: todoEndpoint) else { return }
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        
-        // make the request
-        session.dataTask(with: url){
-            (data, response, error) in
-            // check for any errors
-            guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
-                return
-            }
-            // make sure we got data
-            guard let responseData = data else {
-                print("Error: did not receive data")
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            do {
-                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
-                
-                DispatchQueue.main.async {
-                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
-                }
-            }
-            catch
-            {
-                print("error trying to convert data to JSON")
-                return
-            }
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
-        }.resume()
+//        let todoEndpoint: String = "http://api.ebongo.org/route?agency=\(routeglobalData.agency!)&route=\(routeglobalData.id!)&api_key=XXXX"
+//        guard let url = URL(string: todoEndpoint) else { return }
+//        let config = URLSessionConfiguration.default
+//        let session = URLSession(configuration: config)
+//
+//        // make the request
+//        session.dataTask(with: url){
+//            (data, response, error) in
+//            // check for any errors
+//            guard error == nil else {
+//                print("error calling GET on /todos/1")
+//                print(error!)
+//                return
+//            }
+//            // make sure we got data
+//            guard let responseData = data else {
+//                print("Error: did not receive data")
+//                return
+//            }
+//            // parse the result as JSON, since that's what the API provides
+//            do {
+//                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+//
+//                DispatchQueue.main.async {
+//                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+//                }
+//            }
+//            catch
+//            {
+//                print("error trying to convert data to JSON")
+//                return
+//            }
+//            DispatchQueue.main.async() {
+//                self.tableView.reloadData()
+//            }
+//        }.resume()
     }
     
     
     override func viewWillAppear(_ animated: Bool)
     {
-        if(!FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes.isEmpty)
+        if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil )
         {
-            for i in FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes
+            let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
+            
+            favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
+            
+            for i in favoriteRouteList
             {
-                if (i.id == routeglobalData.id){
+                if (i.id == routeData.id){
                     
                     RouteisExisted = true
                 }
@@ -205,22 +209,13 @@ class RouteInfoTableViewController: UITableViewController
             
             if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil ){
                 
-                
                 let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
                 
-                var favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
+                favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
                 
-
-                
-                favoriteRouteList.append(routeglobalData)
-                
-                print(favoriteRouteList[0].name!)
-                print(favoriteRouteList.last!.name!)
-                print(favoriteRouteList.count)
-                
+                favoriteRouteList.append(routeData)
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
-                
                 
                 FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
                 
@@ -230,14 +225,8 @@ class RouteInfoTableViewController: UITableViewController
             
             else{
                 
-                var favoriteRouteList = [Routes]()
-                
-                favoriteRouteList.append(routeglobalData)
-                
-                print("Chicken" + favoriteRouteList[0].name!)
-                print("Chicken" + favoriteRouteList.last!.name!)
-                print(favoriteRouteList.count)
-                
+                favoriteRouteList.append(routeData)
+
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
                 
                 FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
@@ -261,7 +250,7 @@ class RouteInfoTableViewController: UITableViewController
             
             for i in favoriteRouteList {
                 
-                if (i.id != routeglobalData.id){
+                if (i.id != routeData.id){
 
                     
                     RouteSubList.append(i)
