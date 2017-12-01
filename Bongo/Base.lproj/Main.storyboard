@@ -294,7 +294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yM3-9T-EAz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2278" y="-995"/>
+            <point key="canvasLocation" x="2089" y="-980"/>
         </scene>
         <!--Favorite Routes Table View Controller-->
         <scene sceneID="0Jv-PP-pRy">
@@ -351,24 +351,11 @@
                             <outlet property="delegate" destination="hIy-MZ-T3J" id="GiQ-a9-BvZ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="whc-p1-WyJ">
-                        <barButtonItem key="leftBarButtonItem" title="Info" id="cGV-1M-2jw">
-                            <connections>
-                                <segue destination="d7c-T7-Z37" kind="popoverPresentation" popoverAnchorBarButtonItem="cGV-1M-2jw" id="8mB-ef-D00">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="right-arrow" id="3J5-pv-J97">
-                            <connections>
-                                <segue destination="XeH-VC-0jS" kind="show" id="gj4-oh-zeV"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="whc-p1-WyJ"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aKU-NZ-tWL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1098.4000000000001" y="-261.31934032983509"/>
+            <point key="canvasLocation" x="2090" y="-260"/>
         </scene>
         <!--Favorite Stops Table View Controller-->
         <scene sceneID="lbn-qy-NCZ">
@@ -421,10 +408,24 @@
                             <outlet property="delegate" destination="XeH-VC-0jS" id="n3Y-sO-4WU"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="F7h-id-0vq">
+                        <barButtonItem key="leftBarButtonItem" title="Info" id="cGV-1M-2jw">
+                            <connections>
+                                <segue destination="d7c-T7-Z37" kind="popoverPresentation" popoverAnchorBarButtonItem="cGV-1M-2jw" id="8mB-ef-D00">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="right-arrow" id="G5P-5R-2FZ">
+                            <connections>
+                                <segue destination="hIy-MZ-T3J" kind="show" id="jce-4P-2le"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKi-zc-Bem" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2277.5999999999999" y="-260.41979010494754"/>
+            <point key="canvasLocation" x="1089" y="-260"/>
         </scene>
         <!--My Tab Bar View Controller-->
         <scene sceneID="8g2-BZ-GZf">
@@ -459,7 +460,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="hIy-MZ-T3J" kind="relationship" relationship="rootViewController" id="roR-Uc-0UH"/>
+                        <segue destination="XeH-VC-0jS" kind="relationship" relationship="rootViewController" id="FfC-5W-Q5A"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PeC-Mv-2N9" userLabel="First Responder" sceneMemberID="firstResponder"/>
