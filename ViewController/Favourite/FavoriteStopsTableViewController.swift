@@ -88,6 +88,18 @@ class FavoriteStopsTableViewController: UITableViewController {
         return myFavoriteStopsList.count
     }
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath?
+    {
+        let stop = myFavoriteStopsList[indexPath.row]
+        
+        FavouriteStopsGlobalData.sharedInstance.selectedStops.stoplat = stop.stoplat
+        FavouriteStopsGlobalData.sharedInstance.selectedStops.stoplng = stop.stoplng
+        FavouriteStopsGlobalData.sharedInstance.selectedStops.stopnumber = stop.stopnumber
+        FavouriteStopsGlobalData.sharedInstance.selectedStops.stoptitle = stop.stoptitle
+        
+        return indexPath
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
          let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopsCell", for: indexPath) as! FavoriteStopsTableViewCell

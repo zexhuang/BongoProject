@@ -13,7 +13,7 @@ class InformationViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+
         
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
@@ -37,6 +37,7 @@ class InformationViewController: UIViewController
         self.dismiss(animated: true, completion: nil)
     }
     
+
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem)
     {
         self.dismiss(animated: true, completion: nil)

@@ -1,15 +1,15 @@
 //
-//  StopPredictionTableViewController.swift
+//  FavoriteStopPredictionTableViewController.swift
 //  Bongo
 //
-//  Created by Huangzexian on 10/26/17.
-//  Copyright © 2017 Huangzexian. All rights reserved.
+//  Created by Huangzexian on 12/1/17.
+//  Copyright © 2017 The University of Iowa (CTS). All rights reserved.
 //
 
 import UIKit
 
-class StopPredictionTableViewController: UITableViewController
-{
+class FavoriteStopPredictionTableViewController: UITableViewController {
+
     var refresher:UIRefreshControl!
     var headerLabel = UILabel()
     var headerLabelSubtitle = UILabel()
@@ -17,16 +17,15 @@ class StopPredictionTableViewController: UITableViewController
     var stopsInfoList = [StopsInfo]()
     var StopSubList = [Stops]()
     var favoriteStopList = [Stops]()
-    
-//    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
-    var StopData: Stops = StopsGlobalData.sharedInstance.selectedStops
+
+    var StopData: Stops = FavouriteStopsGlobalData.sharedInstance.selectedStops
     
     var isFavoriteButtonPressed = false
     var StopisExisted = false
     
     let FavoriteStopsDefault = UserDefaults.standard
     let headerview = UIView()
-
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -46,7 +45,7 @@ class StopPredictionTableViewController: UITableViewController
         refresher.addTarget(self, action: #selector(StopPredictionTableViewController.populate), for: UIControlEvents.valueChanged)
         
         // self-update 15 second intervals
-        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(StopPredictionTableViewController.update), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(FavoriteStopPredictionTableViewController.update), userInfo: nil, repeats: true)
         
         tableView.addSubview(refresher)
         //tableView.reloadData()
@@ -54,10 +53,11 @@ class StopPredictionTableViewController: UITableViewController
         
         // favourite button
         
-     let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
+        let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
-    self.navigationItem.rightBarButtonItem = favouriteButtonItem
+        self.navigationItem.rightBarButtonItem = favouriteButtonItem
         
+
         
     }
     
@@ -69,7 +69,7 @@ class StopPredictionTableViewController: UITableViewController
             
             favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
             
-            print("The favirote stops are reloaded")
+            print("The favirote stops Info are reloaded")
             
             for i in favoriteStopList{
                 
@@ -82,7 +82,7 @@ class StopPredictionTableViewController: UITableViewController
                     
                     isFavoriteButtonPressed = true
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-                   
+                    
                 }
                     
                 else{
@@ -92,15 +92,15 @@ class StopPredictionTableViewController: UITableViewController
                     
                 }
             }
-             StopisExisted = false
-       
+            
+               StopisExisted = false
         }
         
         headerLabel.text = StopData.stoptitle
         headerLabelSubtitle.text = StopData.stopnumber
         
         tableView.reloadData()
-
+        
         
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
         
@@ -154,7 +154,7 @@ class StopPredictionTableViewController: UITableViewController
             print("is favorite!")
             
             // TODO
-       
+            
             if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil ){
                 
                 
@@ -163,7 +163,7 @@ class StopPredictionTableViewController: UITableViewController
                 favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
                 
                 favoriteStopList.append(StopData)
-
+                
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
                 
                 FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
@@ -185,7 +185,7 @@ class StopPredictionTableViewController: UITableViewController
                 
                 FavoriteStopsDefault.synchronize()
                 
-               }
+            }
             
             isFavoriteButtonPressed = true
         }
@@ -220,16 +220,18 @@ class StopPredictionTableViewController: UITableViewController
             
         }
     }
- 
     
-
+    
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
+    
 
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         if (self.stopsInfoList.count == 0){
@@ -243,7 +245,7 @@ class StopPredictionTableViewController: UITableViewController
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StopsPredictionCell", for: indexPath) as! StopsPredictionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopsPredictionTableViewCell", for: indexPath) as! FavoriteStopsPredictionTableViewCell
         
         if (stopsInfoList.count == 0){
             
@@ -276,11 +278,11 @@ class StopPredictionTableViewController: UITableViewController
             let whiteRoundedView : UIView = UIView(frame: CGRect(x: 4, y: 12, width: self.view.frame.size.width - 6, height: 55))
             
             whiteRoundedView.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
-
+            
             whiteRoundedView.layer.masksToBounds = false
             whiteRoundedView.layer.cornerRadius = 5.0
             whiteRoundedView.layer.shadowOffset = CGSize(width: 0, height: 0)
-
+            
             cell.contentView.addSubview(whiteRoundedView)
             cell.contentView.sendSubview(toBack: whiteRoundedView)
             
@@ -299,16 +301,16 @@ class StopPredictionTableViewController: UITableViewController
         headerview.layer.masksToBounds = false
         headerview.layer.cornerRadius = 5.0
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
-
+        
         //let titleLabel = UILabel()
         headerLabel.text =  StopData.stoptitle
         headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
-
+        
         headerview.addSubview(headerLabel)
-
+        
         ///let NumberLabel = UILabel()
-
+        
         headerLabelSubtitle.text =  "Stop " + StopData.stopnumber!
         headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)
         headerLabelSubtitle.font = UIFont.boldSystemFont(ofSize: 18)
@@ -318,7 +320,7 @@ class StopPredictionTableViewController: UITableViewController
         
         return headerview
     }
-
+    
     
     @objc func populate()
     {
@@ -356,7 +358,7 @@ class StopPredictionTableViewController: UITableViewController
                 return
             }
             }.resume()
-    
+        
         
         refresher.endRefreshing()
         tableView.reloadData()
@@ -365,7 +367,7 @@ class StopPredictionTableViewController: UITableViewController
     @objc func update() {
         // Set up the URL request
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
-
+        
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
@@ -406,6 +408,5 @@ class StopPredictionTableViewController: UITableViewController
         
     }
 
-   
 
 }

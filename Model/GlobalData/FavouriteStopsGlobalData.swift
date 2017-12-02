@@ -12,7 +12,7 @@ class FavouriteStopsGlobalData{
     static let sharedInstance:FavouriteStopsGlobalData = FavouriteStopsGlobalData()
     
     
-    var MyFavouriteStops:[Stops] = [Stops]()
+    var selectedStops: Stops = Stops()
     
     
 }
