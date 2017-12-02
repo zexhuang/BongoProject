@@ -27,7 +27,7 @@ class FavoriteRoutesTableViewController: UITableViewController {
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
-        
+      
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,3 +127,8 @@ class FavoriteRoutesTableViewController: UITableViewController {
     }
 
 }
+
+
+
+
+
