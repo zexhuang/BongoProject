@@ -13,19 +13,19 @@ class StopPredictionTableViewController: UITableViewController
     var refresher:UIRefreshControl!
     var headerLabel = UILabel()
     var headerLabelSubtitle = UILabel()
+    let headerview = UIView()
     
     var stopsInfoList = [StopsInfo]()
     var StopSubList = [Stops]()
     var favoriteStopList = [Stops]()
     
-//    var currentStopDataToDisplay: Stops = StopsGlobalData.sharedInstance.selectedStops
     var StopData: Stops = StopsGlobalData.sharedInstance.selectedStops
     
     var isFavoriteButtonPressed = false
     var StopisExisted = false
     
     let FavoriteStopsDefault = UserDefaults.standard
-    let headerview = UIView()
+
 
     override func viewDidLoad()
     {
@@ -403,9 +403,5 @@ class StopPredictionTableViewController: UITableViewController
             }
             
             }.resume()
-        
     }
-
-   
-
 }

@@ -41,43 +41,6 @@ class RouteInfoTableViewController: UITableViewController
         
         navigationItem.title = routeData.name
         
-        
-//        let todoEndpoint: String = "http://api.ebongo.org/route?agency=\(routeglobalData.agency!)&route=\(routeglobalData.id!)&api_key=XXXX"
-//        guard let url = URL(string: todoEndpoint) else { return }
-//        let config = URLSessionConfiguration.default
-//        let session = URLSession(configuration: config)
-//
-//        // make the request
-//        session.dataTask(with: url){
-//            (data, response, error) in
-//            // check for any errors
-//            guard error == nil else {
-//                print("error calling GET on /todos/1")
-//                print(error!)
-//                return
-//            }
-//            // make sure we got data
-//            guard let responseData = data else {
-//                print("Error: did not receive data")
-//                return
-//            }
-//            // parse the result as JSON, since that's what the API provides
-//            do {
-//                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
-//
-//                DispatchQueue.main.async {
-//                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
-//                }
-//            }
-//            catch
-//            {
-//                print("error trying to convert data to JSON")
-//                return
-//            }
-//            DispatchQueue.main.async() {
-//                self.tableView.reloadData()
-//            }
-//        }.resume()
     }
     
     

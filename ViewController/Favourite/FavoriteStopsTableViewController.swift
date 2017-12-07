@@ -20,7 +20,6 @@ class FavoriteStopsTableViewController: UITableViewController {
         
         super.viewDidLoad()
         
-        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
         
@@ -142,10 +141,20 @@ class FavoriteStopsTableViewController: UITableViewController {
 
             return cell
         }
+
+    }
+    
+    @IBAction func ShowInfoView(_ sender: UIBarButtonItem) {
         
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "InformationViewController") as! InformationViewController
+        
+        newViewController.modalPresentationStyle = .overCurrentContext
+        
+        present(newViewController, animated: true, completion: nil)
         
     }
-
+    
 
 }
 

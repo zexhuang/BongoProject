@@ -250,10 +250,10 @@
 		D49A8FFC1FC37B6100552FBE /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				D49A8FF41FC3729600552FBE /* MapPredictionTableViewController.swift */,
 				D49ED74E1F9C69ED00E6E4BA /* MapViewController.swift */,
 				28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */,
 				28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */,
-				D49A8FF41FC3729600552FBE /* MapPredictionTableViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";

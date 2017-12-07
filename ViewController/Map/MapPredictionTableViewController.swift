@@ -14,7 +14,18 @@ class MapPredictionTableViewController: UITableViewController {
     let headerview = UIView()
     var headerLabel = UILabel()
     var headerLabelSubtitle = UILabel()
+    
     var stopsInfoList = [StopsInfo]()
+    
+    var StopSubList = [Stops]()
+    var favoriteStopList = [Stops]()
+    
+    var StopData: Stops = MapGlobalData.sharedInstance.mapPrediction
+    
+    var isFavoriteButtonPressed = false
+    var StopisExisted = false
+    
+    let FavoriteStopsDefault = UserDefaults.standard
     
     override func viewDidLoad()
     {
@@ -42,6 +53,13 @@ class MapPredictionTableViewController: UITableViewController {
         tableView.addSubview(refresher)
         tableView.reloadData()
         
+        
+        // favourite button
+        
+        let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
+        
+        self.navigationItem.rightBarButtonItem = favouriteButtonItem
+        
 
     }
     
@@ -50,10 +68,43 @@ class MapPredictionTableViewController: UITableViewController {
     {
         super.viewWillAppear(animated)
         
-        headerLabel.text = MapGlobalData.sharedInstance.mapPrediction.stoptitle
-        headerLabelSubtitle.text = MapGlobalData.sharedInstance.mapPrediction.stopnumber
+        if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil){
+            
+            let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
+            
+            favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+            
+            print("The favirote stops are reloaded")
+            
+            for i in favoriteStopList{
+                
+                if (i.stopnumber == StopData.stopnumber){
+                    
+                    StopisExisted = true
+                }
+                
+                if (StopisExisted){
+                    
+                    isFavoriteButtonPressed = true
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+                    
+                }
+                    
+                else{
+                    
+                    isFavoriteButtonPressed = false
+                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+                    
+                }
+            }
+            StopisExisted = false
+            
+        }
         
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  MapGlobalData.sharedInstance.mapPrediction.stopnumber!  + "&api_key=XXXX"
+        headerLabel.text = StopData.stoptitle
+        headerLabelSubtitle.text = StopData.stopnumber
+        
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  StopData.stopnumber!  + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -180,14 +231,14 @@ class MapPredictionTableViewController: UITableViewController {
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
         
       
-        headerLabel.text =  MapGlobalData.sharedInstance.mapPrediction.stoptitle
+        headerLabel.text =  StopData.stoptitle
         headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
         
         
-        headerLabelSubtitle.text =  "Stop " + MapGlobalData.sharedInstance.mapPrediction.stopnumber!
+        headerLabelSubtitle.text =  "Stop " + StopData.stopnumber!
         headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)
         headerLabelSubtitle.font = UIFont.boldSystemFont(ofSize: 18)
         
@@ -200,7 +251,7 @@ class MapPredictionTableViewController: UITableViewController {
     
     @objc func populate()
     {
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + MapGlobalData.sharedInstance.mapPrediction.stopnumber! + "&api_key=XXXX"
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -243,7 +294,7 @@ class MapPredictionTableViewController: UITableViewController {
     
     @objc func update() {
         // Set up the URL request
-        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  MapGlobalData.sharedInstance.mapPrediction.stopnumber!  + "&api_key=XXXX"
+        let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" +  StopData.stopnumber!  + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -285,6 +336,82 @@ class MapPredictionTableViewController: UITableViewController {
             }.resume()
         
 
+    }
+    
+    @objc func pushToFavourite(){
+        
+        if (isFavoriteButtonPressed == false){
+            
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
+            print("is favorite!")
+            
+            // TODO
+            
+            if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil ){
+                
+                
+                let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
+                
+                favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+                
+                favoriteStopList.append(StopData)
+                
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+                
+                FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+                
+                FavoriteStopsDefault.synchronize()
+                
+                
+            }
+                
+            else{
+                
+                favoriteStopList = [Stops]()
+                
+                favoriteStopList.append(StopData)
+                
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+                
+                FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+                
+                FavoriteStopsDefault.synchronize()
+                
+            }
+            
+            isFavoriteButtonPressed = true
+        }
+        else
+        {
+            
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+            print("is not favorite!")
+            
+            
+            let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
+            
+            favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
+            
+            for i in favoriteStopList {
+                
+                if (i.stopnumber != StopData.stopnumber){
+                    
+                    StopSubList.append(i)
+                }
+            }
+            
+            favoriteStopList = StopSubList
+            
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
+            
+            FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
+            
+            FavoriteStopsDefault.synchronize()
+            
+            isFavoriteButtonPressed = false
+            
+        }
+        
     }
     
 }

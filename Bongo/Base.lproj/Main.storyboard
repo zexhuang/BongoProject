@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7GI-mr-LTC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7GI-mr-LTC">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -167,7 +167,7 @@
         <!--Information View Controller-->
         <scene sceneID="YAu-I1-ujC">
             <objects>
-                <viewController id="d7c-T7-Z37" customClass="InformationViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InformationViewController" id="d7c-T7-Z37" customClass="InformationViewController" customModule="Bongo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Nj-Ou-YXe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,27 +237,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HnI-3y-sNO">
-                                <rect key="frame" x="0.0" y="20" width="375" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="375" id="9JF-zT-1rh"/>
-                                    <constraint firstAttribute="height" constant="60" id="Tun-bZ-a4J"/>
-                                </constraints>
-                                <items>
-                                    <navigationItem title="Info" id="XYK-GO-lVB">
-                                        <barButtonItem key="leftBarButtonItem" width="20" id="QpH-fq-AEf">
-                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4rv-ee-Sxz">
-                                                <rect key="frame" x="16" y="7" width="37" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Done"/>
-                                                <connections>
-                                                    <action selector="doneButtonPressed:" destination="d7c-T7-Z37" eventType="touchUpInside" id="tT2-aA-svu"/>
-                                                </connections>
-                                            </button>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
@@ -268,26 +247,22 @@
                             <constraint firstItem="tVc-bw-3wK" firstAttribute="trailing" secondItem="HH8-QC-Rd0" secondAttribute="trailing" constant="119" id="3gz-Bk-dsL"/>
                             <constraint firstItem="3X2-wO-u9r" firstAttribute="leading" secondItem="tVc-bw-3wK" secondAttribute="leading" constant="59" id="5Sa-Zp-C8A"/>
                             <constraint firstItem="3X2-wO-u9r" firstAttribute="top" secondItem="1hu-6Q-BRx" secondAttribute="bottom" constant="20" id="5T1-S6-43I"/>
-                            <constraint firstItem="f2P-Qi-uOD" firstAttribute="leading" secondItem="8dF-xC-Ref" secondAttribute="trailing" constant="42" id="7W5-tf-kqF"/>
                             <constraint firstItem="YTE-OK-lif" firstAttribute="leading" secondItem="tVc-bw-3wK" secondAttribute="leading" constant="16" id="8rZ-90-5G3"/>
                             <constraint firstItem="4ZH-qk-bfF" firstAttribute="leading" secondItem="YTE-OK-lif" secondAttribute="trailing" constant="42" id="Fsc-o5-dTS"/>
                             <constraint firstItem="se8-8g-Kk3" firstAttribute="top" secondItem="8dF-xC-Ref" secondAttribute="bottom" constant="20" id="GAd-AI-ovl"/>
-                            <constraint firstItem="HnI-3y-sNO" firstAttribute="trailing" secondItem="tVc-bw-3wK" secondAttribute="trailing" id="GNm-4J-5eO"/>
                             <constraint firstItem="f2P-Qi-uOD" firstAttribute="leading" secondItem="8dF-xC-Ref" secondAttribute="trailing" constant="42" id="IAn-aD-3kW"/>
                             <constraint firstItem="HH8-QC-Rd0" firstAttribute="top" secondItem="se8-8g-Kk3" secondAttribute="bottom" constant="89" id="NKh-1W-9tl"/>
                             <constraint firstItem="8dF-xC-Ref" firstAttribute="leading" secondItem="tVc-bw-3wK" secondAttribute="leading" constant="16" id="OSL-GW-GcG"/>
+                            <constraint firstItem="8dF-xC-Ref" firstAttribute="top" secondItem="tVc-bw-3wK" secondAttribute="top" constant="113" id="SVJ-Ia-Yxg"/>
                             <constraint firstItem="3X2-wO-u9r" firstAttribute="top" secondItem="HH8-QC-Rd0" secondAttribute="bottom" constant="29" id="TJs-qr-rga"/>
                             <constraint firstItem="DuB-YG-hoZ" firstAttribute="leading" secondItem="0Nj-Ou-YXe" secondAttribute="leading" constant="-7" id="Xix-YP-BQQ"/>
-                            <constraint firstItem="HnI-3y-sNO" firstAttribute="top" secondItem="tVc-bw-3wK" secondAttribute="top" id="ZYQ-CM-0lb"/>
                             <constraint firstItem="DuB-YG-hoZ" firstAttribute="top" secondItem="4ZH-qk-bfF" secondAttribute="bottom" constant="29" id="abf-GQ-08o"/>
                             <constraint firstItem="YTE-OK-lif" firstAttribute="top" secondItem="3X2-wO-u9r" secondAttribute="bottom" constant="80" id="coQ-yZ-b7f"/>
                             <constraint firstItem="HH8-QC-Rd0" firstAttribute="leading" secondItem="1hu-6Q-BRx" secondAttribute="trailing" constant="42" id="d3R-aT-vsD"/>
                             <constraint firstItem="tVc-bw-3wK" firstAttribute="trailing" secondItem="3X2-wO-u9r" secondAttribute="trailing" constant="58.5" id="ebS-VA-Z2b"/>
                             <constraint firstAttribute="trailing" secondItem="DuB-YG-hoZ" secondAttribute="trailing" constant="-7" id="eeN-Lg-fg3"/>
                             <constraint firstItem="se8-8g-Kk3" firstAttribute="leading" secondItem="tVc-bw-3wK" secondAttribute="leading" constant="59" id="f5G-NK-rzJ"/>
-                            <constraint firstItem="HnI-3y-sNO" firstAttribute="leading" secondItem="tVc-bw-3wK" secondAttribute="leading" id="fHP-Lo-Vyh"/>
                             <constraint firstItem="1hu-6Q-BRx" firstAttribute="top" secondItem="se8-8g-Kk3" secondAttribute="bottom" constant="80" id="iVt-Mt-jEE"/>
-                            <constraint firstItem="8dF-xC-Ref" firstAttribute="top" secondItem="HnI-3y-sNO" secondAttribute="bottom" constant="53" id="naN-2C-vzw"/>
                             <constraint firstItem="DuB-YG-hoZ" firstAttribute="top" secondItem="YTE-OK-lif" secondAttribute="bottom" constant="20" id="nj9-sc-laC"/>
                             <constraint firstItem="4ZH-qk-bfF" firstAttribute="top" secondItem="3X2-wO-u9r" secondAttribute="bottom" constant="89" id="pRR-So-Dzs"/>
                             <constraint firstItem="tVc-bw-3wK" firstAttribute="trailing" secondItem="f2P-Qi-uOD" secondAttribute="trailing" constant="119" id="qRF-iK-6iG"/>
@@ -417,9 +392,7 @@
                     <navigationItem key="navigationItem" id="F7h-id-0vq">
                         <barButtonItem key="leftBarButtonItem" title="Info" id="cGV-1M-2jw">
                             <connections>
-                                <segue destination="d7c-T7-Z37" kind="popoverPresentation" popoverAnchorBarButtonItem="cGV-1M-2jw" id="1Xg-aX-hUi">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
+                                <action selector="ShowInfoView:" destination="XeH-VC-0jS" id="u0h-8M-yeO"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="right-arrow" id="G5P-5R-2FZ">
@@ -884,7 +857,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V8y-Yr-aom" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1287" y="2799"/>
+            <point key="canvasLocation" x="746" y="2657"/>
         </scene>
         <!--Map Prediction Table View Controller-->
         <scene sceneID="5bD-7S-uYn">
