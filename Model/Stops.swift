@@ -94,6 +94,22 @@ class Stops: NSObject, NSCoding
         return stopList
     }
     
+    
+    public static func parseBongoRouteCoordinatefromURL(jsonDictionary:[String:AnyObject])->[Double]{
+        
+        var RouteCoordinate = [Double]()
+        
+         let jsonDictionaries = jsonDictionary["route"] as![String:AnyObject]
+    
+        let maxlng = jsonDictionaries["min_lng"] as! NSNumber
+        let maxlat = jsonDictionaries["min_lat"] as! NSNumber
+        
+        RouteCoordinate.append(maxlat.doubleValue)
+        RouteCoordinate.append(maxlng.doubleValue)
+        
+        return RouteCoordinate
+    }
+    
     public static func downloadBongoStops() -> [Stops]
     {
         // If the data has already been downloaded, simply return allStops

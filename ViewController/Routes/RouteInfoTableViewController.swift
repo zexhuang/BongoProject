@@ -8,23 +8,26 @@
 import UIKit
 import MapKit
 
-class RouteInfoTableViewController: UITableViewController
+class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLLocationManagerDelegate
 {
     @IBOutlet weak var theMap: MKMapView!
     
-//    let routeglobalData = RouteGlobalData.sharedInstance.routeData
     let routePredictionGlobalData:Stops = RoutePredictionGlobalData.sharedInstance.routePrediction
     var routeData = RouteGlobalData.sharedInstance.routeData
+    
     var stops = [Stops]()
     var RouteSubList = [Routes]()
     var favoriteRouteList = [Routes]()
+    
+    var annotations = [MKPointAnnotation]()
+    var coordinates: [CLLocationCoordinate2D] = []
+    private var locationManager = CLLocationManager()
     
     var isFavoriteButtonPressed = false
     var RouteisExisted = false
     
     let FavoriteRoutesDefault = UserDefaults.standard
-
-
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -41,11 +44,29 @@ class RouteInfoTableViewController: UITableViewController
         
         navigationItem.title = routeData.name
         
+        self.theMap.delegate = self
+        self.theMap.mapType = MKMapType.standard
+
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager = CLLocationManager()
+
+     
     }
     
+    let regionRadius: CLLocationDistance = 4000
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                  regionRadius, regionRadius)
+        theMap.setRegion(coordinateRegion, animated: true)
+    }
+
     
     override func viewWillAppear(_ animated: Bool)
     {
+
+        
         if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil )
         {
             let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
@@ -75,7 +96,6 @@ class RouteInfoTableViewController: UITableViewController
             
         }
         
-        
         let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeData.agency!)&route=\(routeData.id!)&api_key=XXXX"
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -99,21 +119,114 @@ class RouteInfoTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+                    
+                    self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops) )
+                    
+                    self.showRoute(stopEntrylist:self.stops)
+                    
+                    let initialLocation = CLLocation(latitude:              Stops.parseBongoRouteCoordinatefromURL(jsonDictionary: todo!)[0], longitude:              Stops.parseBongoRouteCoordinatefromURL(jsonDictionary: todo!)[1])
+                    
+                    self.centerMapOnLocation(location: initialLocation)
+                    
+                    self.tableView.reloadData()
                 }
+              
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
             }
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
             
             
             }.resume()
+        
+    }
+    
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!)
+    {
+        let location = locations.last as! CLLocation
+        
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015))
+        
+        self.theMap.setRegion(region, animated: true)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        renderer.strokeColor = UIColor(hue: 0.6056, saturation: 0.61, brightness: 0.69, alpha: 1.0)
+        renderer.lineWidth = 3
+        
+        return renderer
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
+    {
+        // Don't do anything is the user clicked on the blue dot for current location
+        if annotation is MKUserLocation
+        {
+            return nil
+        }
+        
+        let reuseId = "pin"
+        var pinView = theMap.dequeueReusableAnnotationView(withIdentifier: reuseId)
+        
+        if pinView == nil
+        {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
+            
+            let infoButton = UIButton(type: UIButtonType.detailDisclosure)
+            pinView!.rightCalloutAccessoryView = infoButton as UIView
+        }
+        else
+        {
+            pinView?.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
+    {
+        if control == view.rightCalloutAccessoryView
+        {
+            
+            routePredictionGlobalData.stoptitle = ((view.annotation?.title)!)!
+            routePredictionGlobalData.stopnumber = ((view.annotation?.subtitle)!)!
+            
+            //performSegue(withIdentifier: "routePinToPredictions", sender: self)
+        }
+    }
+    
+    
+    func showAllStops(stopEntrylist:[Stops]) -> [MKPointAnnotation]{
+        
+        for stopEntry in stopEntrylist {
+            
+            let newAnnotation = MKPointAnnotation()
+            newAnnotation.coordinate = CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!)
+            newAnnotation.title = stopEntry.stoptitle
+            newAnnotation.subtitle = stopEntry.stopnumber
+            annotations.append(newAnnotation)
+            
+        }
+        return annotations
+    }
+    
+    func showRoute(stopEntrylist:[Stops]) {
+        
+        for stopEntry in stopEntrylist {
+            
+            coordinates.append(CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!))
+        }
+        let stopPolyLine = MKPolyline(coordinates: &self.coordinates, count: self.coordinates.count)
+        self.theMap.add(stopPolyLine,level: MKOverlayLevel.aboveLabels)
         
     }
     
@@ -132,6 +245,8 @@ class RouteInfoTableViewController: UITableViewController
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
+
         return stops.count
     }
     

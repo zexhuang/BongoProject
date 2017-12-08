@@ -273,7 +273,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     {
         if control == view.rightCalloutAccessoryView
         {
-            // ZexianHuang: Change this two lines to map global data
+            // ZexianHuang: Change these two lines to map global data
             MapGlobalData.sharedInstance.mapPrediction.stoptitle = ((view.annotation?.title)!)!
             MapGlobalData.sharedInstance.mapPrediction.stopnumber = ((view.annotation?.subtitle)!)!
             
