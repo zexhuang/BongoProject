@@ -16,9 +16,6 @@ class RoutesTableViewController: UITableViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        routes = Routes.downloadBongoRoutes()
-        
    
         self.tableView.reloadData()
         self.navigationItem.title = "Routes"
@@ -37,6 +34,47 @@ class RoutesTableViewController: UITableViewController
             
             
         }
+        
+        
+        let todoEndpoint: String = "http://api.ebongo.org/routelist?api_key=XXXX"
+        guard let url = URL(string: todoEndpoint) else { return }
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // make the request
+        session.dataTask(with: url){
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /todos/1")
+                print(error!)
+                return
+            }
+            // make sure we got data
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse the result as JSON, since that's what the API provides
+            do {
+                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+                
+                DispatchQueue.main.async() {
+       
+                    self.routes = Routes.downloadBongoRoutesFromURL(jsonDictionary: todo!)
+                    
+                    self.tableView.reloadData()
+                }
+                
+            }
+            catch
+            {
+                print("error trying to convert data to JSON")
+                return
+            }
+            
+            
+            }.resume()
 
     }
     
