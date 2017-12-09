@@ -23,7 +23,7 @@ class InformationViewController: UIViewController
         view.isOpaque = false
         view.backgroundColor = .clear
         view.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
-        view.layer.shadowOffset = CGSize(width: 0, height: 0)
+
     }
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer)
