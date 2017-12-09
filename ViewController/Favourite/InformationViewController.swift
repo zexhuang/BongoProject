@@ -10,12 +10,12 @@ import UIKit
 
 class InformationViewController: UIViewController
 {
-
+      var navBar: UINavigationBar = UINavigationBar()
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
-        
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
         self.view.addGestureRecognizer(swipeDown)
@@ -31,11 +31,12 @@ class InformationViewController: UIViewController
         self.dismiss(animated: true, completion: nil)
     }
     
-
+    
     @IBAction func DoneButtonPressed(_ sender: UIButton) {
         
-              self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
+    
     
     
 }
