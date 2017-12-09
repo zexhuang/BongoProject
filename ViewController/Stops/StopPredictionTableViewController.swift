@@ -32,6 +32,9 @@ class StopPredictionTableViewController: UITableViewController
         super.viewDidLoad()
         self.tableView.delegate = self
         
+        headerLabel.adjustsFontSizeToFitWidth = true
+        headerLabelSubtitle.adjustsFontSizeToFitWidth = true
+        
         // Configure the cells for the table
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
@@ -53,47 +56,38 @@ class StopPredictionTableViewController: UITableViewController
         
         
         // favourite button
+        let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
-     let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
-        
-    self.navigationItem.rightBarButtonItem = favouriteButtonItem
-        
-        
+        self.navigationItem.rightBarButtonItem = favouriteButtonItem
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil){
-            
+    override func viewWillAppear(_ animated: Bool)
+    {
+        if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil)
+        {
             let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
             
             favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
             
-            print("The favirote stops are reloaded")
-            
-            for i in favoriteStopList{
-                
-                if (i.stopnumber == StopData.stopnumber){
-                    
+            for i in favoriteStopList
+            {
+                if (i.stopnumber == StopData.stopnumber)
+                {
                     StopisExisted = true
                 }
                 
-                if (StopisExisted){
-                    
+                if (StopisExisted)
+                {
                     isFavoriteButtonPressed = true
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-                   
                 }
-                    
-                else{
-                    
+                else
+                {
                     isFavoriteButtonPressed = false
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-                    
                 }
             }
              StopisExisted = false
-       
         }
         
         headerLabel.text = StopData.stoptitle
@@ -101,7 +95,6 @@ class StopPredictionTableViewController: UITableViewController
         
         tableView.reloadData()
 
-        
         let todoEndpoint: String = "http://api.ebongo.org/prediction?stopid=" + StopData.stopnumber! + "&api_key=XXXX"
         
         guard let url = URL(string: todoEndpoint) else { return }
@@ -141,23 +134,17 @@ class StopPredictionTableViewController: UITableViewController
             }
             
             }.resume()
-        
-        
     }
     
     
-    @objc func pushToFavourite() {
-        
-        if (isFavoriteButtonPressed == false){
-            
+    @objc func pushToFavourite()
+    {
+        if (isFavoriteButtonPressed == false)
+        {
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
-            print("is favorite!")
             
-            // TODO
-       
-            if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil ){
-                
-                
+            if(FavoriteStopsDefault.object(forKey: "StopDefaults") != nil )
+            {
                 let favoriteStopData =  FavoriteStopsDefault.object(forKey: "StopDefaults") as! Data
                 
                 favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
@@ -167,25 +154,18 @@ class StopPredictionTableViewController: UITableViewController
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
                 
                 FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
-                
                 FavoriteStopsDefault.synchronize()
-                
-                
             }
-                
-            else{
-                
+            else
+            {
                 favoriteStopList = [Stops]()
-                
                 favoriteStopList.append(StopData)
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
                 
                 FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
-                
                 FavoriteStopsDefault.synchronize()
-                
-               }
+            }
             
             isFavoriteButtonPressed = true
         }
@@ -209,15 +189,11 @@ class StopPredictionTableViewController: UITableViewController
             }
             
             favoriteStopList = StopSubList
-            
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteStopList)
             
             FavoriteStopsDefault.set(encodedData, forKey: "StopDefaults")
-            
             FavoriteStopsDefault.synchronize()
-            
             isFavoriteButtonPressed = false
-            
         }
     }
  
@@ -226,17 +202,17 @@ class StopPredictionTableViewController: UITableViewController
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        if (self.stopsInfoList.count == 0){
-            
+        if (self.stopsInfoList.count == 0)
+        {
             return 1
         }
-        else{
+        else
+        {
             return stopsInfoList.count
         }
     }
@@ -268,7 +244,8 @@ class StopPredictionTableViewController: UITableViewController
             
             return cell
         }
-        else{
+        else
+        {
             let stopInfo = stopsInfoList[indexPath.row]
             
             cell.stopsInfo = stopInfo
@@ -285,7 +262,6 @@ class StopPredictionTableViewController: UITableViewController
             cell.contentView.sendSubview(toBack: whiteRoundedView)
             
             return cell
-            
         }
     }
     
@@ -300,14 +276,11 @@ class StopPredictionTableViewController: UITableViewController
         headerview.layer.cornerRadius = 5.0
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
 
-        //let titleLabel = UILabel()
         headerLabel.text =  StopData.stoptitle
-        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
+        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width - 16, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
 
         headerview.addSubview(headerLabel)
-
-        ///let NumberLabel = UILabel()
 
         headerLabelSubtitle.text =  "Stop " + StopData.stopnumber!
         headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)
@@ -401,7 +374,6 @@ class StopPredictionTableViewController: UITableViewController
             DispatchQueue.main.async() {
                 self.tableView.reloadData()
             }
-            
-            }.resume()
+        }.resume()
     }
 }

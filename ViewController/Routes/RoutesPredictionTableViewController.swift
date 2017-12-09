@@ -16,11 +16,14 @@ class RoutesPredictionTableViewController: UITableViewController {
     var headerLabelSubtitle = UILabel()
     var stopsInfoList = [StopsInfo]()
     let routePredictionGlobalData:Stops = RoutePredictionGlobalData.sharedInstance.routePrediction
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         self.tableView.delegate = self
         
+        headerLabel.adjustsFontSizeToFitWidth = true
+        headerLabelSubtitle.adjustsFontSizeToFitWidth = true
         
         // Configure the cells for the table
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -175,7 +178,7 @@ class RoutesPredictionTableViewController: UITableViewController {
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         headerLabel.text =  routePredictionGlobalData.stoptitle
-        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
+        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width - 16, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
@@ -185,7 +188,6 @@ class RoutesPredictionTableViewController: UITableViewController {
         headerLabelSubtitle.font = UIFont.boldSystemFont(ofSize: 18)
         
         headerview.addSubview(headerLabelSubtitle)
-        
         
         return headerview
     }

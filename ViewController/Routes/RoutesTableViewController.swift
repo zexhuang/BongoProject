@@ -13,26 +13,22 @@ class RoutesTableViewController: UITableViewController
     var routes = [Routes]()
     let routeglobalData = RouteGlobalData.sharedInstance.routeData
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        
    
         self.tableView.reloadData()
         self.navigationItem.title = "Routes"
 
-        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
         
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
         
-        
-        if traitCollection.forceTouchCapability == .available{
-            
+        if traitCollection.forceTouchCapability == .available
+        {
            registerForPreviewing(with: self, sourceView: tableView)
-            
-            
         }
         
         
@@ -60,23 +56,18 @@ class RoutesTableViewController: UITableViewController
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
                 DispatchQueue.main.async() {
-       
                     self.routes = Routes.downloadBongoRoutesFromURL(jsonDictionary: todo!)
-                    
                     self.tableView.reloadData()
                 }
-                
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
             }
-            
-            
-            }.resume()
-
+        }.resume()
     }
+    
     
     // MARK: - Table view data source
 

@@ -78,11 +78,11 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 
                 self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
                 self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                self.centerMapOnLocation(location: self.locationManager.location!)
+                
+                self.tableView.reloadData()
                 self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
                 self.showRoute(stopEntrylist: self.stops)
-                self.centerMapOnLocation(location: self.locationManager.location!)
-
-                self.tableView.reloadData()
             }
             catch
             {
@@ -103,6 +103,11 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     override func viewWillAppear(_ animated: Bool)
     {
+        if let row = tableView.indexPathForSelectedRow
+        {
+            self.tableView.deselectRow(at: row, animated: false)
+        }
+        
         if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil )
         {
             let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
@@ -111,25 +116,23 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             
             for i in favoriteRouteList
             {
-                if (i.id == routeData.id){
-                    
+                if (i.id == routeData.id)
+                {
                     RouteisExisted = true
                 }
                 
-                if (RouteisExisted){
-                    
+                if (RouteisExisted)
+                {
                     isFavoriteButtonPressed = true
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
                 }
-                    
-                else{
-                    
+                else
+                {
                     isFavoriteButtonPressed = false
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
                     
                 }
             }
-            
         }
     }
     
@@ -200,14 +203,13 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     func showAllStops(stopEntrylist:[Stops]) -> [MKPointAnnotation]
     {
-        for stopEntry in stopEntrylist {
-            
+        for stopEntry in stopEntrylist
+        {
             let newAnnotation = MKPointAnnotation()
             newAnnotation.coordinate = CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!)
             newAnnotation.title = stopEntry.stoptitle
             newAnnotation.subtitle = stopEntry.stopnumber
             annotations.append(newAnnotation)
-            
         }
         return annotations
     }
@@ -220,9 +222,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         let polyLine = MKPolyline(coordinates: routePath, count: self.routePath.count)
         self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
     }
-    
-    
-    
     
     
     
@@ -262,46 +261,36 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     @objc func pushToFavourite()
     {
-        if (isFavoriteButtonPressed == false){
-            
+        if (isFavoriteButtonPressed == false)
+        {
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)
             
-            print("is favorite!")
-            
-            
-            if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil ){
-                
+            if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil )
+            {
                 let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
                 
                 favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
-                
                 favoriteRouteList.append(routeData)
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
                 
                 FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
-                
                 FavoriteRoutesDefault.synchronize()
-                
             }
-            
-            else{
-                
+            else
+            {
                 favoriteRouteList.append(routeData)
 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
                 
                 FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
-                
                 FavoriteRoutesDefault.synchronize()
-                
             }
             
             isFavoriteButtonPressed = true
-            
         }
-        else{
-            
+        else
+        {
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
             
             print("is not favorite!")
@@ -310,28 +299,20 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             
             var favoriteRouteList = NSKeyedUnarchiver.unarchiveObject(with: favoriteRouteData) as! [Routes]
             
-            for i in favoriteRouteList {
-                
-                if (i.id != routeData.id){
-
-                    
+            for i in favoriteRouteList
+            {
+                if (i.id != routeData.id)
+                {
                     RouteSubList.append(i)
-                    
                 }
             }
             
             favoriteRouteList = RouteSubList
-            
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
             
             FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
-            
             FavoriteRoutesDefault.synchronize()
-            
             isFavoriteButtonPressed = false
-            
         }
     }
-
-    
 }

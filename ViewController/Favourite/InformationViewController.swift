@@ -36,9 +36,6 @@ class InformationViewController: UIViewController
         
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
-    
 }
 
 

@@ -8,17 +8,17 @@
 
 import UIKit
 
-class FavoriteStopsTableViewController: UITableViewController {
+class FavoriteStopsTableViewController: UITableViewController
+{
+    private var myFavoriteStopsList:[Stops] = [Stops]()
+    private let headerview = UIView()
+    private var headerLabel = UILabel()
     
-    var myFavoriteStopsList:[Stops] = [Stops]()
-    
-    let headerview = UIView()
-    var headerLabel = UILabel()
-    
-    override func viewDidLoad() {
-        
-        
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        
+        self.headerLabel.adjustsFontSizeToFitWidth = true
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
@@ -34,8 +34,11 @@ class FavoriteStopsTableViewController: UITableViewController {
         if traitCollection.forceTouchCapability == .available{
             
             registerForPreviewing(with: self, sourceView: tableView)
-            
         }
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        self.view.addGestureRecognizer(swipeLeft)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -44,20 +47,23 @@ class FavoriteStopsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if(UserDefaults.standard.object(forKey: "StopDefaults") != nil){
-            
+    override func viewWillAppear(_ animated: Bool)
+    {
+        if(UserDefaults.standard.object(forKey: "StopDefaults") != nil)
+        {
             let StopData =  UserDefaults.standard.object(forKey: "StopDefaults") as! Data
-            
             myFavoriteStopsList = NSKeyedUnarchiver.unarchiveObject(with: StopData) as! [Stops]
-            
         }
         
 //        FavouriteStopsGlobalData.sharedInstance.MyFavouriteStops = myFavoriteStopsList
         
         tableView.reloadData()
-        
+    }
+    
+    
+    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer)
+    {
+        self.performSegue(withIdentifier: "showFavoriteRoutes", sender: self)
     }
     
     
@@ -71,9 +77,8 @@ class FavoriteStopsTableViewController: UITableViewController {
         headerview.layer.cornerRadius = 5.0
         headerview.layer.shadowOffset = CGSize(width: 0, height: 0)
         
-        //let titleLabel = UILabel()
         headerLabel.text =  "Stops"
-        headerLabel.frame = CGRect(x:10,y:0, width: view.frame.width, height: 30)
+        headerLabel.frame = CGRect(x:10,y:0, width: view.frame.width - 16, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
@@ -89,12 +94,10 @@ class FavoriteStopsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return myFavoriteStopsList.count
     }
     
@@ -137,34 +140,26 @@ class FavoriteStopsTableViewController: UITableViewController {
             return cell
 
         }
-        else {
-
+        else
+        {
             return cell
         }
-
     }
     
-    @IBAction func ShowInfoView(_ sender: UIBarButtonItem) {
-        
+    @IBAction func ShowInfoView(_ sender: UIBarButtonItem)
+    {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "InformationViewController") as! InformationViewController
         
         newViewController.modalPresentationStyle = .overFullScreen
-
-        
         self.present(newViewController, animated: true, completion: nil)
-       
-        
     }
-    
-
 }
 
 
 
-extension FavoriteStopsTableViewController : UIViewControllerPreviewingDelegate{
-    
+extension FavoriteStopsTableViewController : UIViewControllerPreviewingDelegate
+{
     // peak
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
