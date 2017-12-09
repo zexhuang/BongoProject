@@ -119,14 +119,16 @@ class StopPredictionTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async () {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                }
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
+            }
+            
+            DispatchQueue.main.async () {
+                self.tableView.reloadData()
             }
             
             

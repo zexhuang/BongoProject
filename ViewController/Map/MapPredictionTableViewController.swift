@@ -128,10 +128,8 @@ class MapPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                    
-                }
+            
             }
             catch
             {
@@ -140,6 +138,7 @@ class MapPredictionTableViewController: UITableViewController {
             }
             
             DispatchQueue.main.async() {
+                
                 self.tableView.reloadData()
             }
             
@@ -275,10 +274,8 @@ class MapPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                    //if StopsInfo.downloadBongoStopInfo() return [] list Then "No Prediction Avaliable"
-                }
+            
             }
             catch
             {
@@ -318,10 +315,8 @@ class MapPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                    
-                }
+                
             }
             catch
             {
