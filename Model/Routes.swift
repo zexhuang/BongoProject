@@ -65,6 +65,27 @@ class Routes: NSObject, NSCoding{
         
     }
     
+    static func downloadBongoRoutesFromURL(jsonDictionary:[String:AnyObject])->[Routes]{
+        
+        var routes = [Routes]()
+        
+       
+        let routesDictionaries = jsonDictionary["routes"]as![[String:AnyObject]]
+            
+            for routeDictionary in routesDictionaries
+            {
+                let routeInfomation = routeDictionary["route"]as! [String : Any]
+                let newRoute = Routes(routeInfomation:routeInfomation as [String : AnyObject])
+                
+                routes.append(newRoute)
+            }
+        
+        
+        return routes
+    }
+    
+    
+    
     static func downloadBongoRoutes()->[Routes]
     {
         var routes = [Routes]()
