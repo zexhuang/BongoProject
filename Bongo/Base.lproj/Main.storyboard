@@ -147,7 +147,7 @@
                                     <outlet property="CardView" destination="8wS-va-UBV" id="Ucs-Gy-JOR"/>
                                     <outlet property="StopNumber" destination="xgg-X7-ZY8" id="hnb-BO-Nm1"/>
                                     <outlet property="StopTitle" destination="b6h-NP-1Qa" id="TWa-T7-Myz"/>
-                                    <segue destination="S0T-Ta-4NA" kind="show" id="3ij-bp-Wnq"/>
+                                    <segue destination="S0T-Ta-4NA" kind="show" identifier="routeMapToPrediction" id="3ij-bp-Wnq"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -663,11 +663,24 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Tgw-46-bhU"/>
                     </view>
-                    <navigationItem key="navigationItem" id="dqw-vh-DlQ"/>
+                    <navigationItem key="navigationItem" id="dqw-vh-DlQ">
+                        <barButtonItem key="leftBarButtonItem" title="Trip" style="plain" id="iwD-eA-Xlc">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="DPS-nu-2SD">
+                                <rect key="frame" x="16" y="7" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Trip"/>
+                                <connections>
+                                    <action selector="returnToOverviewPressed" destination="56R-Oh-FSp" eventType="touchUpInside" id="Y6H-Zh-Z9V"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="currentLocationButton" destination="Xhx-Qy-Irg" id="bil-uQ-IK5"/>
                         <outlet property="getDirectionsButton" destination="9ap-Ax-iYo" id="LDh-Yc-8WZ"/>
                         <outlet property="nearbyStopButton" destination="LYP-Gh-Ome" id="pb3-pI-9Wi"/>
+                        <outlet property="overviewButton" destination="DPS-nu-2SD" id="2gC-tU-5fd"/>
                         <outlet property="searchDisplayController" destination="aqn-nK-S2h" id="6DY-M1-hLA"/>
                         <outlet property="theMap" destination="RUi-3e-QOw" id="9Oi-6g-v5F"/>
                         <segue destination="3OR-rM-Ge1" kind="show" identifier="PinToPredictions" id="HjB-46-mUh"/>
@@ -858,6 +871,7 @@
                                 <rect key="frame" x="16" y="124" width="200" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oDj-E3-OVZ" secondAttribute="height" multiplier="2:1" id="8Yt-ZV-kE0"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="8kU-e8-rOr"/>
                                     <constraint firstAttribute="width" constant="200" id="sGy-fP-VvU"/>
                                     <constraint firstAttribute="height" constant="100" id="tA0-xs-Es1"/>
                                 </constraints>
@@ -871,48 +885,52 @@
                                     <constraint firstAttribute="width" secondItem="fSj-Xz-i5x" secondAttribute="height" multiplier="2:1" id="BNZ-hy-wZx"/>
                                     <constraint firstAttribute="height" constant="100" id="d3X-tk-qHe"/>
                                     <constraint firstAttribute="width" constant="200" id="lCe-Hm-4oz"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="yPW-7H-RUD"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xXQ-CD-aPq">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <items>
-                                    <navigationItem title="Trip Information" id="XB6-4S-QwK">
-                                        <barButtonItem key="leftBarButtonItem" style="done" systemItem="done" id="eoh-b0-Ad4"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2C-AD-77P">
                                 <rect key="frame" x="16" y="284" width="200" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="D2C-AD-77P" secondAttribute="height" multiplier="2:1" id="6z5-S5-QbL"/>
                                     <constraint firstAttribute="width" constant="200" id="aEw-XY-33H"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="guD-hv-iYi"/>
                                     <constraint firstAttribute="height" constant="100" id="svq-RS-gX8"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n91-gQ-rS4">
+                                <rect key="frame" x="16" y="20" width="51" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="n91-gQ-rS4" secondAttribute="height" multiplier="3:2" id="QRh-aI-fYU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <state key="normal" title="Done"/>
+                                <connections>
+                                    <action selector="doneButtonPressed" destination="LSP-3q-zwk" eventType="touchUpInside" id="sOT-vM-smB"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="nze-cD-QsR" firstAttribute="trailing" secondItem="7aK-IG-pTm" secondAttribute="trailing" constant="40" id="0IA-bf-Q0m"/>
-                            <constraint firstItem="oDj-E3-OVZ" firstAttribute="top" secondItem="xXQ-CD-aPq" secondAttribute="bottom" constant="60" id="LgP-0M-j9o"/>
+                            <constraint firstItem="oDj-E3-OVZ" firstAttribute="top" secondItem="n91-gQ-rS4" secondAttribute="bottom" constant="70" id="KKM-po-Axl"/>
+                            <constraint firstItem="n91-gQ-rS4" firstAttribute="top" secondItem="nze-cD-QsR" secondAttribute="top" id="NoC-8P-POB"/>
                             <constraint firstItem="D2C-AD-77P" firstAttribute="top" secondItem="oDj-E3-OVZ" secondAttribute="bottom" constant="60" id="QkJ-Qq-0DY"/>
-                            <constraint firstItem="xXQ-CD-aPq" firstAttribute="top" secondItem="nze-cD-QsR" secondAttribute="top" id="Rjj-yQ-YF6"/>
                             <constraint firstItem="oDj-E3-OVZ" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="SYw-Yl-IJO"/>
                             <constraint firstItem="D2C-AD-77P" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="cJt-d4-dpd"/>
-                            <constraint firstItem="xXQ-CD-aPq" firstAttribute="trailing" secondItem="nze-cD-QsR" secondAttribute="trailing" id="cqp-hd-vvp"/>
                             <constraint firstItem="Iyu-NT-q29" firstAttribute="centerY" secondItem="D2C-AD-77P" secondAttribute="centerY" id="dwi-iP-rkn"/>
                             <constraint firstItem="nze-cD-QsR" firstAttribute="trailing" secondItem="Iyu-NT-q29" secondAttribute="trailing" constant="40" id="hrQ-sS-Y5L"/>
                             <constraint firstItem="SBw-HG-ZeY" firstAttribute="centerY" secondItem="fSj-Xz-i5x" secondAttribute="centerY" id="iGe-sg-r0a"/>
-                            <constraint firstItem="xXQ-CD-aPq" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" id="knM-mc-c3T"/>
                             <constraint firstItem="fSj-Xz-i5x" firstAttribute="top" secondItem="D2C-AD-77P" secondAttribute="bottom" constant="60" id="m0h-bT-bbf"/>
                             <constraint firstItem="fSj-Xz-i5x" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="mjC-BG-T7Q"/>
                             <constraint firstItem="oDj-E3-OVZ" firstAttribute="centerY" secondItem="7aK-IG-pTm" secondAttribute="centerY" id="opk-ER-nnB"/>
                             <constraint firstItem="nze-cD-QsR" firstAttribute="trailing" secondItem="SBw-HG-ZeY" secondAttribute="trailing" constant="40" id="yLf-KX-iPe"/>
+                            <constraint firstItem="n91-gQ-rS4" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="yfC-s9-aGd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="nze-cD-QsR"/>
                     </view>

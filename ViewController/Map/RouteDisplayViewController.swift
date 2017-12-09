@@ -21,10 +21,14 @@ class RouteDisplayViewController : UIViewController
     
     var startStop: Stops!
     var destinationStop: Stops!
-    var currentLocation: CLLocation!
+    var destinationName: String!
+    var startLocation: CLLocation!
+    var destinationLocation: CLLocation!
     var mapView: MKMapView?
     
-    public func setVCData(walkToStopText: String, busRouteText: String, walkFromStopText: String, startStop: Stops, destinationStop: Stops, currentLocation: CLLocation, mapView: MKMapView)
+    var mapVC: MapViewController!
+    
+    public func setVCData(walkToStopText: String, busRouteText: String, walkFromStopText: String, startStop: Stops, destinationStop: Stops, startLocation: CLLocation, destinationLocation: CLLocation, destinationName: String, mapVC: MapViewController)
     {
         self.walkToStopText = walkToStopText
         self.busRouteText = busRouteText
@@ -32,19 +36,32 @@ class RouteDisplayViewController : UIViewController
         
         self.startStop = startStop
         self.destinationStop = destinationStop
-        self.currentLocation = currentLocation
-        self.mapView = mapView
+        self.startLocation = startLocation
+        self.destinationLocation = destinationLocation
+        self.destinationName = destinationName
+        self.mapVC = mapVC
     }
-    
     
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
+        self.view.addGestureRecognizer(swipeDown)
+        
+        
+        self.view.backgroundColor = .clear
+        self.view.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
+        
         self.walkToStopLabel.text = walkToStopText
         self.busRouteLabel.text = busRouteText
         self.walkFromStopLabel.text = walkFromStopText
+        
+        self.walkToStopLabel.adjustsFontSizeToFitWidth = true
+        self.busRouteLabel.adjustsFontSizeToFitWidth = true
+        self.walkFromStopLabel.adjustsFontSizeToFitWidth = true
     }
     
     
@@ -57,24 +74,44 @@ class RouteDisplayViewController : UIViewController
         return polylineRenderer
     }
     
+    
+    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer)
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
     @IBAction func walkToStopButtonPressed()
     {
-        
+        self.dismiss(animated: true, completion: {
+            let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
+            self.mapVC.giveWalkingDirections(start: self.startLocation, destination: startStopLocation)
+        })
     }
     
     @IBAction func busRouteButtonPressed()
     {
-        
+        self.dismiss(animated: true, completion: {
+            let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
+            let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
+            
+            self.mapVC.giveBusDirectionsOnMap(start: startStopLocation, destination: destinationStopLocation)
+        })
     }
     
-  /*
+  
     @IBAction func walkFromStopButtonPressed()
     {
-        let coordinate = CLLocationCoordinate2DMake(destinationToOpenInMaps.coordinate.latitude, destinationToOpenInMaps.coordinate.longitude)
-        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
-        
-        mapItem.name = resultSearchController?.searchBar.text
-        mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking])
-    }*/
+        self.dismiss(animated: true, completion: {
+            let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
+            self.mapVC.giveWalkingDirections(start: destinationStopLocation, destination: self.destinationLocation)
+        })
+    }
     
+    
+    @IBAction func doneButtonPressed()
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
 }

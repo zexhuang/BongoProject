@@ -32,7 +32,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     {
         super.viewDidLoad()
         
-    
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
@@ -77,18 +76,13 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                //DispatchQueue.main.async() {
-                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
-                    self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
-                
-                
-                print("\n\n\nStops has length: \(self.stops.count)\n\n")
-                self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops) )
+                self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+                self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
+                self.showRoute(stopEntrylist: self.stops)
                 self.centerMapOnLocation(location: self.locationManager.location!)
 
-
-                    self.tableView.reloadData()
-                //}
+                self.tableView.reloadData()
             }
             catch
             {
@@ -96,11 +90,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 return
             }
         }.resume()
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4), execute: {
-            self.showRoute(stopEntrylist: self.stops)
-        })
     }
     
     func centerMapOnLocation(location: CLLocation)
@@ -155,6 +144,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         self.theMap.setRegion(region, animated: true)
     }
     
+    
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
     {
         let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
@@ -163,6 +154,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         
         return renderer
     }
+    
+    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
     {
@@ -200,7 +193,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             routePredictionGlobalData.stoptitle = ((view.annotation?.title)!)!
             routePredictionGlobalData.stopnumber = ((view.annotation?.subtitle)!)!
             
-            //performSegue(withIdentifier: "routePinToPredictions", sender: self)
+            performSegue(withIdentifier: "routeMapToPrediction", sender: self)
         }
     }
     
@@ -219,37 +212,13 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         return annotations
     }
     
-    func showRoute(stopEntrylist:[Stops])
+    
+    
+    
+    private func showRoute(stopEntrylist:[Stops])
     {
         let polyLine = MKPolyline(coordinates: routePath, count: self.routePath.count)
         self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
-        
-        /*
-        for i in 0...routePath.count-2
-        {
-            print("i is:\(i) ")
-            
-            let request = MKDirectionsRequest()
-            request.source = MKMapItem(placemark: MKPlacemark(coordinate: routePath[i], addressDictionary: nil))
-            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: routePath[i+1], addressDictionary: nil))
-            
-            request.requestsAlternateRoutes = false
-            request.transportType = .automobile
-            
-            let directions = MKDirections(request: request)
-            
-            directions.calculate { [unowned self] response, error in
-                guard let unwrappedResponse = response else {
-                    print("an error occurred")
-                        return }
-                
-                for route in unwrappedResponse.routes
-                {
-                    self.theMap.add(route.polyline)
-                    self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-                }
-            }
-        }*/
     }
     
     
