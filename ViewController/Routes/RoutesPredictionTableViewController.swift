@@ -79,8 +79,9 @@ class RoutesPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
+                    
                 }
             }
             catch
@@ -89,13 +90,9 @@ class RoutesPredictionTableViewController: UITableViewController {
                 return
             }
             
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
             
             }.resume()
         
-        tableView.reloadData()
     }
     
     
@@ -219,7 +216,7 @@ class RoutesPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -261,7 +258,7 @@ class RoutesPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -271,9 +268,6 @@ class RoutesPredictionTableViewController: UITableViewController {
                 return
             }
             
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
             
             }.resume()
         

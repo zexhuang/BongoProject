@@ -74,8 +74,10 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             }
             // parse the result as JSON, since that's what the API provides
             do {
+                
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
+                DispatchQueue.main.async() {
                 self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
                 self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
                 self.centerMapOnLocation(location: self.locationManager.location!)
@@ -83,6 +85,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 self.tableView.reloadData()
                 self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
                 self.showRoute(stopEntrylist: self.stops)
+                    
+                }
             }
             catch
             {

@@ -119,7 +119,7 @@ class StopPredictionTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async () {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -129,9 +129,6 @@ class StopPredictionTableViewController: UITableViewController
                 return
             }
             
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
             
             }.resume()
     }
@@ -319,7 +316,7 @@ class StopPredictionTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -361,7 +358,7 @@ class StopPredictionTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -371,9 +368,6 @@ class StopPredictionTableViewController: UITableViewController
                 return
             }
             
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
         }.resume()
     }
 }

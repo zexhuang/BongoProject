@@ -69,7 +69,6 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             
             favoriteStopList = NSKeyedUnarchiver.unarchiveObject(with: favoriteStopData) as! [Stops]
             
-            print("The favirote stops Info are reloaded")
             
             for i in favoriteStopList{
                 
@@ -126,7 +125,7 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -136,9 +135,6 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
                 return
             }
             
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
             
             }.resume()
         
@@ -348,7 +344,7 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -390,7 +386,7 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
                 }
             }
@@ -399,10 +395,7 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
                 print("error trying to convert data to JSON")
                 return
             }
-            
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
+   
             
             }.resume()
         
