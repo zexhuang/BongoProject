@@ -35,9 +35,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
         self.navigationItem.rightBarButtonItem = favouriteButtonItem
-
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
@@ -78,6 +75,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
                 DispatchQueue.main.async() {
+                    
                 self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
                 self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
                 self.centerMapOnLocation(location: self.locationManager.location!)

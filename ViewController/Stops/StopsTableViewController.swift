@@ -33,7 +33,6 @@ class StopsTableViewController: UITableViewController
         stops = Stops.downloadBongoStops()
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()

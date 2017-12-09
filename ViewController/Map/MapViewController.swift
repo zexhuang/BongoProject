@@ -499,6 +499,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         let destinationName = self.resultSearchController?.searchBar.text
                         
                         self.routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, startStop: startingStop, destinationStop: destinationStop, startLocation: start, destinationLocation: destination, destinationName: destinationName!, mapVC: self)
+                        
+                        self.routingVC.modalPresentationStyle = .overFullScreen
 
                         self.present(self.routingVC, animated: true, completion: nil)
                     }

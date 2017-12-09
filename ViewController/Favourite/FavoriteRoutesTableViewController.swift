@@ -25,7 +25,6 @@ class FavoriteRoutesTableViewController: UITableViewController {
 //        UserDefaults.standard.synchronize()
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
@@ -35,7 +34,8 @@ class FavoriteRoutesTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if(UserDefaults.standard.object(forKey: "RouteDefaults") != nil){
+        if(UserDefaults.standard.object(forKey: "RouteDefaults") != nil)
+        {
             
             let RouteData =  UserDefaults.standard.object(forKey: "RouteDefaults") as! Data
             
@@ -43,9 +43,7 @@ class FavoriteRoutesTableViewController: UITableViewController {
             
         }
         
-        
         tableView.reloadData()
-        
   }
     
     override func tableView(_ tableView: UITableView,viewForHeaderInSection section: Int) -> UIView?
@@ -68,12 +66,6 @@ class FavoriteRoutesTableViewController: UITableViewController {
         return headerview
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections

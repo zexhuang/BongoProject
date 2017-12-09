@@ -12,6 +12,8 @@ class RoutesTableViewController: UITableViewController
 {
     var routes = [Routes]()
     let routeglobalData = RouteGlobalData.sharedInstance.routeData
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var filteredRoutes = [Routes]()
 
     override func viewDidLoad()
     {
@@ -21,10 +23,19 @@ class RoutesTableViewController: UITableViewController
         self.navigationItem.title = "Routes"
 
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
+        
+        // Setup the Search Controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Routes"
+        searchController.searchBar.barStyle = .blackOpaque
+        searchController.searchBar.barTintColor = .white
+        
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         
         if traitCollection.forceTouchCapability == .available
         {
@@ -55,21 +66,40 @@ class RoutesTableViewController: UITableViewController
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                    self.routes = Routes.downloadBongoRoutesFromURL(jsonDictionary: todo!)
-
+                self.routes = Routes.downloadBongoRoutesFromURL(jsonDictionary: todo!)
+                
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
             }
-            
-            DispatchQueue.main.async () {
+            DispatchQueue.main.async() {
                 
                 self.tableView.reloadData()
             }
             
+            
         }.resume()
+    }
+    
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+
+    func filterContentForSearchText(_ searchText: String, scope: String = "All")
+    {
+        filteredRoutes = routes.filter({( myRoute : Routes) -> Bool in
+            return (myRoute.name?.lowercased().contains(searchText.lowercased()))!
+        })
+
+        tableView.reloadData()
+    }
+
+    func isFiltering() -> Bool
+    {
+        return searchController.isActive && !searchBarIsEmpty()
     }
     
     
@@ -82,21 +112,42 @@ class RoutesTableViewController: UITableViewController
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        if isFiltering()
+        {
+            return filteredRoutes.count
+        }
+        
         return routes.count
     }
     
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath?{
         
-        let route = routes[indexPath.row]
-        routeglobalData.name = route.name!
-        routeglobalData.agency = route.agency!
-        routeglobalData.id =  route.id!
-        routeglobalData.agencyName = route.agencyName!
-        routeglobalData.tag = route.tag!
+        if isFiltering(){
+            
+            let route = filteredRoutes[indexPath.row]
+            routeglobalData.name = route.name!
+            routeglobalData.agency = route.agency!
+            routeglobalData.id =  route.id!
+            routeglobalData.agencyName = route.agencyName!
+            routeglobalData.tag = route.tag!
+            
+        }
+            
+        else
+            
+        {
+            
+            let route = routes[indexPath.row]
+            routeglobalData.name = route.name!
+            routeglobalData.agency = route.agency!
+            routeglobalData.id =  route.id!
+            routeglobalData.agencyName = route.agencyName!
+            routeglobalData.tag = route.tag!
+            
+        }
         
         return indexPath
-        
     }
 
     
@@ -104,9 +155,17 @@ class RoutesTableViewController: UITableViewController
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Routecell", for: indexPath)as! RoutesTableViewCell
         
-        let route = routes[indexPath.row]
-
-        cell.route = route
+        if isFiltering()
+        {
+            let route = filteredRoutes[indexPath.row]
+            cell.route = route
+        }
+        else
+        {
+            let route = routes[indexPath.row]
+            
+            cell.route = route
+        }
         
         return cell
     }
@@ -114,7 +173,13 @@ class RoutesTableViewController: UITableViewController
 
 }
 
-
+extension RoutesTableViewController: UISearchResultsUpdating
+{
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
 
 extension RoutesTableViewController : UIViewControllerPreviewingDelegate{
     
