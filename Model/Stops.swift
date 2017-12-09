@@ -6,7 +6,7 @@
 //  Copyright © 2017 Huangzexian. All rights reserved.
 //
 
-import Foundation
+import MapKit
 
 class Stops: NSObject, NSCoding
 {
@@ -92,6 +92,31 @@ class Stops: NSObject, NSCoding
         }
         
         return stopList
+    }
+    
+    
+    public static func parseBongoPathfromURL(jsonDictionary:[String:AnyObject]) ->[CLLocationCoordinate2D] {
+        var pathList = [CLLocationCoordinate2D]()
+        
+        let jsonDictionaries = jsonDictionary["route"] as![String:AnyObject]
+        let points = jsonDictionaries["paths"] as! [[String:AnyObject]]
+        
+        for point in points {
+            
+            let  pointList = point["points"] as! [[String:AnyObject]]
+            
+            for singlepoint in pointList{
+                
+                let lat = singlepoint["lat"] as! Double
+                let lng = singlepoint["lng"] as! Double
+                pathList.append(CLLocationCoordinate2D(latitude: lat, longitude: lng))
+                
+            }
+            
+        }
+ 
+        print("the path list is \(pathList)")
+        return pathList
     }
     
     

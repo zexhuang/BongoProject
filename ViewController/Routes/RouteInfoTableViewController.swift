@@ -130,6 +130,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                     
                     self.centerMapOnLocation(location: initialLocation)
                     
+                    Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                    
                     self.tableView.reloadData()
                 }
               
