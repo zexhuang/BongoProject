@@ -22,6 +22,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet var theMap: MKMapView!
     private var locationManager = CLLocationManager()
 
+    
+    @IBOutlet var overviewButton: UIButton!
     @IBOutlet var nearbyStopButton: UIButton!
     @IBOutlet var currentLocationButton: UIButton!
     @IBOutlet weak var getDirectionsButton: UIButton!
@@ -29,6 +31,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private var destinationToOpenInMaps: CLLocation!
     private var annotations = [MKPointAnnotation]()
     private var resultSearchController:UISearchController? = nil
+    private var nameOfDestination: String!
+    
+    private var routingVC: RouteDisplayViewController!
 
     
     override func viewDidLoad()
@@ -57,6 +62,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         getDirectionsButton.clipsToBounds = true
         getDirectionsButton.isHidden = true
         
+        overviewButton.layer.cornerRadius = 10
+        overviewButton.clipsToBounds = true
+        overviewButton.isHidden = true
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -153,7 +161,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func showNearbyStops()
     {
-        let closestStops = getClosestStops(location: locationManager.location!)
+        let closestStops = getClosestStops(location: locationManager.location!, searchRadius: 400)
 
         // Get rid of all old annotations
         self.centerMapOnCurrentLocation()
@@ -172,7 +180,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    private func getClosestStops(location: CLLocation)->[Stops]
+    private func getClosestStops(location: CLLocation, searchRadius: Double)->[Stops]
     {
         // Array of every stop
         let allStops: [Stops] = Stops.downloadBongoStops()
@@ -194,18 +202,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if distance < 3 * oneMile
             {
                 // Determine whether all of the closest stops are within a quarter mile
-                var allStopsWithinFifthMile = true
+                var allStopsWithinSearchRadius = true
                 for closeStop in closestStops
                 {
-                    if closeStop.value > (oneMile/5.0)
+                    if closeStop.value > searchRadius
                     {
-                        allStopsWithinFifthMile = false
+                        allStopsWithinSearchRadius = false
                         break
                     }
                 }
                 
                 // Add up to five closest stops and any additional if every stop is within a fifth of a mile of current location
-                if distance < oneMile/5.0 && allStopsWithinFifthMile || closestStops.count < 5
+                if distance < searchRadius && allStopsWithinSearchRadius || closestStops.count < 5
                 {
                     closestStops[stop] = distance
                 }
@@ -268,13 +276,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     {
         if control == view.rightCalloutAccessoryView
         {
-            // ZexianHuang: Change these two lines to map global data
             MapGlobalData.sharedInstance.mapPrediction.stoptitle = ((view.annotation?.title)!)!
             MapGlobalData.sharedInstance.mapPrediction.stopnumber = ((view.annotation?.subtitle)!)!
             
             performSegue(withIdentifier: "PinToPredictions", sender: self)
         }
     }
+    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
     {
@@ -322,6 +330,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
+    
     func planTrip(destinationLocation: CLLocation)
     {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
@@ -353,6 +362,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
+    
+    
     // Given a location, determine which stop is closest to it
     private func findNearestStop(locationToCheck: CLLocation)->Stops?
     {
@@ -378,7 +389,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    private func giveWalkingDirections(start: CLLocation, destination: CLLocation)
+    func giveWalkingDirections(start: CLLocation, destination: CLLocation)
     {
         getDirectionsButton.isHidden = false
         destinationToOpenInMaps = destination
@@ -407,7 +418,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    private func giveBusDirectionsOnMap(start: CLLocation, destination: CLLocation)
+    func giveBusDirectionsOnMap(start: CLLocation, destination: CLLocation)
     {
         let request = MKDirectionsRequest()
         request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude), addressDictionary: nil))
@@ -432,10 +443,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    private func giveBusDirections(start: CLLocation, destination: CLLocation)
+    func giveBusDirections(start: CLLocation, destination: CLLocation)
     {
-        let stopsNearStart = getClosestStops(location: start)
-        let stopsNearDestination = getClosestStops(location: destination)
+        let stopsNearStart = getClosestStops(location: start, searchRadius: 250)
+        let stopsNearDestination = getClosestStops(location: destination, searchRadius: 250)
         
         if !stopsNearStart.isEmpty && !stopsNearDestination.isEmpty
         {
@@ -448,7 +459,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             alert.view.addSubview(loadingIndicator)
             
             self.present(alert, animated: true, completion: {
-                //let startDestDict = TripPlanning.determineIfBusGoesToBothStops(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
+                
+                self.overviewButton.isHidden = false
+                self.centerMapOnCurrentLocation()
                 
                 let optimalRouteDictionary: [Stops : String] = TripPlanning.findBestBusBetweenStartAndDestination(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
                 
@@ -476,32 +489,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             }
                         }
                         
-                        //let startingStop: Stops = (startDestDict.first?.key)!
-                        //let destinationStop: Stops = (startDestDict.first?.value)!
-                        
-                        //let startStopLocation: CLLocation = CLLocation(latitude: (startingStop.stoplat)!, longitude: (startingStop.stoplng)!)
-                        
-                        //let destinationStopLocation: CLLocation = CLLocation(latitude: (destinationStop.stoplat)!, longitude: (destinationStop.stoplng)!)
-                        
-                        
                         walkToStopDescription = "Walk to stop: " + startingStop.stoptitle!
                         walkFromStopDescription = "Walk from " + destinationStop.stoptitle! + " to destination"
                         
                         // Create view for displaying all information and present it
-                        let routingVC =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
+                        self.routingVC =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
                         
-                        routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, startStop: startingStop, destinationStop: destinationStop, currentLocation: self.locationManager.location!, mapView: self.theMap)
+                        let destinationName = self.resultSearchController?.searchBar.text
+                        
+                        self.routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, startStop: startingStop, destinationStop: destinationStop, startLocation: start, destinationLocation: destination, destinationName: destinationName!, mapVC: self)
 
-                        self.present(routingVC, animated: true, completion: nil)
-
-                        
-                        
-                        /*
-                        
-                        self.giveBusDirectionsOnMap(start: startStopLocation, destination: destinationStopLocation)
-                        let title = "Trip Information"
-                        let message = description
-                        self.displayAlertMessage(title: title, message: message)*/
+                        self.present(self.routingVC, animated: true, completion: nil)
                     }
                     else
                     {
@@ -522,7 +520,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
+    {
+        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        renderer.strokeColor = UIColor(hue: 0.6056, saturation: 0.61, brightness: 0.69, alpha: 1.0)
+        renderer.lineWidth = 3
+        
+        return renderer
+    }
     
     
     @IBAction func openMapsAppWithDirections()
@@ -530,8 +535,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let coordinate = CLLocationCoordinate2DMake(destinationToOpenInMaps.coordinate.latitude, destinationToOpenInMaps.coordinate.longitude)
         let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
         
-        mapItem.name = resultSearchController?.searchBar.text
+        mapItem.name = nameOfDestination
         mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking])
+    }
+    
+    
+    
+    @IBAction func returnToOverviewPressed()
+    {
+        self.present(routingVC, animated: true, completion: nil)
     }
 }
 
