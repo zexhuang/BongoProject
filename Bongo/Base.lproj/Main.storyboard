@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7GI-mr-LTC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7GI-mr-LTC">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -409,7 +409,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="right-arrow" id="G5P-5R-2FZ">
                             <connections>
-                                <segue destination="hIy-MZ-T3J" kind="show" id="jce-4P-2le"/>
+                                <segue destination="hIy-MZ-T3J" kind="show" identifier="showFavoriteRoutes" id="jce-4P-2le"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -839,7 +839,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7aK-IG-pTm">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7aK-IG-pTm">
                                 <rect key="frame" x="285" y="149" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7aK-IG-pTm" secondAttribute="height" multiplier="1:1" id="Ijv-te-zMP"/>
@@ -936,7 +936,6 @@
                             <constraint firstItem="fSj-Xz-i5x" firstAttribute="top" secondItem="D2C-AD-77P" secondAttribute="bottom" constant="60" id="m0h-bT-bbf"/>
                             <constraint firstItem="7aK-IG-pTm" firstAttribute="leading" secondItem="oDj-E3-OVZ" secondAttribute="trailing" constant="69" id="mSo-9O-DWg"/>
                             <constraint firstItem="fSj-Xz-i5x" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="mjC-BG-T7Q"/>
-                            <constraint firstItem="7aK-IG-pTm" firstAttribute="top" secondItem="xXQ-CD-aPq" secondAttribute="bottom" constant="85" id="ogF-sC-eWf"/>
                             <constraint firstItem="nze-cD-QsR" firstAttribute="trailing" secondItem="SBw-HG-ZeY" secondAttribute="trailing" constant="40" id="yLf-KX-iPe"/>
                             <constraint firstItem="n91-gQ-rS4" firstAttribute="leading" secondItem="nze-cD-QsR" secondAttribute="leading" constant="16" id="yfC-s9-aGd"/>
                         </constraints>

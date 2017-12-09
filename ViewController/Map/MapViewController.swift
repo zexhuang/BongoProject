@@ -462,6 +462,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
                 self.overviewButton.isHidden = false
                 self.centerMapOnCurrentLocation()
+                self.nameOfDestination = self.resultSearchController?.searchBar.text
                 
                 let optimalRouteDictionary: [Stops : String] = TripPlanning.findBestBusBetweenStartAndDestination(startingStops: stopsNearStart, destinationStops: stopsNearDestination)
                 
@@ -503,6 +504,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     }
                     else
                     {
+                        self.overviewButton.isHidden = true
+                        
                         let title = "No Bus Trips Available"
                         let message = "There are no available buses. Showing walking directions"
                         self.giveWalkingDirections(start: start, destination: destination)

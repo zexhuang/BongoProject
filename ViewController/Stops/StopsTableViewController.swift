@@ -10,30 +10,27 @@ import UIKit
 
 class StopsTableViewController: UITableViewController
 {
-    var stops = [Stops]()
-    
-    var filteredStops = [Stops]()
-    let searchController = UISearchController(searchResultsController: nil)
-    let globalDataStopToModify = StopsGlobalData.sharedInstance.selectedStops
+    private var stops = [Stops]()
+    private var filteredStops = [Stops]()
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let globalDataStopToModify = StopsGlobalData.sharedInstance.selectedStops
  
-
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
         
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Stops"
-        searchController.searchBar.barTintColor = UIColor.clear
+        searchController.searchBar.barStyle = .blackOpaque
+        searchController.searchBar.barTintColor = .white
+
         navigationItem.searchController = searchController
         definesPresentationContext = true
         
         self.navigationItem.title = "Stops"
-        
         stops = Stops.downloadBongoStops()
-        
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 80.0
@@ -46,10 +43,9 @@ class StopsTableViewController: UITableViewController
             registerForPreviewing(with: self, sourceView: tableView)
         }
         
-        if traitCollection.forceTouchCapability == .available{
-            
+        if traitCollection.forceTouchCapability == .available
+        {
             registerForPreviewing(with: self, sourceView: tableView)
-            
         }
     }
     
@@ -59,46 +55,40 @@ class StopsTableViewController: UITableViewController
         return searchController.searchBar.text?.isEmpty ?? true
     }
     
-    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+    func filterContentForSearchText(_ searchText: String, scope: String = "All")
+    {
         filteredStops = stops.filter({( myStop : Stops) -> Bool in
-            return (myStop.stoptitle?.lowercased().contains(searchText.lowercased()))!
+            return (myStop.stoptitle?.lowercased().contains(searchText.lowercased()))! || (myStop.stopnumber?.contains(searchText))!
         })
         
         tableView.reloadData()
     }
     
-    func isFiltering() -> Bool {
+    func isFiltering() -> Bool
+    {
         return searchController.isActive && !searchBarIsEmpty()
     }
     
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        if isFiltering(){
-            
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        if isFiltering()
+        {
             return filteredStops.count
-            
         }
         
         return stops.count
     }
     
+    
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath?
     {
-        
-        
         if isFiltering()
         {
             let stop = filteredStops[indexPath.row]
@@ -117,7 +107,6 @@ class StopsTableViewController: UITableViewController
             globalDataStopToModify.stoplng = stop.stoplng!
         }
         
-        
         return indexPath
     }
 
@@ -125,42 +114,35 @@ class StopsTableViewController: UITableViewController
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Stopscell", for: indexPath) as! StopsTableViewCell
         
-        if isFiltering() {
-            
+        if isFiltering()
+        {
             let stop = filteredStops[indexPath.row]
-            
             cell.stop = stop
-            
         }
-        else{
-            
-             let stop = stops[indexPath.row]
-            
+        else
+        {
+            let stop = stops[indexPath.row]
             cell.stop = stop
         }
         
         return cell
-
     }
-    
-
-
 }
 
-extension StopsTableViewController: UISearchResultsUpdating {
+extension StopsTableViewController: UISearchResultsUpdating
+{
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
 
 
-extension StopsTableViewController : UIViewControllerPreviewingDelegate{
-    
+extension StopsTableViewController : UIViewControllerPreviewingDelegate
+{
     // peak
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController?
+    {
         guard let indexPath = tableView.indexPathForRow(at: location),
             let cell = tableView.cellForRow(at: indexPath) as? StopsTableViewCell
             else{return nil}
@@ -173,20 +155,14 @@ extension StopsTableViewController : UIViewControllerPreviewingDelegate{
         
         previewingContext.sourceRect = cell.frame
         
-        
         return StopsVC
     }
     
     //pop
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        
-        
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController)
+    {
         self.navigationController?.pushViewController(viewControllerToCommit, animated: true)
-        
     }
-
-    
-    
 }
 
 

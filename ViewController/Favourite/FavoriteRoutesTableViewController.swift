@@ -15,8 +15,11 @@ class FavoriteRoutesTableViewController: UITableViewController {
     let headerview = UIView()
     var headerLabel = UILabel()
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        
+        headerLabel.adjustsFontSizeToFitWidth = true
         
 //        UserDefaults.standard.removeObject(forKey: "RouteDefaults")
 //        UserDefaults.standard.synchronize()
@@ -57,7 +60,7 @@ class FavoriteRoutesTableViewController: UITableViewController {
         
         //let titleLabel = UILabel()
         headerLabel.text =  "Routes"
-        headerLabel.frame = CGRect(x:10,y:0, width: view.frame.width, height: 30)
+        headerLabel.frame = CGRect(x:10,y:0, width: view.frame.width - 16, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
