@@ -20,7 +20,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     var favoriteRouteList = [Routes]()
     
     var annotations = [MKPointAnnotation]()
-    var coordinates: [CLLocationCoordinate2D] = []
     private var locationManager = CLLocationManager()
     
     var isFavoriteButtonPressed = false
@@ -31,6 +30,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
     
         let favouriteButtonItem = UIBarButtonItem.init(image: UIImage(named: "like"), style: .done, target: self, action: #selector(pushToFavourite))
         
@@ -52,11 +52,56 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager = CLLocationManager()
 
-     
+
+        let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeData.agency!)&route=\(routeData.id!)&api_key=XXXX"
+        guard let url = URL(string: todoEndpoint) else { return }
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // make the request
+        session.dataTask(with: url){
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /todos/1")
+                print(error!)
+                return
+            }
+            // make sure we got data
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse the result as JSON, since that's what the API provides
+            do {
+                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+                
+                //DispatchQueue.main.async() {
+                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+                print("\n\n\nStops has length: \(self.stops.count)\n\n")
+                self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops) )
+                self.centerMapOnLocation(location: self.locationManager.location!)
+
+
+                    self.tableView.reloadData()
+                //}
+            }
+            catch
+            {
+                print("error trying to convert data to JSON")
+                return
+            }
+        }.resume()
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4), execute: {
+            self.showRoute(stopEntrylist: self.stops)
+        })
     }
     
-    let regionRadius: CLLocationDistance = 4000
-    func centerMapOnLocation(location: CLLocation) {
+    func centerMapOnLocation(location: CLLocation)
+    {
+        let regionRadius: CLLocationDistance = 8000
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   regionRadius, regionRadius)
         theMap.setRegion(coordinateRegion, animated: true)
@@ -65,8 +110,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     override func viewWillAppear(_ animated: Bool)
     {
-
-        
         if(FavoriteRoutesDefault.object(forKey: "RouteDefaults") != nil )
         {
             let favoriteRouteData =  FavoriteRoutesDefault.object(forKey: "RouteDefaults") as! Data
@@ -95,54 +138,6 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             }
             
         }
-        
-        let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeData.agency!)&route=\(routeData.id!)&api_key=XXXX"
-        guard let url = URL(string: todoEndpoint) else { return }
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        
-        // make the request
-        session.dataTask(with: url){
-            (data, response, error) in
-            // check for any errors
-            guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
-                return
-            }
-            // make sure we got data
-            guard let responseData = data else {
-                print("Error: did not receive data")
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            do {
-                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
-                
-                DispatchQueue.main.async() {
-                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
-                    
-                    self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops) )
-                    
-                    self.showRoute(stopEntrylist:self.stops)
-                    
-                    let initialLocation = CLLocation(latitude:              Stops.parseBongoRouteCoordinatefromURL(jsonDictionary: todo!)[0], longitude:              Stops.parseBongoRouteCoordinatefromURL(jsonDictionary: todo!)[1])
-                    
-                    self.centerMapOnLocation(location: initialLocation)
-                    
-                    self.tableView.reloadData()
-                }
-              
-            }
-            catch
-            {
-                print("error trying to convert data to JSON")
-                return
-            }
-            
-            
-            }.resume()
-        
     }
     
     
@@ -156,7 +151,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         self.theMap.setRegion(region, animated: true)
     }
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
+    {
         let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
         renderer.strokeColor = UIColor(hue: 0.6056, saturation: 0.61, brightness: 0.69, alpha: 1.0)
         renderer.lineWidth = 3
@@ -205,8 +201,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     }
     
     
-    func showAllStops(stopEntrylist:[Stops]) -> [MKPointAnnotation]{
-        
+    func showAllStops(stopEntrylist:[Stops]) -> [MKPointAnnotation]
+    {
         for stopEntry in stopEntrylist {
             
             let newAnnotation = MKPointAnnotation()
@@ -219,34 +215,58 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         return annotations
     }
     
-    func showRoute(stopEntrylist:[Stops]) {
-        
-        for stopEntry in stopEntrylist {
-            
-            coordinates.append(CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!))
-        }
-        let stopPolyLine = MKPolyline(coordinates: &self.coordinates, count: self.coordinates.count)
-        self.theMap.add(stopPolyLine,level: MKOverlayLevel.aboveLabels)
-        
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    func showRoute(stopEntrylist:[Stops])
+    {
+        var stopCoordinates: [CLLocationCoordinate2D] = []
 
-    // MARK: - Table view data source
+        for stopEntry in stopEntrylist
+        {
+            stopCoordinates.append(CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!))
+        }
+       // let stopPolyLine = MKPolyline(coordinates: &self.coordinates, count: self.coordinates.count)
+       // self.theMap.add(stopPolyLine,level: MKOverlayLevel.aboveLabels)
+        
+        
+
+        
+        for i in stride(from: stopCoordinates.count-1, through: 3, by: -1)
+        {
+            print("i is:\(i) ")
+            
+            let request = MKDirectionsRequest()
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: stopCoordinates[i], addressDictionary: nil))
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: stopCoordinates[i-1], addressDictionary: nil))
+            
+            request.requestsAlternateRoutes = false
+            request.transportType = .automobile
+            
+            let directions = MKDirections(request: request)
+            
+            directions.calculate { [unowned self] response, error in
+                guard let unwrappedResponse = response else {
+                    print("an error occurred")
+                        return }
+                
+                for route in unwrappedResponse.routes
+                {
+                    self.theMap.add(route.polyline)
+                    self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        
-
         return stops.count
     }
     
@@ -275,9 +295,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
 
     
-    @objc func pushToFavourite() {
-        
-        
+    @objc func pushToFavourite()
+    {
         if (isFavoriteButtonPressed == false){
             
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor(red:0.98, green:0.22, blue:0.35, alpha:1.0)

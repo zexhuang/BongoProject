@@ -15,7 +15,6 @@ class LocationSearchTable : UITableViewController
     var mapView: MKMapView? = nil
     
     
-    // temporary
     var handleMapSearchDelegate:HandleMapSearch? = nil
     
     

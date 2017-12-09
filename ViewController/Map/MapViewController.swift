@@ -27,10 +27,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var getDirectionsButton: UIButton!
     
     private var destinationToOpenInMaps: CLLocation!
-    var annotations = [MKPointAnnotation]()
-    var resultSearchController:UISearchController? = nil
+    private var annotations = [MKPointAnnotation]()
+    private var resultSearchController:UISearchController? = nil
 
-    
     
     override func viewDidLoad()
     {
@@ -42,8 +41,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         resultSearchController?.searchResultsUpdater = locationSearchTable
         
         locationSearchTable.mapView = theMap
+        locationSearchTable.handleMapSearchDelegate = self
 
-        
+        // Configure the top search bar
         let searchBar = resultSearchController!.searchBar
         searchBar.sizeToFit()
         searchBar.placeholder = "Enter Destination"
@@ -53,12 +53,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         resultSearchController?.dimsBackgroundDuringPresentation = true
         definesPresentationContext = true
         
-        
-        locationSearchTable.handleMapSearchDelegate = self
         getDirectionsButton.layer.cornerRadius = 10
         getDirectionsButton.clipsToBounds = true
         getDirectionsButton.isHidden = true
-        
         
         
         locationManager.delegate = self
@@ -67,19 +64,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         theMap.delegate = self
         theMap.mapType = MKMapType.standard
         
+        // Configure nearby stop button
         nearbyStopButton.isHidden = true
         nearbyStopButton.layer.cornerRadius = 15
-
-        //nearbyStopButton.backgroundColor = UIColor.clear
         nearbyStopButton.layer.shadowColor = UIColor.darkGray.cgColor
         nearbyStopButton.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
         nearbyStopButton.layer.shadowRadius = 2.0
         nearbyStopButton.layer.shadowOpacity = 0.7
         nearbyStopButton.layer.masksToBounds = false
         
+        // Configure current location button
         currentLocationButton.isHidden = true
         currentLocationButton.layer.cornerRadius = 15
-        
         currentLocationButton.layer.shadowColor = UIColor.darkGray.cgColor
         currentLocationButton.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
         currentLocationButton.layer.shadowRadius = 2.0
@@ -87,7 +83,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         currentLocationButton.layer.masksToBounds = false
     
         
-
         // If we haven't received permission to access location, ask for it
         if CLLocationManager.authorizationStatus() == .notDetermined
         {
@@ -110,7 +105,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
-    {        
+    {
         if CLLocationManager.locationServicesEnabled() && status == .authorizedWhenInUse
         {
             locationManager.startUpdatingLocation()
@@ -326,6 +321,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
+    
     func planTrip(destinationLocation: CLLocation)
     {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
@@ -379,6 +375,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return shortestDistance < 5000 ? closestStop : nil
     }
     
+    
+    
+    
     private func giveWalkingDirections(start: CLLocation, destination: CLLocation)
     {
         getDirectionsButton.isHidden = false
@@ -405,6 +404,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
+    
+    
+    
     private func giveBusDirectionsOnMap(start: CLLocation, destination: CLLocation)
     {
         let request = MKDirectionsRequest()
@@ -426,6 +428,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
+    
+    
     
     
     private func giveBusDirections(start: CLLocation, destination: CLLocation)
@@ -455,7 +459,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     {
                         var startingStop: Stops = stopsNearStart[0]
                         var destinationStop: Stops = stopsNearDestination[0]
-                        var description: String = "An unknown error occurred."
+                        var walkToStopDescription: String = "An unknown error occurred"
+                        var busRouteDescription: String = "An unknown error occurred"
+                        var walkFromStopDescription: String = "An unknown error occurred"
+                        
                         for pair in optimalRouteDictionary
                         {
                             if pair.value.isEmpty
@@ -465,21 +472,36 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             else
                             {
                                 startingStop = pair.key
-                                description = pair.value
+                                busRouteDescription = pair.value
                             }
                         }
                         
                         //let startingStop: Stops = (startDestDict.first?.key)!
                         //let destinationStop: Stops = (startDestDict.first?.value)!
                         
-                        let startStopLocation: CLLocation = CLLocation(latitude: (startingStop.stoplat)!, longitude: (startingStop.stoplng)!)
+                        //let startStopLocation: CLLocation = CLLocation(latitude: (startingStop.stoplat)!, longitude: (startingStop.stoplng)!)
                         
-                        let destinationStopLocation: CLLocation = CLLocation(latitude: (destinationStop.stoplat)!, longitude: (destinationStop.stoplng)!)
+                        //let destinationStopLocation: CLLocation = CLLocation(latitude: (destinationStop.stoplat)!, longitude: (destinationStop.stoplng)!)
+                        
+                        
+                        walkToStopDescription = "Walk to stop: " + startingStop.stoptitle!
+                        walkFromStopDescription = "Walk from " + destinationStop.stoptitle! + " to " + (self.resultSearchController?.searchBar.text)!
+                        
+                        // Create view for displaying all information and present it
+                        let routingVC =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
+                        
+                        routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, startStop: startingStop, destinationStop: destinationStop, currentLocation: self.locationManager.location!, mapView: self.theMap)
+
+                        self.present(routingVC, animated: true, completion: nil)
+
+                        
+                        
+                        /*
                         
                         self.giveBusDirectionsOnMap(start: startStopLocation, destination: destinationStopLocation)
                         let title = "Trip Information"
                         let message = description
-                        self.displayAlertMessage(title: title, message: message)
+                        self.displayAlertMessage(title: title, message: message)*/
                     }
                     else
                     {
@@ -501,14 +523,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
-    {
-        let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-        polylineRenderer.strokeColor = UIColor.blue
-        polylineRenderer.fillColor = UIColor.blue
-        polylineRenderer.lineWidth = 8
-        return polylineRenderer
-    }
     
     
     @IBAction func openMapsAppWithDirections()

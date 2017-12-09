@@ -10,6 +10,7 @@
 		283D1AD61FA7CAAB0007D893 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 283D1AD51FA7CAAB0007D893 /* MapKit.framework */; };
 		28784CBF1FC8D5AA00E4BBE9 /* LocationSearchTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */; };
 		28784CC11FC9E58A00E4BBE9 /* TripPlanning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */; };
+		28B7D3E41FDB376100AA4C13 /* RouteDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B7D3E31FDB376100AA4C13 /* RouteDisplayViewController.swift */; };
 		28DE18C61FCDBAF500808FB2 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */; };
 		D404D38E1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404D38D1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift */; };
 		D404D3901FC362E300ED0EA6 /* RoutesPredictionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404D38F1FC362E300ED0EA6 /* RoutesPredictionTableViewCell.swift */; };
@@ -57,6 +58,7 @@
 		283D1AD51FA7CAAB0007D893 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchTable.swift; sourceTree = "<group>"; };
 		28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlanning.swift; sourceTree = "<group>"; };
+		28B7D3E31FDB376100AA4C13 /* RouteDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDisplayViewController.swift; sourceTree = "<group>"; };
 		28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
 		5206F37ABBE51006ECC211E1 /* Pods-Bongo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bongo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bongo/Pods-Bongo.debug.xcconfig"; sourceTree = "<group>"; };
 		528F474CEA7B8BFF8ECB38B9 /* libPods-Bongo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bongo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -254,6 +256,7 @@
 				D49A8FF41FC3729600552FBE /* MapPredictionTableViewController.swift */,
 				28784CC01FC9E58A00E4BBE9 /* TripPlanning.swift */,
 				28784CBE1FC8D5AA00E4BBE9 /* LocationSearchTable.swift */,
+				28B7D3E31FDB376100AA4C13 /* RouteDisplayViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				D422411C1F9AE89D00DF423C /* StopsTableViewController.swift in Sources */,
 				D46A95181FA1B5BA0010380A /* RequestManager.swift in Sources */,
 				D404D3901FC362E300ED0EA6 /* RoutesPredictionTableViewCell.swift in Sources */,
+				28B7D3E41FDB376100AA4C13 /* RouteDisplayViewController.swift in Sources */,
 				D404D38E1FC362B800ED0EA6 /* RoutesPredictionTableViewController.swift in Sources */,
 				D42241231F9B01CD00DF423C /* Routes.swift in Sources */,
 				D42241271F9B10DB00DF423C /* NetworkService.swift in Sources */,
@@ -621,10 +625,10 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 56R6YXWGGF;
+				DEVELOPMENT_TEAM = PSA882ZPWY;
 				INFOPLIST_FILE = Bongo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "C---Doc.Bongo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schweer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -640,10 +644,10 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 56R6YXWGGF;
+				DEVELOPMENT_TEAM = PSA882ZPWY;
 				INFOPLIST_FILE = Bongo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "C---Doc.Bongo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schweer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
