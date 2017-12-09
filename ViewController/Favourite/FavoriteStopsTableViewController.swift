@@ -147,11 +147,14 @@ class FavoriteStopsTableViewController: UITableViewController {
     @IBAction func ShowInfoView(_ sender: UIBarButtonItem) {
         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "InformationViewController") as! InformationViewController
         
-        newViewController.modalPresentationStyle = .overCurrentContext
+        newViewController.modalPresentationStyle = .overFullScreen
+
         
-        present(newViewController, animated: true, completion: nil)
+        self.present(newViewController, animated: true, completion: nil)
+       
         
     }
     

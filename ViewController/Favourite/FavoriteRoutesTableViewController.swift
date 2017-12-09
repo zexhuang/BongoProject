@@ -40,7 +40,6 @@ class FavoriteRoutesTableViewController: UITableViewController {
             
         }
         
-//        FavouriteRoutesGlobalData.sharedInstance.MyFavouriteRoutes = myFavoriteRoutesList
         
         tableView.reloadData()
         

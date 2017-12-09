@@ -22,7 +22,7 @@ class InformationViewController: UIViewController
         
         view.isOpaque = false
         view.backgroundColor = .clear
-        view.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.9, 0.9, 0.9, 0.9])
+        view.layer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.95, 0.95, 0.95, 0.95])
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
@@ -32,10 +32,12 @@ class InformationViewController: UIViewController
     }
     
 
-    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem)
-    {
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func DoneButtonPressed(_ sender: UIButton) {
+        
+              self.dismiss(animated: true, completion: nil)
     }
+    
+    
 }
 
 
