@@ -917,6 +917,8 @@
                         <viewLayoutGuide key="safeArea" id="nze-cD-QsR"/>
                     </view>
                     <connections>
+                        <outlet property="busRouteLabel" destination="D2C-AD-77P" id="JVh-NN-AWi"/>
+                        <outlet property="walkFromStopLabel" destination="fSj-Xz-i5x" id="gE3-BF-DA4"/>
                         <outlet property="walkToStopLabel" destination="oDj-E3-OVZ" id="SoI-IA-gvy"/>
                     </connections>
                 </viewController>

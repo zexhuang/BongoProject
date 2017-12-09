@@ -16,6 +16,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     var routeData = RouteGlobalData.sharedInstance.routeData
     
     var stops = [Stops]()
+    var routePath = [CLLocationCoordinate2D]()
     var RouteSubList = [Routes]()
     var favoriteRouteList = [Routes]()
     
@@ -78,6 +79,9 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 
                 //DispatchQueue.main.async() {
                     self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+                    self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                
+                
                 print("\n\n\nStops has length: \(self.stops.count)\n\n")
                 self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops) )
                 self.centerMapOnLocation(location: self.locationManager.location!)
@@ -217,25 +221,17 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     func showRoute(stopEntrylist:[Stops])
     {
-        var stopCoordinates: [CLLocationCoordinate2D] = []
-
-        for stopEntry in stopEntrylist
-        {
-            stopCoordinates.append(CLLocationCoordinate2D(latitude: stopEntry.stoplat!, longitude: stopEntry.stoplng!))
-        }
-       // let stopPolyLine = MKPolyline(coordinates: &self.coordinates, count: self.coordinates.count)
-       // self.theMap.add(stopPolyLine,level: MKOverlayLevel.aboveLabels)
+        let polyLine = MKPolyline(coordinates: routePath, count: self.routePath.count)
+        self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
         
-        
-
-        
-        for i in stride(from: stopCoordinates.count-1, through: 3, by: -1)
+        /*
+        for i in 0...routePath.count-2
         {
             print("i is:\(i) ")
             
             let request = MKDirectionsRequest()
-            request.source = MKMapItem(placemark: MKPlacemark(coordinate: stopCoordinates[i], addressDictionary: nil))
-            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: stopCoordinates[i-1], addressDictionary: nil))
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: routePath[i], addressDictionary: nil))
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: routePath[i+1], addressDictionary: nil))
             
             request.requestsAlternateRoutes = false
             request.transportType = .automobile
@@ -253,7 +249,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                     self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 }
             }
-        }
+        }*/
     }
     
     

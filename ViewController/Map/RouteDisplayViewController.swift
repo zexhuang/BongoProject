@@ -42,7 +42,7 @@ class RouteDisplayViewController : UIViewController
     {
         super.viewDidLoad()
         
-        self.walkFromStopLabel.text = walkToStopText
+        self.walkToStopLabel.text = walkToStopText
         self.busRouteLabel.text = busRouteText
         self.walkFromStopLabel.text = walkFromStopText
     }
@@ -67,10 +67,14 @@ class RouteDisplayViewController : UIViewController
         
     }
     
-    
+  /*
     @IBAction func walkFromStopButtonPressed()
     {
+        let coordinate = CLLocationCoordinate2DMake(destinationToOpenInMaps.coordinate.latitude, destinationToOpenInMaps.coordinate.longitude)
+        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
         
-    }
+        mapItem.name = resultSearchController?.searchBar.text
+        mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking])
+    }*/
     
 }

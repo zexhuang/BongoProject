@@ -485,7 +485,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         
                         
                         walkToStopDescription = "Walk to stop: " + startingStop.stoptitle!
-                        walkFromStopDescription = "Walk from " + destinationStop.stoptitle! + " to " + (self.resultSearchController?.searchBar.text)!
+                        walkFromStopDescription = "Walk from " + destinationStop.stoptitle! + " to destination"
                         
                         // Create view for displaying all information and present it
                         let routingVC =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
