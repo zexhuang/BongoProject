@@ -56,7 +56,6 @@ class RoutesTableViewController: UITableViewController
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
                     self.routes = Routes.downloadBongoRoutesFromURL(jsonDictionary: todo!)
-
             }
             catch
             {

@@ -8,16 +8,16 @@
 
 import Foundation
 
-class Routes: NSObject, NSCoding{
-    
+class Routes: NSObject, NSCoding
+{
     var id: Int?
     var name: String?
     var tag: String?
     var agency:String?
     var agencyName:String?
     
-    func encode(with aCoder: NSCoder) {
-        
+    func encode(with aCoder: NSCoder)
+    {
         aCoder.encode(id, forKey: "id")
         aCoder.encode(name, forKey: "name")
         aCoder.encode(tag, forKey: "tag")
@@ -32,7 +32,6 @@ class Routes: NSObject, NSCoding{
         agency = aDecoder.decodeObject(forKey: "agency") as? String
         agencyName = aDecoder.decodeObject(forKey: "agencyName") as? String
         id = aDecoder.decodeObject(forKey: "id") as? Int ?? aDecoder.decodeInteger(forKey: "id")
-
     }
     
     
@@ -47,71 +46,68 @@ class Routes: NSObject, NSCoding{
     }
     
     
-    init(id: Int, name: String,tag: String,agency:String,agencyName:String){
-        
+    init(id: Int, name: String,tag: String,agency:String,agencyName:String)
+    {
         self.id = id
         self.name = name
         self.tag = tag
         self.agency = agency
         self.agencyName = agencyName
-        
     }
-    init(routeInfomation:[String: AnyObject]){
+    
+    init(routeInfomation:[String: AnyObject])
+    {
         self.id = routeInfomation["id"] as? Int
         self.name = routeInfomation["name"] as? String
         self.tag =  routeInfomation["tag"] as? String
         self.agency =  routeInfomation["agency"] as? String
         self.agencyName =  routeInfomation["agencyname"] as? String
-        
     }
     
-    static func downloadBongoRoutesFromURL(jsonDictionary:[String:AnyObject])->[Routes]{
-        
+    static func downloadBongoRoutesFromURL(jsonDictionary:[String:AnyObject])->[Routes]
+    {
         var routes = [Routes]()
-        
        
         let routesDictionaries = jsonDictionary["routes"]as![[String:AnyObject]]
             
             for routeDictionary in routesDictionaries
             {
                 let routeInfomation = routeDictionary["route"]as! [String : Any]
-                let newRoute = Routes(routeInfomation:routeInfomation as [String : AnyObject])
+                let newRoute = Routes(routeInfomation: routeInfomation as [String : AnyObject])
                 
                 routes.append(newRoute)
             }
-        
         
         return routes
     }
     
     
-    
+    private static var allRoutes = [Routes]()
+
     static func downloadBongoRoutes()->[Routes]
     {
-        var routes = [Routes]()
+        if allRoutes.count > 0
+        {
+            return allRoutes
+        }
         
         let jsonFile = Bundle.main.path(forResource: "routelist", ofType:"json")
         let jsonFileURL = URL (fileURLWithPath: jsonFile!)
         let jsonData = try?Data(contentsOf: jsonFileURL)
         
-        if let jasonDictionary = NetworkService.parseJSONFromData(jsonData)
+        if let jsonDictionary = NetworkService.parseJSONFromData(jsonData)
         {
-            let routesDictionaries = jasonDictionary["routes"]as![[String:AnyObject]]
+            let routesDictionaries = jsonDictionary["routes"] as! [[String:AnyObject]]
 
             for routeDictionary in routesDictionaries
             {
-                let routeInfomation = routeDictionary["route"]as! [String : Any]
-                let newRoute = Routes(routeInfomation:routeInfomation as [String : AnyObject])
+                let routeInfomation = routeDictionary["route"] as! [String : Any]
+                let newRoute = Routes(routeInfomation: routeInfomation as [String : AnyObject])
         
-                routes.append(newRoute)
+                allRoutes.append(newRoute)
             }
-            
         }
          
-        return routes
+        return allRoutes
     }
-    
-    
-    
-    
 }
