@@ -22,6 +22,7 @@ class RouteDisplayViewController : UIViewController
     private var walkToStopText: String = "Error"
     private var busRouteText: String = "Error"
     private var walkFromStopText: String = "Error"
+    private var selectedRouteName: String = "Error"
     
     var startStop: Stops!
     var destinationStop: Stops!
@@ -32,11 +33,12 @@ class RouteDisplayViewController : UIViewController
     
     var mapVC: MapViewController!
     
-    public func setVCData(walkToStopText: String, busRouteText: String, walkFromStopText: String, startStop: Stops, destinationStop: Stops, startLocation: CLLocation, destinationLocation: CLLocation, destinationName: String, mapVC: MapViewController)
+    public func setVCData(walkToStopText: String, busRouteText: String, walkFromStopText: String, selectedRouteName: String, startStop: Stops, destinationStop: Stops, startLocation: CLLocation, destinationLocation: CLLocation, destinationName: String, mapVC: MapViewController)
     {
         self.walkToStopText = walkToStopText
         self.busRouteText = busRouteText
         self.walkFromStopText = walkFromStopText
+        self.selectedRouteName = selectedRouteName
         
         self.startStop = startStop
         self.destinationStop = destinationStop
@@ -123,7 +125,7 @@ class RouteDisplayViewController : UIViewController
             let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
             let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
             
-            self.mapVC.giveBusDirectionsOnMap(start: startStopLocation, destination: destinationStopLocation)
+            self.mapVC.giveBusDirectionsOnMap(startStopLocation: startStopLocation, destinationStopLocation: destinationStopLocation, routeName: self.selectedRouteName)
         })
     }
     

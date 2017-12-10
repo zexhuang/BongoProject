@@ -78,7 +78,7 @@ class TripPlanning
                     {
                         minimumPredictionTime = timeUntilBusArrivesAtStart
                         optimalRoute[startingStops[allRoutes[prediction.RouteName!]![0]]] = description
-                        optimalRoute[destinationStops[prediction.optionalInfo!]] = ""
+                        optimalRoute[destinationStops[prediction.optionalInfo!]] = prediction.RouteName! + "*"
                     }
                     else if minimumPredictionTime < timeUntilBusArrivesAtStart
                     {
@@ -86,7 +86,7 @@ class TripPlanning
                         optimalRoute.removeAll()
                         minimumPredictionTime = timeUntilBusArrivesAtStart
                         optimalRoute[startingStops[allRoutes[prediction.RouteName!]![0]]] = description
-                        optimalRoute[destinationStops[prediction.optionalInfo!]] = ""
+                        optimalRoute[destinationStops[prediction.optionalInfo!]] = prediction.RouteName! + "*"
                     }
                 }
                 //allRoutes[prediction.RouteName!] = nil

@@ -258,6 +258,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBAction func centerMapOnCurrentLocation()
     {
         getDirectionsButton.isHidden = true
+        
         theMap.removeAnnotations(annotations)
         annotations.removeAll()
         let location: CLLocation = locationManager.location!
@@ -276,6 +277,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     {
         if control == view.rightCalloutAccessoryView
         {
+            if (view.annotation?.title)! == "Start" || (view.annotation?.title)! == "Finish"
+            {
+                self.present(self.routingVC, animated: true, completion: nil)
+                return
+            }
+            
             MapGlobalData.sharedInstance.mapPrediction.stoptitle = ((view.annotation?.title)!)!
             MapGlobalData.sharedInstance.mapPrediction.stopnumber = ((view.annotation?.subtitle)!)!
             
@@ -391,6 +398,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func giveWalkingDirections(start: CLLocation, destination: CLLocation)
     {
+        self.centerMapOnCurrentLocation()
+        
         getDirectionsButton.isHidden = false
         destinationToOpenInMaps = destination
 
@@ -418,8 +427,165 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    func giveBusDirectionsOnMap(start: CLLocation, destination: CLLocation)
+    func giveBusDirectionsOnMap(startStopLocation: CLLocation, destinationStopLocation: CLLocation, routeName: String)
     {
+        self.centerMapOnCurrentLocation()
+        
+        var routeCoordinates = [CLLocationCoordinate2D]()
+        let allRoutes: [Routes] = Routes.downloadBongoRoutes()
+        
+        var selectedRoute: Routes? = nil
+        for route in allRoutes
+        {
+            if route.name?.lowercased() == routeName.lowercased()
+            {
+                selectedRoute = route
+                break
+            }
+        }
+        
+        if selectedRoute == nil
+        {
+            return
+        }
+        
+        let todoEndpoint: String = "http://api.ebongo.org/route?agency=" + (selectedRoute?.agency)! + "&route=\(selectedRoute!.id!)&api_key=XXXX"
+        
+        guard let url = URL(string: todoEndpoint) else { return }
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // make the request
+        session.dataTask(with: url) {
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /todos/1")
+                print(error!)
+                return
+            }
+            // make sure we got data
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse the result as JSON, since that's what the API provides
+            do {
+                let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
+                
+                //DispatchQueue.main.async() {
+                    routeCoordinates = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                //}
+            }
+            catch
+            {
+                print("error trying to convert data to JSON")
+                return
+            }
+        }.resume()
+        
+        
+        
+        // Wait for result to be populated
+        var count: Int = 0
+        while(routeCoordinates.count == 0)
+        {
+            count += 1
+            usleep(50000)
+            if count > 100
+            {
+                print("shit")
+                return
+            }
+        }
+        print("\n\n\nThe size of routeCoordinates is: \(routeCoordinates.count)")
+        /*
+        var startIndex = -1
+        var destinationIndex = -1
+        
+        for i in 0...routeCoordinates.count-1
+        {
+            let latDifferenceStart: Double = routeCoordinates[i].latitude - startStopLocation.coordinate.latitude
+            let latDifferenceDest: Double = routeCoordinates[i].latitude - destinationStopLocation.coordinate.latitude
+
+            
+            if latDifferenceStart < 0.01 && latDifferenceStart > -0.01
+            {
+                let longDifferenceStart: Double = routeCoordinates[i].longitude - startStopLocation.coordinate.longitude
+                
+                if longDifferenceStart < 0.01 && longDifferenceStart > -0.01
+                {
+                    startIndex = i
+                }
+            }
+            else if latDifferenceDest < 0.01 && latDifferenceDest > -0.01
+            {
+                let longDifferenceDest: Double = routeCoordinates[i].longitude - destinationStopLocation.coordinate.longitude
+                
+                if longDifferenceDest < 0.01 && longDifferenceDest > -0.01
+                {
+                    destinationIndex = i
+                }
+            }
+        }
+        
+        if startIndex == -1 || destinationIndex == -1
+        {
+            print("\n\n\nThere was an error getting the indicies\n\n")
+            return
+        }
+        else
+        {
+            print("The start index is: \(startIndex)\nThe destination index is: \(destinationIndex)")
+        }
+        
+        var routePath = [CLLocationCoordinate2D]()
+        
+        if startIndex < destinationIndex
+        {
+            for i in startIndex...destinationIndex
+            {
+                routePath.append(routeCoordinates[i])
+            }
+        }
+        else
+        {
+            /*for i in destinationIndex...startIndex
+            {
+                routePath.append(routeCoordinates[i])
+            }*/
+            
+            
+            for i in destinationIndex...routeCoordinates.count-1
+            {
+                routePath.append(routeCoordinates[i])
+            }
+            for i in 0...startIndex
+            {
+                routePath.append(routeCoordinates[i])
+            }
+        
+        }
+        
+        print("The size of routePath is: \(routePath.count)")
+        */
+        let polyLine = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+        self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
+        
+        let startAnnotation = MKPointAnnotation()
+        startAnnotation.coordinate = startStopLocation.coordinate
+        startAnnotation.title = "Start"
+
+        let destinationAnnotation = MKPointAnnotation()
+        destinationAnnotation.coordinate = destinationStopLocation.coordinate
+        destinationAnnotation.title = "Finish"
+        
+        self.annotations.removeAll()
+        self.annotations.append(startAnnotation)
+        self.annotations.append(destinationAnnotation)
+        self.theMap.addAnnotations(annotations)
+        
+        /*
         let request = MKDirectionsRequest()
         request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude), addressDictionary: nil))
         request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: destination.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
@@ -437,7 +603,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.theMap.add(route.polyline)
                 self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             }
-        }
+        }*/
     }
     
     
@@ -476,31 +642,35 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         var walkToStopDescription: String = "An unknown error occurred"
                         var busRouteDescription: String = "An unknown error occurred"
                         var walkFromStopDescription: String = "An unknown error occurred"
+                        var routeName: String = ""
                         
-                        for pair in optimalRouteDictionary
+                        for (key, value) in optimalRouteDictionary
                         {
-                            if pair.value.isEmpty
+                            if value.contains("*")
                             {
-                                destinationStop = pair.key
+                                destinationStop = key
+                                let end = value.index(of: "*")!
+                                let sub: Substring = value[..<end]
+                                routeName = String(sub)
+                                
+                                print("route name is: " + routeName)
                             }
                             else
                             {
-                                startingStop = pair.key
-                                busRouteDescription = pair.value
+                                startingStop = key
+                                busRouteDescription = value
                             }
                         }
                         
-                        walkToStopDescription = "Walk to stop: " + startingStop.stoptitle!
-                        walkFromStopDescription = "Walk from " + destinationStop.stoptitle! + " to destination"
+                        walkToStopDescription = "Walk to stop " + startingStop.stoptitle! + "."
+                        walkFromStopDescription = "Walk from stop " + destinationStop.stoptitle! + " to destination."
                         
                         // Create view for displaying all information and present it
-                        self.routingVC =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
+                        self.routingVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "routeVC") as! RouteDisplayViewController
                         
                         let destinationName = self.resultSearchController?.searchBar.text
                         
-                        self.routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, startStop: startingStop, destinationStop: destinationStop, startLocation: start, destinationLocation: destination, destinationName: destinationName!, mapVC: self)
-                        
-                        self.routingVC.modalPresentationStyle = .overFullScreen
+                        self.routingVC.setVCData(walkToStopText: walkToStopDescription, busRouteText: busRouteDescription, walkFromStopText: walkFromStopDescription, selectedRouteName: routeName, startStop: startingStop, destinationStop: destinationStop, startLocation: start, destinationLocation: destination, destinationName: destinationName!, mapVC: self)
 
                         self.present(self.routingVC, animated: true, completion: nil)
                     }

@@ -20,7 +20,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     var RouteSubList = [Routes]()
     var favoriteRouteList = [Routes]()
     
-    var annotations = [MKPointAnnotation]()
+    private var annotations = [MKPointAnnotation]()
     private var locationManager = CLLocationManager()
     
     var isFavoriteButtonPressed = false

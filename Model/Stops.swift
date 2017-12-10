@@ -10,16 +10,16 @@ import MapKit
 
 class Stops: NSObject, NSCoding
 {
-    func encode(with aCoder: NSCoder) {
-        
+    func encode(with aCoder: NSCoder)
+    {
         aCoder.encode(stoptitle, forKey: "stoptitle")
         aCoder.encode(stopnumber, forKey: "stopnumber")
         aCoder.encode(stoplat, forKey: "stoplat")
         aCoder.encode(stoplng, forKey: "stoplng")
-
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder)
+    {
         stoptitle = aDecoder.decodeObject(forKey: "stoptitle") as? String
         stopnumber = aDecoder.decodeObject(forKey: "stopnumber") as? String
         stoplat = aDecoder.decodeObject(forKey: "stoplat") as? Double ?? aDecoder.decodeDouble(forKey: "stoplat")
@@ -70,25 +70,22 @@ class Stops: NSObject, NSCoding
         self.stoplng = stopInfomation["stoplng"] as? Double
     }
     
-    public static func parseBongoStopsfromURL(jsonDictionary:[String:AnyObject])->[Stops]{
-        
+    public static func parseBongoStopsfromURL(jsonDictionary:[String:AnyObject])->[Stops]
+    {
         var stopList = [Stops]()
         
         let jsonDictionaries = jsonDictionary["route"] as![String:AnyObject]
-        
         let stopsDictionaries = jsonDictionaries["directions"] as![[String:AnyObject]]
         
         for stopsDictionary in stopsDictionaries
         {
             let stopCollection = stopsDictionary["stops"] as! [[String:AnyObject]]
             
-            for stopInfomation in stopCollection{
-                
+            for stopInfomation in stopCollection
+            {
                 let newStop = Stops(stopInfomation:stopInfomation as [String : AnyObject])
                 stopList.append(newStop)
-                
             }
-
         }
         
         return stopList
@@ -101,18 +98,16 @@ class Stops: NSObject, NSCoding
         let jsonDictionaries = jsonDictionary["route"] as![String:AnyObject]
         let points = jsonDictionaries["paths"] as! [[String:AnyObject]]
         
-        for point in points {
-            
+        for point in points
+        {
             let  pointList = point["points"] as! [[String:AnyObject]]
             
-            for singlepoint in pointList{
-                
+            for singlepoint in pointList
+            {
                 let lat = singlepoint["lat"] as! Double
                 let lng = singlepoint["lng"] as! Double
                 pathList.append(CLLocationCoordinate2D(latitude: lat, longitude: lng))
-                
             }
-            
         }
  
         print("the path list is \(pathList)")
