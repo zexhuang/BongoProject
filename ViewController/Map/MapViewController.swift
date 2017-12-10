@@ -119,7 +119,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             locationManager.startUpdatingLocation()
             theMap.showsUserLocation = true
             
-            let location: CLLocation = locationManager.location!
+            // Default to Downtown Interchange location
+            let location: CLLocation = locationManager.location ?? CLLocation(latitude: 41.660155, longitude: -91.535925)
+
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015))
             self.theMap.setRegion(region, animated: true)
@@ -318,6 +320,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return pinView
     }
     
+
     
     private func displayAlertMessage(title: String, message: String)
     {
@@ -347,6 +350,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if distanceStartToDestination! < 550.0
             {
                 displayAlertMessage(title: "Trip Information", message: "The best route to " + (resultSearchController?.searchBar.text)! + " is walking.")
+                self.nameOfDestination = self.resultSearchController?.searchBar.text
                 giveWalkingDirections(start: locationManager.location!, destination: destinationLocation)
             }
             else if distanceStartToDestination! < 10000
@@ -404,8 +408,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         destinationToOpenInMaps = destination
 
         let request = MKDirectionsRequest()
+        
         request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude), addressDictionary: nil))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: destination.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
+        
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
         
         request.requestsAlternateRoutes = false
         request.transportType = .walking
@@ -427,14 +433,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     
-    func giveBusDirectionsOnMap(startStopLocation: CLLocation, destinationStopLocation: CLLocation, routeName: String)
+    func giveBusDirectionsOnMap(SelectedStartStop: Stops, SelectedDestinationStop: Stops, routeName: String)
     {
         self.centerMapOnCurrentLocation()
         
         var routeCoordinates = [CLLocationCoordinate2D]()
+        var StopsOntheRouteList = [Stops]()
+        var bestRouteList = [Stops]()
+        var startIndex = Int()
+        var endIndex = Int()
+        // This need to be change to Route.downloadBongoRoutesFromURL ()
         let allRoutes: [Routes] = Routes.downloadBongoRoutes()
         
         var selectedRoute: Routes? = nil
+        
         for route in allRoutes
         {
             if route.name?.lowercased() == routeName.lowercased()
@@ -455,6 +467,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         
+
         // make the request
         session.dataTask(with: url) {
             (data, response, error) in
@@ -473,22 +486,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                //DispatchQueue.main.async() {
-                    routeCoordinates = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
-                //}
+                StopsOntheRouteList = Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
             }
-        }.resume()
+            
+        
+            
+            }.resume()
         
         
-        
+
         // Wait for result to be populated
         var count: Int = 0
-        while(routeCoordinates.count == 0)
+        while(StopsOntheRouteList.count == 0)
         {
             count += 1
             usleep(50000)
@@ -498,112 +512,230 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 return
             }
         }
-        print("\n\n\nThe size of routeCoordinates is: \(routeCoordinates.count)")
-        /*
-        var startIndex = -1
-        var destinationIndex = -1
+        //print("\n\n\nThe size of routeCoordinates is: \(routeCoordinates.count)")
+        print("\n\n\nThe size of StopsOntheRouteList is: \(StopsOntheRouteList.count)")
         
-        for i in 0...routeCoordinates.count-1
-        {
-            let latDifferenceStart: Double = routeCoordinates[i].latitude - startStopLocation.coordinate.latitude
-            let latDifferenceDest: Double = routeCoordinates[i].latitude - destinationStopLocation.coordinate.latitude
-
+        for i in 0...StopsOntheRouteList.count-1 {
             
-            if latDifferenceStart < 0.01 && latDifferenceStart > -0.01
+            if (StopsOntheRouteList[i].stopnumber == SelectedStartStop.stopnumber)
             {
-                let longDifferenceStart: Double = routeCoordinates[i].longitude - startStopLocation.coordinate.longitude
-                
-                if longDifferenceStart < 0.01 && longDifferenceStart > -0.01
-                {
-                    startIndex = i
-                }
+                startIndex = i
+                print("The startIndex is \(startIndex)")
             }
-            else if latDifferenceDest < 0.01 && latDifferenceDest > -0.01
-            {
-                let longDifferenceDest: Double = routeCoordinates[i].longitude - destinationStopLocation.coordinate.longitude
+            
+            if (StopsOntheRouteList[i].stopnumber == SelectedDestinationStop.stopnumber){
                 
-                if longDifferenceDest < 0.01 && longDifferenceDest > -0.01
-                {
-                    destinationIndex = i
-                }
+                endIndex = i
+                print("The endIndex is \(endIndex)")
             }
+            
         }
-        
-        if startIndex == -1 || destinationIndex == -1
-        {
-            print("\n\n\nThere was an error getting the indicies\n\n")
-            return
-        }
-        else
-        {
-            print("The start index is: \(startIndex)\nThe destination index is: \(destinationIndex)")
-        }
-        
-        var routePath = [CLLocationCoordinate2D]()
-        
-        if startIndex < destinationIndex
-        {
-            for i in startIndex...destinationIndex
-            {
-                routePath.append(routeCoordinates[i])
+        if (startIndex < endIndex) {
+            
+            for j in startIndex...endIndex {
+                
+                
+                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
+                
+                routeCoordinates.append(SingleSpot)
+                
+                let SingleSpotInfo = StopsOntheRouteList[j]
+                
+                bestRouteList.append(SingleSpotInfo)
+                
             }
         }
         else
         {
-            /*for i in destinationIndex...startIndex
-            {
-                routePath.append(routeCoordinates[i])
-            }*/
-            
-            
-            for i in destinationIndex...routeCoordinates.count-1
-            {
-                routePath.append(routeCoordinates[i])
+            for j in startIndex...StopsOntheRouteList.count-1 {
+                
+                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
+                
+                 routeCoordinates.append(SingleSpot)
+                
+                
+                let SingleSpotInfo = StopsOntheRouteList[j]
+                
+                bestRouteList.append(SingleSpotInfo)
+                
             }
-            for i in 0...startIndex
-            {
-                routePath.append(routeCoordinates[i])
+            
+            for k in 0...endIndex {
+                
+                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[k].stoplat!, longitude: StopsOntheRouteList[k].stoplng!)
+                
+                routeCoordinates.append(SingleSpot)
+                
+                let SingleSpotInfo = StopsOntheRouteList[k]
+                
+                bestRouteList.append(SingleSpotInfo)
+                
             }
-        
+            
         }
         
-        print("The size of routePath is: \(routePath.count)")
-        */
-        let polyLine = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-        self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
-        
-        let startAnnotation = MKPointAnnotation()
-        startAnnotation.coordinate = startStopLocation.coordinate
-        startAnnotation.title = "Start"
+        for l in (0...routeCoordinates.count-2) {
 
-        let destinationAnnotation = MKPointAnnotation()
-        destinationAnnotation.coordinate = destinationStopLocation.coordinate
-        destinationAnnotation.title = "Finish"
+            let request = MKDirectionsRequest()
+
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: routeCoordinates[l].latitude, longitude: routeCoordinates[l].longitude), addressDictionary: nil))
+
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: routeCoordinates[l+1].latitude, longitude: routeCoordinates[l+1].longitude), addressDictionary: nil))
+
+            request.requestsAlternateRoutes = false
+            request.transportType = .automobile
+
+            let directions = MKDirections(request: request)
+
+            directions.calculate { [unowned self] routeCoordinates, error in guard let unwrappedResponse = routeCoordinates else { return }
+
+            for route in unwrappedResponse.routes
+                {
+                    //let polyLine = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+
+                    self.theMap.add(route.polyline)
+                    self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+
+                }
+            }
+
+        }
+
+        
+        print("The routeCoordinates count is : \(routeCoordinates.count)")
+        print("The routeCoordinates lat is \(routeCoordinates[0].latitude)")
+        print("The routeCoordinates lng is \(routeCoordinates[0].longitude)")
+
+//        let polyLine = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+//        self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
+        
+        var AnnotationsList = [MKPointAnnotation()]
         
         self.annotations.removeAll()
-        self.annotations.append(startAnnotation)
-        self.annotations.append(destinationAnnotation)
+
+        for i in 0...routeCoordinates.count-1{
+
+            AnnotationsList.append(MKPointAnnotation())
+            
+            AnnotationsList[i].coordinate = routeCoordinates[i]
+
+            self.annotations.append(AnnotationsList[i])
+
+        }
+        
+        for i in 0 ... annotations.count - 1{
+            
+            if i == 0
+            {
+                self.annotations[i].title = "Start Stop:" + bestRouteList[i].stoptitle!
+                self.annotations[i].subtitle = bestRouteList[i].stopnumber
+            }
+            else if i == annotations.count - 1
+            {
+                
+                self.annotations[i].title = "Destination Stop:" + bestRouteList[i].stoptitle!
+                self.annotations[i].subtitle = bestRouteList[i].stopnumber
+            }
+            else
+            {
+                
+                self.annotations[i].title =  bestRouteList[i].stoptitle!
+                self.annotations[i].subtitle = bestRouteList[i].stopnumber
+            }
+            
+        }
+//        self.annotations[0].title = "Start:" + SelectedStartStop.stoptitle!
+//        self.annotations[annotations.count - 1].title = "Finish:" + SelectedDestinationStop.stoptitle!
+
+       
         self.theMap.addAnnotations(annotations)
         
+        
+        
+//        let startAnnotation = MKPointAnnotation()
+//        startAnnotation.coordinate = routeCoordinates[0]
+//        startAnnotation.title = "Start:" + SelectedStartStop.stoptitle!
+//
+//        let destinationAnnotation = MKPointAnnotation()
+//        destinationAnnotation.coordinate = routeCoordinates[routeCoordinates.count - 1]
+//        destinationAnnotation.title = "Finish:" + SelectedDestinationStop.stoptitle!
+//
+//        self.annotations.removeAll()
+//        self.annotations.append(startAnnotation)
+//        self.annotations.append(destinationAnnotation)
+//        self.theMap.addAnnotations(annotations)
+        
         /*
-        let request = MKDirectionsRequest()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude), addressDictionary: nil))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: destination.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
+         var startIndex = -1
+         var destinationIndex = -1
+         
+         for i in 0...routeCoordinates.count-1
+         {
+         let latDifferenceStart: Double = routeCoordinates[i].latitude - startStopLocation.coordinate.latitude
+         let latDifferenceDest: Double = routeCoordinates[i].latitude - destinationStopLocation.coordinate.latitude
+         
+         
+         if latDifferenceStart < 0.01 && latDifferenceStart > -0.01
+         {
+         let longDifferenceStart: Double = routeCoordinates[i].longitude - startStopLocation.coordinate.longitude
+         
+         if longDifferenceStart < 0.01 && longDifferenceStart > -0.01
+         {
+         startIndex = i
+         }
+         }
+         else if latDifferenceDest < 0.01 && latDifferenceDest > -0.01
+         {
+         let longDifferenceDest: Double = routeCoordinates[i].longitude - destinationStopLocation.coordinate.longitude
+         
+         if longDifferenceDest < 0.01 && longDifferenceDest > -0.01
+         {
+         destinationIndex = i
+         }
+         }
+         }
+         
+         if startIndex == -1 || destinationIndex == -1
+         {
+         print("\n\n\nThere was an error getting the indicies\n\n")
+         return
+         }
+         else
+         {
+         print("The start index is: \(startIndex)\nThe destination index is: \(destinationIndex)")
+         }
+         
+         var routePath = [CLLocationCoordinate2D]()
+         
+         if startIndex < destinationIndex
+         {
+         for i in startIndex...destinationIndex
+         {
+         routePath.append(routeCoordinates[i])
+         }
+         }
+         else
+         {
+         /*for i in destinationIndex...startIndex
+         {
+         routePath.append(routeCoordinates[i])
+         }*/
+         
+         
+         for i in destinationIndex...routeCoordinates.count-1
+         {
+         routePath.append(routeCoordinates[i])
+         }
+         for i in 0...startIndex
+         {
+         routePath.append(routeCoordinates[i])
+         }
+         
+         }
+         
+         print("The size of routePath is: \(routePath.count)")
+         */
         
-        request.requestsAlternateRoutes = false
-        request.transportType = .automobile
-        
-        let directions = MKDirections(request: request)
-        
-        directions.calculate { [unowned self] response, error in
-            guard let unwrappedResponse = response else { return }
-            
-            for route in unwrappedResponse.routes
-            {
-                self.theMap.add(route.polyline)
-                self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-            }
-        }*/
     }
     
     
@@ -652,8 +784,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                 let end = value.index(of: "*")!
                                 let sub: Substring = value[..<end]
                                 routeName = String(sub)
-                                
-                                print("route name is: " + routeName)
                             }
                             else
                             {
@@ -698,6 +828,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
     {
         let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        
         renderer.strokeColor = UIColor(hue: 0.6056, saturation: 0.61, brightness: 0.69, alpha: 1.0)
         renderer.lineWidth = 3
         

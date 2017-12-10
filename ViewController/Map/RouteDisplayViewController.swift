@@ -115,6 +115,7 @@ class RouteDisplayViewController : UIViewController
     {
         self.dismiss(animated: true, completion: {
             let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
+            
             self.mapVC.giveWalkingDirections(start: self.startLocation, destination: startStopLocation)
         })
     }
@@ -122,10 +123,16 @@ class RouteDisplayViewController : UIViewController
     @IBAction func busRouteButtonPressed()
     {
         self.dismiss(animated: true, completion: {
-            let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
-            let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
+            //let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
+            //let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
             
-            self.mapVC.giveBusDirectionsOnMap(startStopLocation: startStopLocation, destinationStopLocation: destinationStopLocation, routeName: self.selectedRouteName)
+            let selectedStartStop: Stops = self.startStop
+            
+            let selectedDestinationStop: Stops = self.destinationStop
+            
+            self.mapVC.giveBusDirectionsOnMap(SelectedStartStop: selectedStartStop, SelectedDestinationStop: selectedDestinationStop, routeName: self.selectedRouteName)
+            
+           // self.mapVC.giveBusDirectionsOnMap(SelectedStartStop: selectedStartStop, SelectedDestinationStop: selectedDestinationStop, routeName: self.selectedRouteName)
         })
     }
     
@@ -133,7 +140,9 @@ class RouteDisplayViewController : UIViewController
     @IBAction func walkFromStopButtonPressed()
     {
         self.dismiss(animated: true, completion: {
+            
             let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
+            
             self.mapVC.giveWalkingDirections(start: destinationStopLocation, destination: self.destinationLocation)
         })
     }
