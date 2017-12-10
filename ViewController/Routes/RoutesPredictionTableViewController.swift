@@ -27,7 +27,6 @@ class RoutesPredictionTableViewController: UITableViewController {
         
         // Configure the cells for the table
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
         self.tableView.sectionHeaderHeight = 70
@@ -79,8 +78,8 @@ class RoutesPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                    self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                
+                self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
+
             }
             catch
             {
@@ -219,7 +218,7 @@ class RoutesPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                    self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
+                self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
             
             }
             catch
@@ -272,6 +271,11 @@ class RoutesPredictionTableViewController: UITableViewController {
                 return
             }
             
+            DispatchQueue.main.async () {
+                
+                self.tableView.reloadData()
+                
+            }
             
             }.resume()
         

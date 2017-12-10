@@ -33,7 +33,6 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
         
         // Configure the cells for the table
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         self.tableView.separatorColor = UIColor.clear
         self.tableView.tableFooterView = UIView()
         self.tableView.sectionHeaderHeight = 70
@@ -125,9 +124,8 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                }
+    
             }
             catch
             {
@@ -135,7 +133,10 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
                 return
             }
             
-            
+            DispatchQueue.main.async () {
+                self.tableView.reloadData()
+            }
+
             }.resume()
         
         
@@ -344,9 +345,7 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                }
             }
             catch
             {
@@ -386,17 +385,18 @@ class FavoriteStopPredictionTableViewController: UITableViewController {
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
                 
-                DispatchQueue.main.async() {
                     self.stopsInfoList =  StopsInfo.downloadBongoStopsInfo(jsonDictionary: todo!)
-                }
             }
             catch
             {
                 print("error trying to convert data to JSON")
                 return
             }
-   
             
+            DispatchQueue.main.async () {
+                self.tableView.reloadData()
+            }
+   
             }.resume()
         
     }

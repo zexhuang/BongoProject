@@ -15,6 +15,10 @@ class RouteDisplayViewController : UIViewController
     @IBOutlet var busRouteLabel: UILabel!
     @IBOutlet var walkFromStopLabel: UILabel!
     
+    @IBOutlet weak var WalktoStop: UIButton!
+    @IBOutlet weak var BusRouteButton: UIButton!
+    @IBOutlet weak var StoptoDestination: UIButton!
+    
     private var walkToStopText: String = "Error"
     private var busRouteText: String = "Error"
     private var walkFromStopText: String = "Error"
@@ -61,9 +65,32 @@ class RouteDisplayViewController : UIViewController
         self.busRouteLabel.text = busRouteText
         self.walkFromStopLabel.text = walkFromStopText
         
+        self.walkToStopLabel.textColor = UIColor(red:0.05, green:0.50, blue:0.82, alpha:1.0)
+        self.busRouteLabel.textColor = UIColor(red:0.05, green:0.50, blue:0.82, alpha:1.0)
+        self.walkFromStopLabel.textColor = UIColor(red:0.05, green:0.50, blue:0.82, alpha:1.0)
+        
+        self.walkToStopLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        self.busRouteLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        self.walkFromStopLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        
         self.walkToStopLabel.adjustsFontSizeToFitWidth = true
         self.busRouteLabel.adjustsFontSizeToFitWidth = true
         self.walkFromStopLabel.adjustsFontSizeToFitWidth = true
+        
+        WalktoStop.layer.shadowColor = UIColor.darkGray.cgColor
+        WalktoStop.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+        WalktoStop.layer.shadowRadius = 2.0
+        WalktoStop.layer.shadowOpacity = 0.7
+        
+        BusRouteButton.layer.shadowColor = UIColor.darkGray.cgColor
+        BusRouteButton.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+        BusRouteButton.layer.shadowRadius = 2.0
+        BusRouteButton.layer.shadowOpacity = 0.7
+        
+        StoptoDestination.layer.shadowColor = UIColor.darkGray.cgColor
+        StoptoDestination.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+        StoptoDestination.layer.shadowRadius = 2.0
+        StoptoDestination.layer.shadowOpacity = 0.7
     }
     
     

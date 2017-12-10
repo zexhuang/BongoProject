@@ -21,7 +21,6 @@ class FavoriteStopsTableViewController: UITableViewController
         self.headerLabel.adjustsFontSizeToFitWidth = true
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 80.0
         
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
