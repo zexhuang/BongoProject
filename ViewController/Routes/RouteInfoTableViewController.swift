@@ -48,6 +48,22 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager = CLLocationManager()
+        
+        // If we haven't received permission to access location, ask for it
+        if CLLocationManager.authorizationStatus() == .notDetermined
+        {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
+        {
+            locationManager.startUpdatingLocation()
+            theMap.showsUserLocation = true
+            
+            let location: CLLocation = locationManager.location ?? CLLocation(latitude: 41.660155, longitude: -91.535925)
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015))
+            self.theMap.setRegion(region, animated: true)
+        }
 
 
         let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeData.agency!)&route=\(routeData.id!)&api_key=XXXX"
@@ -78,8 +94,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                     
                 self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
                 self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
-                self.centerMapOnLocation(location: self.locationManager.location!)
-                
+                self.centerMapOnLocation(location: self.locationManager.location ?? CLLocation(latitude: 41.660155, longitude: -91.535925))
+                    
                 self.tableView.reloadData()
                 self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
                 self.showRoute(stopEntrylist: self.stops)
