@@ -123,16 +123,11 @@ class RouteDisplayViewController : UIViewController
     @IBAction func busRouteButtonPressed()
     {
         self.dismiss(animated: true, completion: {
-            //let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
-            //let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
-            
             let selectedStartStop: Stops = self.startStop
             
             let selectedDestinationStop: Stops = self.destinationStop
             
             self.mapVC.giveBusDirectionsOnMap(SelectedStartStop: selectedStartStop, SelectedDestinationStop: selectedDestinationStop, routeName: self.selectedRouteName)
-            
-           // self.mapVC.giveBusDirectionsOnMap(SelectedStartStop: selectedStartStop, SelectedDestinationStop: selectedDestinationStop, routeName: self.selectedRouteName)
         })
     }
     

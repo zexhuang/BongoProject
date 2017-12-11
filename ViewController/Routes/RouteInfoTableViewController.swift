@@ -83,6 +83,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 self.tableView.reloadData()
                 self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
                 self.showRoute(stopEntrylist: self.stops)
+
                     
                 }
             }
@@ -92,6 +93,8 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 return
             }
         }.resume()
+        
+        
     }
     
     func centerMapOnLocation(location: CLLocation)

@@ -279,12 +279,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     {
         if control == view.rightCalloutAccessoryView
         {
-            if (view.annotation?.title)! == "Start" || (view.annotation?.title)! == "Finish"
-            {
-                self.present(self.routingVC, animated: true, completion: nil)
-                return
-            }
-            
             MapGlobalData.sharedInstance.mapPrediction.stoptitle = ((view.annotation?.title)!)!
             MapGlobalData.sharedInstance.mapPrediction.stopnumber = ((view.annotation?.subtitle)!)!
             
@@ -430,6 +424,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             }
         }
+        
+//        let annotation = MKPointAnnotation()
+//        annotation.coordinate = destination.coordinate
+//        annotation.title = destinationName
+//        annotations.append(annotation)
+//        self.theMap.addAnnotations(annotations)
     }
     
     
@@ -486,7 +486,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             // parse the result as JSON, since that's what the API provides
             do {
                 let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject]
-                
                 StopsOntheRouteList = Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
             }
             catch
@@ -509,18 +508,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
         
+        
         for i in 0...StopsOntheRouteList.count-1
         {
             if (StopsOntheRouteList[i].stopnumber == SelectedStartStop.stopnumber)
             {
                 startIndex = i
-                print("The startIndex is \(startIndex)")
             }
             
             if (StopsOntheRouteList[i].stopnumber == SelectedDestinationStop.stopnumber)
             {
                 endIndex = i
-                print("The endIndex is \(endIndex)")
             }
         }
         
@@ -581,14 +579,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 }
             }
         }
-
-        
-        print("The routeCoordinates count is : \(routeCoordinates.count)")
-        print("The routeCoordinates lat is \(routeCoordinates[0].latitude)")
-        print("The routeCoordinates lng is \(routeCoordinates[0].longitude)")
-
-//        let polyLine = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-//        self.theMap.add(polyLine, level: MKOverlayLevel.aboveLabels)
         
         var AnnotationsList = [MKPointAnnotation()]
         
@@ -625,98 +615,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             
         }
-//        self.annotations[0].title = "Start:" + SelectedStartStop.stoptitle!
-//        self.annotations[annotations.count - 1].title = "Finish:" + SelectedDestinationStop.stoptitle!
 
-       
         self.theMap.addAnnotations(annotations)
-        
-        
-        
-//        let startAnnotation = MKPointAnnotation()
-//        startAnnotation.coordinate = routeCoordinates[0]
-//        startAnnotation.title = "Start:" + SelectedStartStop.stoptitle!
-//
-//        let destinationAnnotation = MKPointAnnotation()
-//        destinationAnnotation.coordinate = routeCoordinates[routeCoordinates.count - 1]
-//        destinationAnnotation.title = "Finish:" + SelectedDestinationStop.stoptitle!
-//
-//        self.annotations.removeAll()
-//        self.annotations.append(startAnnotation)
-//        self.annotations.append(destinationAnnotation)
-//        self.theMap.addAnnotations(annotations)
-        
-        /*
-         var startIndex = -1
-         var destinationIndex = -1
-         
-         for i in 0...routeCoordinates.count-1
-         {
-         let latDifferenceStart: Double = routeCoordinates[i].latitude - startStopLocation.coordinate.latitude
-         let latDifferenceDest: Double = routeCoordinates[i].latitude - destinationStopLocation.coordinate.latitude
-         
-         
-         if latDifferenceStart < 0.01 && latDifferenceStart > -0.01
-         {
-         let longDifferenceStart: Double = routeCoordinates[i].longitude - startStopLocation.coordinate.longitude
-         
-         if longDifferenceStart < 0.01 && longDifferenceStart > -0.01
-         {
-         startIndex = i
-         }
-         }
-         else if latDifferenceDest < 0.01 && latDifferenceDest > -0.01
-         {
-         let longDifferenceDest: Double = routeCoordinates[i].longitude - destinationStopLocation.coordinate.longitude
-         
-         if longDifferenceDest < 0.01 && longDifferenceDest > -0.01
-         {
-         destinationIndex = i
-         }
-         }
-         }
-         
-         if startIndex == -1 || destinationIndex == -1
-         {
-         print("\n\n\nThere was an error getting the indicies\n\n")
-         return
-         }
-         else
-         {
-         print("The start index is: \(startIndex)\nThe destination index is: \(destinationIndex)")
-         }
-         
-         var routePath = [CLLocationCoordinate2D]()
-         
-         if startIndex < destinationIndex
-         {
-         for i in startIndex...destinationIndex
-         {
-         routePath.append(routeCoordinates[i])
-         }
-         }
-         else
-         {
-         /*for i in destinationIndex...startIndex
-         {
-         routePath.append(routeCoordinates[i])
-         }*/
-         
-         
-         for i in destinationIndex...routeCoordinates.count-1
-         {
-         routePath.append(routeCoordinates[i])
-         }
-         for i in 0...startIndex
-         {
-         routePath.append(routeCoordinates[i])
-         }
-         
-         }
-         
-         print("The size of routePath is: \(routePath.count)")
-         */
-        
     }
     
     
