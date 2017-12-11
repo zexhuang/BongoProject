@@ -116,7 +116,7 @@ class RouteDisplayViewController : UIViewController
         self.dismiss(animated: true, completion: {
             let startStopLocation: CLLocation = CLLocation(latitude: (self.startStop.stoplat)!, longitude: (self.startStop.stoplng)!)
             
-            self.mapVC.giveWalkingDirections(start: self.startLocation, destination: startStopLocation)
+            self.mapVC.giveWalkingDirections(start: self.startLocation, destination: startStopLocation, destinationName: self.startStop.stoptitle!)
         })
     }
     
@@ -143,7 +143,7 @@ class RouteDisplayViewController : UIViewController
             
             let destinationStopLocation: CLLocation = CLLocation(latitude: (self.destinationStop.stoplat)!, longitude: (self.destinationStop.stoplng)!)
             
-            self.mapVC.giveWalkingDirections(start: destinationStopLocation, destination: self.destinationLocation)
+            self.mapVC.giveWalkingDirections(start: destinationStopLocation, destination: self.destinationLocation, destinationName: self.destinationName)
         })
     }
     

@@ -51,15 +51,7 @@ class TripPlanning
             }
         }
         
-        
-        
-        for route in allRoutes
-        {
-            print(route.key + " \(route.value)")
-        }
-        
-        
-        
+    
         var minimumPredictionTime: Int = 1000
         for prediction in allPredictionsForDestinationStops
         {
@@ -89,16 +81,11 @@ class TripPlanning
                         optimalRoute[destinationStops[prediction.optionalInfo!]] = prediction.RouteName! + "*"
                     }
                 }
-                //allRoutes[prediction.RouteName!] = nil
-            }
-            else
-            {
-                print("IN else " + prediction.RouteName! + " " + String(prediction.Prediction!))
-
             }
         }
         return optimalRoute
     }
+    
     
     // Aggregate all predictions for an array of stops
     private static func getPredictions(stops: [Stops])->[StopsInfo]
@@ -110,100 +97,7 @@ class TripPlanning
         }
         return predictionsForAllStops
     }
-    
 
-    
-    
-    
-    
-    
-    
-    /*
-    // This is currently n^2 just to get it to work. Speed improvements to come soon
-    public static func determineIfBusGoesToBothStops(startingStops: [Stops], destinationStops: [Stops])->[Stops : String]
-    {
-        var retval = [Stops : Stops]()
-        for startStop in startingStops
-        {
-            for destStop in destinationStops
-            {
-                if determineIfBusGoesToBothStops(start: startStop, destination: destStop)
-                {
-                    retval[startStop] = "Take " +
-                    retval[destStop] = ""
-                    return retval
-                }
-            }
-        }
-        return retval
-    }
-    
-    private static func determineIfBusGoesToBothStops(start: Stops, destination: Stops)->Bool
-    {
-        let predictionsForStart: [StopsInfo]! = getPredictions(stop: start, stopIndex: 0)
-        if predictionsForStart == nil || predictionsForStart.isEmpty
-        {
-            return false
-        }
-        
-        let predictionsForDestination: [StopsInfo]! = getPredictions(stop: destination, stopIndex: 0)
-        if predictionsForDestination == nil || predictionsForDestination.isEmpty
-        {
-            return false
-        }
-        
-        
-        // Go through the predictions for the starting stop.
-        // Store all routes and predictions into a dictionary where
-        // the key is the route name and the value is an array of predictions
-        var allRoutes = [String : [Int]]()
-        for prediction in predictionsForStart
-        {
-            if allRoutes[prediction.RouteName!] == nil
-            {
-                allRoutes[prediction.RouteName!]? = [prediction.Prediction!]
-            }
-            else
-            {
-                allRoutes[prediction.RouteName!]?.append(prediction.Prediction!)
-            }
-        }
-        
-        
-        var minimumPrediction: Int
-        for prediction in predictionsForDestination
-        {
-            if allRoutes[prediction.RouteName!] != nil
-            {
-                if
-            }
-        }
-        
-        
-        /*
-        let routesFromStartingStop = NSMutableSet()
-        for prediction in predictionsForStart
-        {
-            routesFromStartingStop.add(prediction.RouteName!)
-        }
-                
-        let commonRoutes = NSMutableSet()
-        for prediction in predictionsForDestination
-        {
-            if routesFromStartingStop.contains(prediction.RouteName!)
-            {
-                commonRoutes.add(prediction.RouteName!)
-            }
-        }*/
-
-        
-        for route in commonRoutes
-        {
-            
-        }
-        
-        return commonRoutes.count > 0 
-    }*/
     
     private static func getPredictions(stop: Stops, stopIndex: Int)->[StopsInfo]!
     {

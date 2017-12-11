@@ -163,7 +163,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func showNearbyStops()
     {
-        let closestStops = getClosestStops(location: locationManager.location!, searchRadius: 400)
+        let closestStops = getClosestStops(location: locationManager.location!, searchRadius: 350)
 
         // Get rid of all old annotations
         self.centerMapOnCurrentLocation()
@@ -330,15 +330,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    
-    
-    
     func resultSelected(destination: String)
     {
         resultSearchController?.searchBar.text = destination
     }
-    
-    
     
     
     func planTrip(destinationLocation: CLLocation)
@@ -346,6 +341,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
         {
             centerMapOnCurrentLocation()
+            
+            self.overviewButton.isHidden = true
             let distanceStartToDestination = locationManager.location?.distance(from: destinationLocation).magnitude
             if distanceStartToDestination! < 550.0
             {
@@ -355,6 +352,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             else if distanceStartToDestination! < 10000
             {
+                self.overviewButton.isHidden = false
                 giveBusDirections(start: locationManager.location!, destination: destinationLocation)
             }
             else
@@ -398,20 +396,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    
-    
     func giveWalkingDirections(start: CLLocation, destination: CLLocation)
+    {
+        giveWalkingDirections(start: start, destination: destination, destinationName: (self.resultSearchController?.searchBar.text)!)
+    }
+
+    
+    func giveWalkingDirections(start: CLLocation, destination: CLLocation, destinationName: String)
     {
         self.centerMapOnCurrentLocation()
         
         getDirectionsButton.isHidden = false
         destinationToOpenInMaps = destination
+        self.nameOfDestination = destinationName
 
         let request = MKDirectionsRequest()
         
         request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude), addressDictionary: nil))
         
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: destination.coordinate.latitude, longitude: destination.coordinate.longitude), addressDictionary: nil))
         
         request.requestsAlternateRoutes = false
         request.transportType = .walking
@@ -428,9 +431,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
-    
-    
-    
     
     
     func giveBusDirectionsOnMap(SelectedStartStop: Stops, SelectedDestinationStop: Stops, routeName: String)
@@ -493,11 +493,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 print("error trying to convert data to JSON")
                 return
             }
-            
-        
-            
-            }.resume()
-        
+        }.resume()
         
 
         // Wait for result to be populated
@@ -506,72 +502,58 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         {
             count += 1
             usleep(50000)
-            if count > 100
+            if count > 50
             {
-                print("shit")
                 return
             }
         }
-        //print("\n\n\nThe size of routeCoordinates is: \(routeCoordinates.count)")
-        print("\n\n\nThe size of StopsOntheRouteList is: \(StopsOntheRouteList.count)")
         
-        for i in 0...StopsOntheRouteList.count-1 {
-            
+        for i in 0...StopsOntheRouteList.count-1
+        {
             if (StopsOntheRouteList[i].stopnumber == SelectedStartStop.stopnumber)
             {
                 startIndex = i
                 print("The startIndex is \(startIndex)")
             }
             
-            if (StopsOntheRouteList[i].stopnumber == SelectedDestinationStop.stopnumber){
-                
+            if (StopsOntheRouteList[i].stopnumber == SelectedDestinationStop.stopnumber)
+            {
                 endIndex = i
                 print("The endIndex is \(endIndex)")
             }
-            
         }
-        if (startIndex < endIndex) {
-            
-            for j in startIndex...endIndex {
-                
-                
-                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
-                
-                routeCoordinates.append(SingleSpot)
+        
+        
+        if (startIndex < endIndex)
+        {
+            for j in startIndex...endIndex
+            {
+                let SingleSpot = CLLocation(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
+                routeCoordinates.append(SingleSpot.coordinate)
                 
                 let SingleSpotInfo = StopsOntheRouteList[j]
-                
                 bestRouteList.append(SingleSpotInfo)
-                
             }
         }
         else
         {
-            for j in startIndex...StopsOntheRouteList.count-1 {
-                
-                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
-                
-                 routeCoordinates.append(SingleSpot)
-                
-                
+            for j in startIndex...StopsOntheRouteList.count-1
+            {
+                let SingleSpot = CLLocation(latitude: StopsOntheRouteList[j].stoplat!, longitude: StopsOntheRouteList[j].stoplng!)
+                routeCoordinates.append(SingleSpot.coordinate)
+
                 let SingleSpotInfo = StopsOntheRouteList[j]
-                
                 bestRouteList.append(SingleSpotInfo)
-                
             }
             
-            for k in 0...endIndex {
-                
-                let SingleSpot = CLLocationCoordinate2D(latitude: StopsOntheRouteList[k].stoplat!, longitude: StopsOntheRouteList[k].stoplng!)
-                
-                routeCoordinates.append(SingleSpot)
+            for k in 0...endIndex
+            {
+                let SingleSpot = CLLocation(latitude: StopsOntheRouteList[k].stoplat!, longitude: StopsOntheRouteList[k].stoplng!)
+                routeCoordinates.append(SingleSpot.coordinate)
                 
                 let SingleSpotInfo = StopsOntheRouteList[k]
-                
                 bestRouteList.append(SingleSpotInfo)
-                
             }
-            
         }
         
         for l in (0...routeCoordinates.count-2) {
@@ -595,10 +577,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
                     self.theMap.add(route.polyline)
                     self.theMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-
                 }
             }
-
         }
 
         
@@ -623,17 +603,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         }
         
-        for i in 0 ... annotations.count - 1{
-            
+        for i in 0 ... annotations.count - 1
+        {
             if i == 0
             {
-                self.annotations[i].title = "Start Stop:" + bestRouteList[i].stoptitle!
+                self.annotations[i].title = "Start Stop: " + bestRouteList[i].stoptitle!
                 self.annotations[i].subtitle = bestRouteList[i].stopnumber
             }
             else if i == annotations.count - 1
             {
                 
-                self.annotations[i].title = "Destination Stop:" + bestRouteList[i].stoptitle!
+                self.annotations[i].title = "Destination Stop: " + bestRouteList[i].stoptitle!
                 self.annotations[i].subtitle = bestRouteList[i].stopnumber
             }
             else
@@ -841,7 +821,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let coordinate = CLLocationCoordinate2DMake(destinationToOpenInMaps.coordinate.latitude, destinationToOpenInMaps.coordinate.longitude)
         let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
         
-        mapItem.name = nameOfDestination
+        mapItem.name = self.nameOfDestination
         mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking])
     }
     
@@ -849,6 +829,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func returnToOverviewPressed()
     {
+        
         self.present(routingVC, animated: true, completion: nil)
     }
 }

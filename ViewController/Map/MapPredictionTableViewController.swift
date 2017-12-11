@@ -8,8 +8,8 @@
 
 import UIKit
 
-class MapPredictionTableViewController: UITableViewController {
-    
+class MapPredictionTableViewController: UITableViewController
+{
     var refresher:UIRefreshControl!
     let headerview = UIView()
     var headerLabel = UILabel()
@@ -24,13 +24,14 @@ class MapPredictionTableViewController: UITableViewController {
     
     var isFavoriteButtonPressed = false
     var StopisExisted = false
-    
     let FavoriteStopsDefault = UserDefaults.standard
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         self.tableView.delegate = self
+        self.headerLabel.adjustsFontSizeToFitWidth = true
+        self.headerLabelSubtitle.adjustsFontSizeToFitWidth = true
         
         
         // Configure the cells for the table
@@ -229,18 +230,15 @@ class MapPredictionTableViewController: UITableViewController {
         
       
         headerLabel.text =  StopData.stoptitle
-        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width, height: 30)
+        headerLabel.frame = CGRect(x:10,y:5, width: view.frame.width - 16, height: 30)
         headerLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         headerview.addSubview(headerLabel)
         
-        
         headerLabelSubtitle.text =  "Stop " + StopData.stopnumber!
-        headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width, height: 30)
+        headerLabelSubtitle.frame = CGRect(x:10,y:35, width: view.frame.width - 16, height: 30)
         headerLabelSubtitle.font = UIFont.boldSystemFont(ofSize: 18)
-        
         headerview.addSubview(headerLabelSubtitle)
-        
         
         return headerview
     }
