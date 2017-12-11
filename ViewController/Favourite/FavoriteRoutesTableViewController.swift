@@ -29,6 +29,11 @@ class FavoriteRoutesTableViewController: UITableViewController {
         navigationItem.title = "Favorites"
         self.tableView.separatorColor = UIColor.clear
         
+        if traitCollection.forceTouchCapability == .available
+        {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
+        
       
     }
     
@@ -82,6 +87,13 @@ class FavoriteRoutesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath?
     {
+        let route = myFavoriteRoutesList[indexPath.row]
+        
+        FavouriteRoutesGlobalData.sharedInstance.routeData.name = route.name
+        FavouriteRoutesGlobalData.sharedInstance.routeData.agency = route.agency
+        FavouriteRoutesGlobalData.sharedInstance.routeData.agencyName = route.agencyName
+        FavouriteRoutesGlobalData.sharedInstance.routeData.id = route.id
+        FavouriteRoutesGlobalData.sharedInstance.routeData.tag = route.tag
         
         return indexPath
     }
@@ -117,6 +129,36 @@ class FavoriteRoutesTableViewController: UITableViewController {
             
             return cell
         }
+        
+    }
+    
+}
+
+extension FavoriteRoutesTableViewController : UIViewControllerPreviewingDelegate{
+    
+    // peak
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = tableView.indexPathForRow(at: location),
+            let cell = tableView.cellForRow(at: indexPath) as? FavoriteRoutesTableViewCell
+            else{return nil}
+        
+        let identifier = "FavoriteRouteInfoTableViewController"
+        
+        guard let RoutesVC = storyboard?.instantiateViewController(withIdentifier: identifier) as? FavoriteRouteInfoTableViewController else {return nil}
+        
+        RoutesVC.routeData = cell.route
+        
+        previewingContext.sourceRect = cell.frame
+        
+        
+        return RoutesVC
+    }
+    
+    //pop
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        
+        self.navigationController?.pushViewController(viewControllerToCommit, animated: true)
         
     }
     

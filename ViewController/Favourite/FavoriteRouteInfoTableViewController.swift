@@ -1,19 +1,21 @@
 //
-//  RouteInfoTableViewController.swift
+//  FavoriteRouteInfoTableViewController.swift
 //  Bongo
 //
-//  Created by Huangzexian on 11/7/17.
-//  Copyright © 2017 Huangzexian. All rights reserved.
+//  Created by Huangzexian on 12/10/17.
+//  Copyright © 2017 The University of Iowa (CTS). All rights reserved.
+//
 
 import UIKit
 import MapKit
 
-class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLLocationManagerDelegate
-{
+class FavoriteRouteInfoTableViewController: UITableViewController,MKMapViewDelegate,CLLocationManagerDelegate {
+
     @IBOutlet weak var theMap: MKMapView!
     
-    let routePredictionGlobalData:Stops = RoutePredictionGlobalData.sharedInstance.routePrediction
-    var routeData = RouteGlobalData.sharedInstance.routeData
+    let routePredictionGlobalData:Stops = FavoriteRoutePredictionGlobalData.sharedInstance.routePrediction
+    
+    var routeData = FavouriteRoutesGlobalData.sharedInstance.routeData
     
     var stops = [Stops]()
     var routePath = [CLLocationCoordinate2D]()
@@ -43,13 +45,13 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         
         self.theMap.delegate = self
         self.theMap.mapType = MKMapType.standard
-
+        
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager = CLLocationManager()
-
-
+        
+        
         let todoEndpoint: String = "http://api.ebongo.org/route?agency=\( routeData.agency!)&route=\(routeData.id!)&api_key=XXXX"
         guard let url = URL(string: todoEndpoint) else { return }
         let config = URLSessionConfiguration.default
@@ -76,13 +78,13 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 
                 DispatchQueue.main.async() {
                     
-                self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
-                self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
-                self.centerMapOnLocation(location: self.locationManager.location!)
-                
-                self.tableView.reloadData()
-                self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
-                self.showRoute(stopEntrylist: self.stops)
+                    self.stops =  Stops.parseBongoStopsfromURL(jsonDictionary: todo!)
+                    self.routePath = Stops.parseBongoPathfromURL(jsonDictionary: todo!)
+                    self.centerMapOnLocation(location: self.locationManager.location!)
+                    
+                    self.tableView.reloadData()
+                    self.theMap.addAnnotations(self.showAllStops(stopEntrylist:self.stops))
+                    self.showRoute(stopEntrylist: self.stops)
                     
                 }
             }
@@ -91,7 +93,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 print("error trying to convert data to JSON")
                 return
             }
-        }.resume()
+            }.resume()
     }
     
     func centerMapOnLocation(location: CLLocation)
@@ -101,7 +103,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                                                                   regionRadius, regionRadius)
         theMap.setRegion(coordinateRegion, animated: true)
     }
-
+    
     
     override func viewWillAppear(_ animated: Bool)
     {
@@ -136,6 +138,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
                 }
             }
         }
+        
         RouteisExisted = false
     }
     
@@ -195,11 +198,11 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     {
         if control == view.rightCalloutAccessoryView
         {
-            
+
             routePredictionGlobalData.stoptitle = ((view.annotation?.title)!)!
             routePredictionGlobalData.stopnumber = ((view.annotation?.subtitle)!)!
-            
-            performSegue(withIdentifier: "routeMapToPrediction", sender: self)
+
+            performSegue(withIdentifier: "FavoriterouteMapToPrediction", sender: self)
         }
     }
     
@@ -228,11 +231,11 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
     
     
     
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return stops.count
     }
@@ -249,18 +252,18 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
         
         return indexPath
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RouteInfoCell", for: indexPath)as! RouteInfoTableViewCell
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteInfoCell", for: indexPath)as! FavoriteRouteInfoTableViewCell
+        
         let stop = stops[indexPath.row]
         cell.stop = stop
         
         return cell
     }
     
-
+    
     
     @objc func pushToFavourite()
     {
@@ -283,7 +286,7 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             else
             {
                 favoriteRouteList.append(routeData)
-
+                
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: favoriteRouteList)
                 
                 FavoriteRoutesDefault.set(encodedData, forKey: "RouteDefaults")
@@ -318,4 +321,5 @@ class RouteInfoTableViewController: UITableViewController,MKMapViewDelegate, CLL
             isFavoriteButtonPressed = false
         }
     }
+
 }

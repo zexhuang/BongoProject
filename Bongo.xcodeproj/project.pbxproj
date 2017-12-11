@@ -22,6 +22,11 @@
 		D42907FE1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */; };
 		D42CD5331F9B3C9700C1407D /* routelist.json in Resources */ = {isa = PBXBuildFile; fileRef = D42CD5321F9B3C9700C1407D /* routelist.json */; };
 		D42E13891F9B1A3800802FE4 /* RoutesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42E13881F9B1A3800802FE4 /* RoutesTableViewCell.swift */; };
+		D44E31D81FDDDF9200299D20 /* FavoriteRouteInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44E31D71FDDDF9200299D20 /* FavoriteRouteInfoTableViewController.swift */; };
+		D44E31DA1FDDDFB700299D20 /* FavoriteRoutesPredictionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44E31D91FDDDFB700299D20 /* FavoriteRoutesPredictionTableViewController.swift */; };
+		D44E31DC1FDDDFED00299D20 /* FavoriteRouteInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44E31DB1FDDDFED00299D20 /* FavoriteRouteInfoTableViewCell.swift */; };
+		D44E31DE1FDDE00800299D20 /* FavoriteRoutesPredictionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44E31DD1FDDE00800299D20 /* FavoriteRoutesPredictionTableViewCell.swift */; };
+		D44E31E01FDDF0D100299D20 /* FavoriteRoutePredictionGlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44E31DF1FDDF0D100299D20 /* FavoriteRoutePredictionGlobalData.swift */; };
 		D45F66F01FC504F000B4CF7C /* FavouriteStopsGlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F66EF1FC504F000B4CF7C /* FavouriteStopsGlobalData.swift */; };
 		D45F66F21FC5053200B4CF7C /* FavouriteRoutesGlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F66F11FC5053200B4CF7C /* FavouriteRoutesGlobalData.swift */; };
 		D46A95181FA1B5BA0010380A /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46A95171FA1B5BA0010380A /* RequestManager.swift */; };
@@ -72,6 +77,11 @@
 		D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStopsTableViewController.swift; sourceTree = "<group>"; };
 		D42CD5321F9B3C9700C1407D /* routelist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = routelist.json; sourceTree = "<group>"; };
 		D42E13881F9B1A3800802FE4 /* RoutesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewCell.swift; sourceTree = "<group>"; };
+		D44E31D71FDDDF9200299D20 /* FavoriteRouteInfoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouteInfoTableViewController.swift; sourceTree = "<group>"; };
+		D44E31D91FDDDFB700299D20 /* FavoriteRoutesPredictionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRoutesPredictionTableViewController.swift; sourceTree = "<group>"; };
+		D44E31DB1FDDDFED00299D20 /* FavoriteRouteInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouteInfoTableViewCell.swift; sourceTree = "<group>"; };
+		D44E31DD1FDDE00800299D20 /* FavoriteRoutesPredictionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRoutesPredictionTableViewCell.swift; sourceTree = "<group>"; };
+		D44E31DF1FDDF0D100299D20 /* FavoriteRoutePredictionGlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRoutePredictionGlobalData.swift; sourceTree = "<group>"; };
 		D45F66EF1FC504F000B4CF7C /* FavouriteStopsGlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteStopsGlobalData.swift; sourceTree = "<group>"; };
 		D45F66F11FC5053200B4CF7C /* FavouriteRoutesGlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteRoutesGlobalData.swift; sourceTree = "<group>"; };
 		D46A95171FA1B5BA0010380A /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
@@ -156,10 +166,12 @@
 		D45F66F71FC50DB600B4CF7C /* Favourite */ = {
 			isa = PBXGroup;
 			children = (
-				28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */,
 				D490CC0B1FC64495003CDD18 /* FavoriteRoutesTableViewController.swift */,
+				D44E31D71FDDDF9200299D20 /* FavoriteRouteInfoTableViewController.swift */,
+				D44E31D91FDDDFB700299D20 /* FavoriteRoutesPredictionTableViewController.swift */,
 				D42907FD1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift */,
 				D48C25BA1FD2758C00A727EA /* FavoriteStopPredictionTableViewController.swift */,
+				28DE18C51FCDBAF500808FB2 /* InformationViewController.swift */,
 			);
 			path = Favourite;
 			sourceTree = "<group>";
@@ -167,9 +179,11 @@
 		D490CC081FC5D21C003CDD18 /* FavoriteTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				D490CC091FC5D24E003CDD18 /* FavoriteRoutesTableViewCell.swift */,
 				D490CC061FC5D212003CDD18 /* FavoriteStopsTableViewCell.swift */,
 				D48C25BC1FD278A100A727EA /* FavoriteStopsPredictionTableViewCell.swift */,
+				D490CC091FC5D24E003CDD18 /* FavoriteRoutesTableViewCell.swift */,
+				D44E31DB1FDDDFED00299D20 /* FavoriteRouteInfoTableViewCell.swift */,
+				D44E31DD1FDDE00800299D20 /* FavoriteRoutesPredictionTableViewCell.swift */,
 			);
 			path = FavoriteTableViewCell;
 			sourceTree = "<group>";
@@ -212,12 +226,13 @@
 		D49A8FF81FC37B0200552FBE /* GlobalData */ = {
 			isa = PBXGroup;
 			children = (
+				D49A8FF21FC370F700552FBE /* MapGlobalData.swift */,
 				D48953B21FA22CD50045EFEE /* StopsGlobalData.swift */,
 				D4C344521FB22E150011F40F /* RouteGlobalData.swift */,
 				D49A8FF01FC36B4F00552FBE /* RoutePredictionGlobalData.swift */,
-				D49A8FF21FC370F700552FBE /* MapGlobalData.swift */,
 				D45F66EF1FC504F000B4CF7C /* FavouriteStopsGlobalData.swift */,
 				D45F66F11FC5053200B4CF7C /* FavouriteRoutesGlobalData.swift */,
+				D44E31DF1FDDF0D100299D20 /* FavoriteRoutePredictionGlobalData.swift */,
 			);
 			path = GlobalData;
 			sourceTree = "<group>";
@@ -451,11 +466,13 @@
 				D45F66F01FC504F000B4CF7C /* FavouriteStopsGlobalData.swift in Sources */,
 				D490CC0A1FC5D24E003CDD18 /* FavoriteRoutesTableViewCell.swift in Sources */,
 				D4E9CFC71FA8CF9000F5D1C0 /* StopsPredictionTableViewCell.swift in Sources */,
+				D44E31DA1FDDDFB700299D20 /* FavoriteRoutesPredictionTableViewController.swift in Sources */,
 				28784CC11FC9E58A00E4BBE9 /* TripPlanning.swift in Sources */,
 				D490CC0C1FC64495003CDD18 /* FavoriteRoutesTableViewController.swift in Sources */,
 				D48953B71FA235DE0045EFEE /* StopPredictionTableViewController.swift in Sources */,
 				D48953B31FA22CD50045EFEE /* StopsGlobalData.swift in Sources */,
 				D48C25BB1FD2758C00A727EA /* FavoriteStopPredictionTableViewController.swift in Sources */,
+				D44E31DE1FDDE00800299D20 /* FavoriteRoutesPredictionTableViewCell.swift in Sources */,
 				D45F66F21FC5053200B4CF7C /* FavouriteRoutesGlobalData.swift in Sources */,
 				D49A8FF11FC36B4F00552FBE /* RoutePredictionGlobalData.swift in Sources */,
 				D42E13891F9B1A3800802FE4 /* RoutesTableViewCell.swift in Sources */,
@@ -479,12 +496,15 @@
 				D49ED74C1F9C697600E6E4BA /* StopsTableViewCell.swift in Sources */,
 				D49A90011FC37FDD00552FBE /* MapTableViewCell.swift in Sources */,
 				D49ED74A1F9C68C500E6E4BA /* Stops.swift in Sources */,
+				D44E31E01FDDF0D100299D20 /* FavoriteRoutePredictionGlobalData.swift in Sources */,
 				28784CBF1FC8D5AA00E4BBE9 /* LocationSearchTable.swift in Sources */,
 				D42907FE1FCD10B7007D3C1F /* FavoriteStopsTableViewController.swift in Sources */,
 				D4B4594B1FA8514800F5395A /* StopsInfo.swift in Sources */,
 				D49A8FF31FC370F700552FBE /* MapGlobalData.swift in Sources */,
 				D48C25BD1FD278A100A727EA /* FavoriteStopsPredictionTableViewCell.swift in Sources */,
+				D44E31DC1FDDDFED00299D20 /* FavoriteRouteInfoTableViewCell.swift in Sources */,
 				28DE18C61FCDBAF500808FB2 /* InformationViewController.swift in Sources */,
+				D44E31D81FDDDF9200299D20 /* FavoriteRouteInfoTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

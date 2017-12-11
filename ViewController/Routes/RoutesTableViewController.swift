@@ -208,6 +208,4 @@ extension RoutesTableViewController : UIViewControllerPreviewingDelegate{
         
     }
     
-    
-    
 }

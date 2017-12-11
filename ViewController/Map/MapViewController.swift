@@ -442,7 +442,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         var bestRouteList = [Stops]()
         var startIndex = Int()
         var endIndex = Int()
-        // This need to be change to Route.downloadBongoRoutesFromURL ()
+        
+        // This need to be changed to Route.downloadBongoRoutesFromURL ()
         let allRoutes: [Routes] = Routes.downloadBongoRoutes()
         
         var selectedRoute: Routes? = nil

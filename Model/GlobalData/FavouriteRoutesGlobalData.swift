@@ -12,7 +12,7 @@ class FavouriteRoutesGlobalData{
     
     static let sharedInstance:FavouriteRoutesGlobalData = FavouriteRoutesGlobalData()
     
-    var MyFavouriteRoutes:[Routes] = [Routes]()
+     var routeData:Routes = Routes()
     
     
 }
